@@ -1,4 +1,3 @@
-#include <iostream>
 #ifdef _WIN32
 	#include "PEFunctions.h"
 	#include "Disassembler.h"
