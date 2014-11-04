@@ -1,6 +1,11 @@
 #include <iostream>
-#include "PEFunctions.h"
-#include "Disassembler.h"
+#ifdef _WIN32
+	#include "PEFunctions.h"
+	#include "Disassembler.h"
+#elif __linux__
+	#include "../Headers/PEFunctions.h"
+	#include "../Headers/Disassembler.h"
+#endif
 
 int main(int argc, char* argv[])
 {
