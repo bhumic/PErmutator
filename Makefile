@@ -1,7 +1,9 @@
 CC = gcc
 CFLAGS = -Wall
 TARGET = libdistorm3.so
-COBJS = ExternalLib/distorm3/src/mnemonics.o ExternalLib/distorm3/src/wstring.o ExternalLib/distorm3/src/textdefs.o ExternalLib/distorm3/src/prefix.o ExternalLib/distorm3/src/operands.o ExternalLib/distorm3/src/insts.o ExternalLib/distorm3/src/instructions.o ExternalLib/distorm3/src/distorm.o ExternalLib/distorm3/src/decoder.o 
+COBJS = ExternalLib/distorm3/src/mnemonics.o ExternalLib/distorm3/src/wstring.o ExternalLib/distorm3/src/textdefs.o \
+ExternalLib/distorm3/src/prefix.o ExternalLib/distorm3/src/operands.o ExternalLib/distorm3/src/insts.o \
+ExternalLib/distorm3/src/instructions.o ExternalLib/distorm3/src/distorm.o ExternalLib/distorm3/src/decoder.o 
 CFLAGS_D = -fPIC -O2 -Wall -DSUPPORT_64BIT_OFFSET -DDISTORM_STATIC
 
 default: PErmutator
