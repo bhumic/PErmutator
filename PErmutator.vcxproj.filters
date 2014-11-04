@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{73c8198f-6589-4268-b29f-66bb9a37c96e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{1a07e2d9-c9b9-4831-9ae5-8c24f609eee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{37bb3958-0fde-4ccc-9a74-694c2fd5a5e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExternalLib">
+      <UniqueIdentifier>{5b143811-c8af-4c68-bb3b-454d0d65a0fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExternalLib\distorm3">
+      <UniqueIdentifier>{2034e9e4-bfc7-42ec-86b8-a708d1eb30a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExternalLib\distorm3\src">
+      <UniqueIdentifier>{fc84c047-4665-423b-befd-362b06e6bdea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExternalLib\distorm3\include">
+      <UniqueIdentifier>{fdd055f3-3142-4d9b-a74c-da22bae0ddc7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\Disassembler.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\distorm.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\PEFunctions.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Permutator.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Types.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\include\distorm.h">
+      <Filter>ExternalLib\distorm3\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\include\mnemonics.h">
+      <Filter>ExternalLib\distorm3\include</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\config.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\decoder.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\instructions.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\insts.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\operands.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\prefix.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\textdefs.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\wstring.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+    <ClInclude Include="ExternalLib\distorm3\src\x86defs.h">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Lib\distorm.lib">
+      <Filter>Lib</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ExternalLib\distorm3\src\decoder.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\distorm.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\instructions.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\insts.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\mnemonics.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\operands.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\prefix.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\textdefs.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="ExternalLib\distorm3\src\wstring.c">
+      <Filter>ExternalLib\distorm3\src</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Disassembler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PEFunctions.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Permutator.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
+</Project>
