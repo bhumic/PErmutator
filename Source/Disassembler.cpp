@@ -55,7 +55,16 @@ DWORD Disassembler::Disassemble(_DecodedInst* decodedInstructions)
 		{
 			free(sectionData);
 			return 0;
-		}	
+		}
+
+		for (DWORD i = 0; i < decodedInstructionsCount; ++i)
+		{
+			std::cout << std::hex << std::setw(8) << std::setfill('0') << decodedInstructions[i].offset << " " <<
+				std::setw(20) << std::setfill(' ') << decodedInstructions[i].instructionHex.p << " " <<
+				decodedInstructions[i].mnemonic.p << " " <<
+				(decodedInstructions[i].operands.length != 0 ? " " : "") <<
+				decodedInstructions[i].operands.p << std::endl;
+		}
 
 		if (res == DECRES_SUCCESS) break; // All instructions were decoded.
 		else if (decodedInstructionsCount == 0) break;
