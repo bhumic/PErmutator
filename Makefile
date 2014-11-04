@@ -17,7 +17,7 @@ TestMain.o: Source/TestMain.cpp Headers/PEFunctions.h Headers/Disassembler.h
 Permutator.o: Source/Permutator.cpp Headers/Permutator.h
 	$(CC) $(CFLAGS) -c Source/Permutator.cpp -lstdc++
 	
-PEFunction.o: Source/PEFunctions.cpp Headers/PEFunction.h
+PEFunctions.o: Source/PEFunctions.cpp Headers/PEFunctions.h
 	$(CC) $(CFLAGS) -c Source/PEFunctions.cpp -lstdc++
 	
 Disassembler.o: Source/Disassembler.cpp Headers/Disassembler.h Headers/distorm.h
