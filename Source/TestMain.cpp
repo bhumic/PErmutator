@@ -32,17 +32,7 @@ int main(int argc, char* argv[])
 	{
 		Disassembler disassembler(hInputFile);
 		_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
-		DWORD decodedInstructionsCount = 0;
-
-		decodedInstructionsCount = disassembler.Disassemble(decodedInstructions);
-		for (DWORD i = 0; i < decodedInstructionsCount; ++i)
-		{
-			std::cout << std::hex << std::setw(8) << std::setfill('0') << decodedInstructions[i].offset << " " <<
-				std::setw(20) << std::setfill(' ') << decodedInstructions[i].instructionHex.p << " " <<
-				decodedInstructions[i].mnemonic.p << " " <<
-				(decodedInstructions[i].operands.length != 0 ? " " : "") <<
-				decodedInstructions[i].operands.p << std::endl;
-		}
+		disassembler.Disassemble(decodedInstructions);
 	}
 	catch (std::runtime_error& error)
 	{
