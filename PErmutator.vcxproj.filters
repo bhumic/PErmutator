@@ -72,9 +72,6 @@
     <ClInclude Include="ExternalLib\distorm3\src\x86defs.h">
       <Filter>ExternalLib\distorm3\src</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Lib\distorm.lib">
@@ -119,9 +116,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\TestMain.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Node.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

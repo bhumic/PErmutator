@@ -96,7 +96,6 @@
     <ClInclude Include="Headers\PEFunctions.h" />
     <ClInclude Include="Headers\Permutator.h" />
     <ClInclude Include="Headers\Types.h" />
-    <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Lib\distorm.lib" />
@@ -111,7 +110,6 @@
     <ClCompile Include="ExternalLib\distorm3\src\prefix.c" />
     <ClCompile Include="ExternalLib\distorm3\src\textdefs.c" />
     <ClCompile Include="ExternalLib\distorm3\src\wstring.c" />
-    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Source\Disassembler.cpp" />
     <ClCompile Include="Source\PEFunctions.cpp" />
     <ClCompile Include="Source\Permutator.cpp" />
