@@ -31,7 +31,7 @@ void Disassembler::InitDisassembler()
 	dwFstSctHdrOffset = pDosHeader->e_lfanew + 4 + IMAGE_SIZEOF_FILE_HEADER + pNtHeader->FileHeader.SizeOfOptionalHeader;
 }
 
-DWORD Disassembler::Disassemble(_DecodedInst* decodedInstructions)
+void Disassembler::Disassemble(_DecodedInst* decodedInstructions)
 {
 	BYTE* sectionData = nullptr;
 	_DecodeResult res;
@@ -54,7 +54,7 @@ DWORD Disassembler::Disassemble(_DecodedInst* decodedInstructions)
 		if (res == DECRES_INPUTERR)
 		{
 			free(sectionData);
-			return 0;
+			return;
 		}
 
 		for (DWORD i = 0; i < decodedInstructionsCount; ++i)
@@ -77,6 +77,4 @@ DWORD Disassembler::Disassemble(_DecodedInst* decodedInstructions)
 		dwSectionSize -= next;
 		offset += next;
 	}
-
-	return decodedInstructionsCount;
 }
