@@ -21,7 +21,7 @@ public:
 //	*A function which takes a pointer to _DecodedInst structure which at the 
 //	end contains all the decoded instructions. The function returns the number
 //	of decoded instructions
-	DWORD Disassemble(_DecodedInst* decodedInstructions);
+	void Disassemble(_DecodedInst* decodedInstructions);
 private:
 	std::fstream* hInputFile;
 	PIMAGE_DOS_HEADER pDosHeader;
