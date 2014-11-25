@@ -22,6 +22,8 @@ public:
 //	end contains all the decoded instructions. The function returns the number
 //	of decoded instructions
 	void Disassemble(_DecodedInst* decodedInstructions);
+	PIMAGE_DOS_HEADER GetDosHeader();
+	PIMAGE_NT_HEADERS GetNtHeader();
 private:
 	std::fstream* hInputFile;
 	PIMAGE_DOS_HEADER pDosHeader;
