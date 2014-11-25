@@ -78,3 +78,13 @@ void Disassembler::Disassemble(_DecodedInst* decodedInstructions)
 		offset += next;
 	}
 }
+
+PIMAGE_DOS_HEADER Disassembler::GetDosHeader()
+{
+	return this->pDosHeader;
+}
+
+PIMAGE_NT_HEADERS Disassembler::GetNtHeader()
+{
+	return this->pNtHeader;
+}
