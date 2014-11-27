@@ -58,6 +58,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/FIXED:NO %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,6 +94,7 @@
     <ClInclude Include="ExternalLib\distorm3\src\x86defs.h" />
     <ClInclude Include="Headers\Disassembler.h" />
     <ClInclude Include="Headers\distorm.h" />
+    <ClInclude Include="Headers\Graph.h" />
     <ClInclude Include="Headers\Node.h" />
     <ClInclude Include="Headers\PEFunctions.h" />
     <ClInclude Include="Headers\Permutator.h" />
@@ -112,6 +114,7 @@
     <ClCompile Include="ExternalLib\distorm3\src\textdefs.c" />
     <ClCompile Include="ExternalLib\distorm3\src\wstring.c" />
     <ClCompile Include="Source\Disassembler.cpp" />
+    <ClCompile Include="Source\Graph.cpp" />
     <ClCompile Include="Source\Node.cpp" />
     <ClCompile Include="Source\PEFunctions.cpp" />
     <ClCompile Include="Source\Permutator.cpp" />

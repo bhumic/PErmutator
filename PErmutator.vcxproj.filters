@@ -75,6 +75,9 @@
     <ClInclude Include="Headers\Node.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Headers\Graph.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="Lib\distorm.lib">
@@ -122,6 +125,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Node.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graph.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
