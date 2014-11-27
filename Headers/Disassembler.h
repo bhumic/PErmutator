@@ -10,7 +10,7 @@
 	#pragma comment(lib, "Lib\\distorm.lib")
 #endif
 
-#define MAX_INSTRUCTIONS (1000)
+#define MAX_INSTRUCTIONS_DISASM (1000)
 
 class Disassembler
 {
