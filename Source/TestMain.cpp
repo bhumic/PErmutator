@@ -1,9 +1,11 @@
 #ifdef _WIN32
 	#include "PEFunctions.h"
 	#include "Disassembler.h"
+	#include "Permutator.h"
 #elif __linux__
 	#include "../Headers/PEFunctions.h"
 	#include "../Headers/Disassembler.h"
+	#include "../Headers/Permutator.h"
 #endif
 
 int main(int argc, char* argv[])
@@ -30,9 +32,8 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		Disassembler disassembler(hInputFile);
-		_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
-		disassembler.Disassemble(decodedInstructions);
+		Permutator permutator(hInputFile);
+		permutator.CreateGraph();
 	}
 	catch (std::runtime_error& error)
 	{
