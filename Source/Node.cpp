@@ -13,3 +13,42 @@ Node::~Node()
 {
 
 }
+
+DWORD Node::GetOffset()
+{
+	return dwOffset;
+}
+
+BYTE* Node::GetInstructions()
+{
+	return instructions;
+}
+
+std::vector<Node* > Node::GetChildren()
+{
+	return children;
+}
+
+void Node::AppendChild(Node* child)
+{
+	children.push_back(child);
+}
+
+Node* Node::FindChild(DWORD offset)
+{
+	int numOfChildren = children.size();
+
+	for (int i = 0; i < numOfChildren; ++i)
+	{
+		Node* tmp = children.at(i);
+		if (tmp->dwOffset == offset)
+			return tmp;
+	}
+
+	return nullptr;
+}
+
+void Node::SetEnd(BOOL value)
+{
+	end = value;
+}
