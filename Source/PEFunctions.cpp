@@ -79,13 +79,14 @@ BYTE* ReadData(unsigned char*buffer, DWORD dwOffset, DWORD dwSize)
 		return nullptr;
 	}
 
-#ifdef _WIN32
+/*#ifdef _WIN32
 	memcpy_s(data_segment, dwSize, buffer + dwOffset, dwSize);
 #elif __linux__
 	memcpy(data_segment, buffer + dwOffset, dwSize);
 #else
 #error "OS not supported!"
-#endif
+#endif*/
+	std::memcpy(data_segment, buffer + dwOffset, dwSize);
 
 	return data_segment;
 }
@@ -195,18 +196,21 @@ BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, P
 			return nullptr;
 		}
 
-		if (((*pSectionHeader)->Characteristics & 0x00000020) && ((*pSectionHeader)->Characteristics & 0x20000000))
-		{
+		//if (((*pSectionHeader)->Characteristics & 0x00000020) && ((*pSectionHeader)->Characteristics & 0x20000000))
+		//{
 			if ((pNtHeader->OptionalHeader.AddressOfEntryPoint >= (*pSectionHeader)->VirtualAddress) &&
 				(pNtHeader->OptionalHeader.AddressOfEntryPoint < ((*pSectionHeader)->VirtualAddress + (*pSectionHeader)->Misc.VirtualSize)))
 			{
 				break;
 			}
-		}
+		//}
 
 		free(*pSectionHeader);
+		*pSectionHeader = nullptr;
 	}
 
+	if (*pSectionHeader == nullptr)
+		return nullptr;
 	sectionData = LoadSection(hFile, *pSectionHeader);
 
 	return sectionData;
