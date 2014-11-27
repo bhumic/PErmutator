@@ -45,12 +45,16 @@ void Disassembler::Disassemble(_DecodedInst* decodedInstructions)
 	pSectionHeader = &ppSectionHeader;
 
 	sectionData = LoadExecutableSection(*hInputFile, pDosHeader, pNtHeader, dwFstSctHdrOffset, pSectionHeader);
+
+	if (sectionData == nullptr)
+		return;
+
 	DWORD dwSectionSize = (*pSectionHeader)->SizeOfRawData;
 	
 	while (1)
 	{
 		res = distorm_decode(offset, (const unsigned char*)sectionData, dwSectionSize,
-			dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
+			dt, decodedInstructions, MAX_INSTRUCTIONS_DISASM, &decodedInstructionsCount);
 		if (res == DECRES_INPUTERR)
 		{
 			free(sectionData);
