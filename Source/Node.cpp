@@ -52,3 +52,15 @@ void Node::SetEnd(BOOL value)
 {
 	end = value;
 }
+
+void Node::SetOffset(DWORD offset)
+{
+	dwOffset = offset;
+}
+
+void Node::SetInstructions(BYTE* instructions, DWORD size)
+{
+	this->instructions = (BYTE*)malloc(size);
+	this->dwSize = size;
+	std::memcpy((BYTE*)this->instructions, (BYTE*)instructions, size);
+}
