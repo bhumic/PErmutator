@@ -20,8 +20,11 @@ public:
 	BYTE* GetInstructions();
 	std::vector<Node* > GetChildren();
 	void SetEnd(BOOL value);
+	void SetOffset(DWORD offset);
+	void SetInstructions(BYTE* instructions, DWORD size);
 private:
 	DWORD dwOffset;
+	DWORD dwSize;
 	BYTE* instructions;
 	BOOL end;
 	std::vector<Node* > children;
