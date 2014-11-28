@@ -5,7 +5,7 @@
 #include <vector>
 
 #ifdef _WIN32
-	#pragma comment(lib, "Lib\\distorm.lib")
+#pragma comment(lib, "Lib\\distorm.lib")
 #endif
 
 #define MAX_INSTRUCTIONS (100)
@@ -25,7 +25,8 @@ private:
 	DWORD dwFstSctHdrOffset;
 	Graph graph;
 		
-
 	void InitPermutator();
+	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize);
+	bool IsJump(std::string mnemonic);
 };
 
