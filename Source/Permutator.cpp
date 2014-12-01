@@ -31,7 +31,9 @@ void Permutator::CreateGraph()
 	DWORD dwSectionSize = (*pSectionHeader)->SizeOfRawData;
 
 	// Create Graph
-	_CreateGraph(sectionData, 0, dwSectionSize);
+	_CreateGraph(sectionData, 0, dwSectionSize, 0);
+
+	return;
 }
 
 void Permutator::InitPermutator()
@@ -59,7 +61,7 @@ bool Permutator::IsJump(std::string mnemonic)
 	return std::find(std::begin(all_jmps), std::end(all_jmps), mnemonic) != all_jmps.end();
 }
 
-void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize)
+void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset)
 {
 	_DecodeResult res;
 	unsigned int decodedInstructionsCount = 0, next;
@@ -67,6 +69,8 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 	_OffsetType offset = blockOffset;
 	_OffsetType offsetEnd;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
+	unsigned int i;
+	std::string mnemonic;
 
 	while (1)
 	{
@@ -78,31 +82,48 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 			return;
 		}
 
-		for (unsigned int i = 0; i < decodedInstructionsCount; ++i)
-		{
-			std::string mnemonic(reinterpret_cast<char*>(decodedInstructions[i].mnemonic.p));
-			if (IsJump(mnemonic))
+		for (i = 0; i < decodedInstructionsCount; ++i)
+		{ 
+			mnemonic = (reinterpret_cast<char*>(decodedInstructions[i].mnemonic.p));
+			if (IsJump(mnemonic) ||
+				mnemonic.compare("RET") == 0 ||
+				mnemonic.compare("RETN") == 0)
 			{
-				offsetEnd = decodedInstructions[i].offset;
-				DWORD blockSize = offsetEnd + decodedInstructions[i].size - offset;
-				Node node;
-
-				node.SetOffset(offset);
-				node.SetInstructions(sectionData + offset, blockSize);
-				
+				break;
 			}
 		}
 
-		if (res == DECRES_SUCCESS) break; // All instructions were decoded.
-		else if (decodedInstructionsCount == 0) break;
+		// Main part of graph creation
+		offsetEnd = decodedInstructions[i].offset;
+		DWORD blockSize = offsetEnd + decodedInstructions[i].size - offset;
+		Node* node = new Node();
 
-		// Synchronize:
-		next = (unsigned long)(decodedInstructions[decodedInstructionsCount - 1].offset - offset);
-		next += decodedInstructions[decodedInstructionsCount - 1].size;
-		// Advance ptr and recalc offset.
-		sectionData += next;
-		dwSectionSize -= next;
-		offset += next;
+		node->SetOffset(offset);
+		node->SetInstructions(sectionData, blockSize);
+		graph.AddNode(node, parentOffset);
+
+		if (mnemonic.compare("RET") == 0 ||
+			mnemonic.compare("RETN") == 0)
+			return;
+
+		int newOffset = std::stoi(reinterpret_cast<char*>(decodedInstructions[i].operands.p), nullptr, 0);
+
+		_CreateGraph(sectionData + blockSize + (newOffset - offsetEnd - decodedInstructions[i].size),
+					 newOffset,
+					 dwSectionSize - newOffset + offset,
+					 node->GetOffset());
+
+		if (mnemonic.compare("JMP") == 0)
+			return;
+
+		int jumpFalseOffset = offsetEnd + decodedInstructions[i].size;
+		
+		_CreateGraph(sectionData + jumpFalseOffset - offset,
+			jumpFalseOffset,
+			dwSectionSize - jumpFalseOffset + offset,
+			node->GetOffset());
+
+		break;
 	}
 }
 
