@@ -7,8 +7,7 @@
 
 Graph::Graph()
 {
-	root = new Node();
-	root->SetEnd(FALSE);
+	root = nullptr;
 }
 
 Graph::~Graph()
@@ -23,6 +22,12 @@ Node* Graph::GetRoot()
 
 void Graph::AddNode(Node* node, DWORD offsetParent)
 {
+	if (root == nullptr)
+	{
+		root = node;
+		return;
+	}
+
 	Node* parent = FindNode(root, offsetParent);
 	if (parent == nullptr)
 		return;
