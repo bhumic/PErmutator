@@ -28,5 +28,6 @@ private:
 	void InitPermutator();
 	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
 	bool IsJump(std::string mnemonic);
+	bool IsRegister(std::string operand);
 };
 
