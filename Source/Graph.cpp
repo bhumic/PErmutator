@@ -12,7 +12,7 @@ Graph::Graph()
 
 Graph::~Graph()
 {
-
+	free(root);
 }
 
 Node* Graph::GetRoot()
