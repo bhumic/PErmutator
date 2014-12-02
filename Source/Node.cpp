@@ -11,7 +11,8 @@ Node::Node()
 
 Node::~Node()
 {
-
+	free(instructions);
+	children.clear();
 }
 
 DWORD Node::GetOffset()
