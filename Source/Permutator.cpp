@@ -61,6 +61,13 @@ bool Permutator::IsJump(std::string mnemonic)
 	return std::find(std::begin(all_jmps), std::end(all_jmps), mnemonic) != all_jmps.end();
 }
 
+bool Permutator::IsRegister(std::string operand)
+{
+	std::vector<std::string> registers{"EAX", "EBX", "ECX", "EDX", "ESP", "EBP", "ESI", "EDI", "EIP"};
+
+	return std::find(std::begin(registers), std::end(registers), operand) != registers.end();
+}
+
 void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset)
 {
 	_DecodeResult res;
@@ -70,7 +77,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 	_OffsetType offsetEnd;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
 	unsigned int i;
-	std::string mnemonic;
+	std::string mnemonic, operand;
 
 	while (1)
 	{
@@ -106,7 +113,11 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 			mnemonic.compare("RETN") == 0)
 			return;
 
-		int newOffset = std::stoi(reinterpret_cast<char*>(decodedInstructions[i].operands.p), nullptr, 0);
+		operand = reinterpret_cast<char*>(decodedInstructions[i].operands.p);
+		if (IsRegister(operand))
+			return;
+
+		int newOffset = std::stoi(operand, nullptr, 0);
 
 		_CreateGraph(sectionData + blockSize + (newOffset - offsetEnd - decodedInstructions[i].size),
 					 newOffset,
