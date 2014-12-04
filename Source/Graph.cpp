@@ -20,19 +20,19 @@ Node* Graph::GetRoot()
 	return root;
 }
 
-void Graph::AddNode(Node* node, DWORD offsetParent)
+int Graph::AddNode(Node* node, DWORD offsetParent)
 {
 	if (root == nullptr)
 	{
 		root = node;
-		return;
+		return 0;
 	}
 
 	Node* parent = FindNode(root, offsetParent);
 	if (parent == nullptr)
-		return;
+		return 2;	// Error code
 
-	parent->AppendChild(node);
+	return parent->AppendChild(node);
 }
 
 Node* Graph::FindNode(Node* current, DWORD offset)

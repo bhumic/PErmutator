@@ -9,7 +9,7 @@ public:
 	~Node();
 
 // Add new Node as a child to the current Node
-	void AppendChild(Node* child);
+	int AppendChild(Node* child);
 
 // Find a child Node based on offset value.
 // Every Node has an unique offset
@@ -22,6 +22,9 @@ public:
 	void SetEnd(BOOL value);
 	void SetOffset(DWORD offset);
 	void SetInstructions(BYTE* instructions, DWORD size);
+
+// Operators
+	bool operator==(const Node& node);
 private:
 	DWORD dwOffset;
 	DWORD dwSize;

@@ -30,9 +30,17 @@ std::vector<Node* > Node::GetChildren()
 	return children;
 }
 
-void Node::AppendChild(Node* child)
+int Node::AppendChild(Node* child)
 {
+// Check if file alredy exists. Loop removal
+	for (std::vector<Node* >::iterator it = children.begin(); it != children.end(); ++it)
+	{
+		if ((**it).dwOffset == child->dwOffset)
+			return 1;
+	}
+
 	children.push_back(child);
+	return 0;
 }
 
 Node* Node::FindChild(DWORD offset)
@@ -64,4 +72,12 @@ void Node::SetInstructions(BYTE* instructions, DWORD size)
 	this->instructions = (BYTE*)malloc(size);
 	this->dwSize = size;
 	std::memcpy((BYTE*)this->instructions, (BYTE*)instructions, size);
+}
+
+bool Node::operator==(const Node& node)
+{
+	if (this->dwOffset == node.dwOffset)
+		return true;
+
+	return false;
 }

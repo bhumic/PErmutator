@@ -107,7 +107,11 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 
 		node->SetOffset(offset);
 		node->SetInstructions(sectionData, blockSize);
-		graph.AddNode(node, parentOffset);
+		
+		if (graph.AddNode(node, parentOffset))
+		{
+			return;
+		}
 
 		if (mnemonic.compare("RET") == 0 ||
 			mnemonic.compare("RETN") == 0)

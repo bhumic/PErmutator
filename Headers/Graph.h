@@ -14,7 +14,7 @@ public:
 // Add a new Node to the Graph. The new Node is added
 // as a child of the Node repsented with the offsetParent 
 // argument.
-	void AddNode(Node* node, DWORD offsetParent);
+	int AddNode(Node* node, DWORD offsetParent);
 
 // Return a Node based on offset. The search starts from 
 // the Node labeled current(argument)
