@@ -3,6 +3,7 @@
 #include "Graph.h"
 #include "distorm.h"
 #include <vector>
+#include <sstream>
 
 #ifdef _WIN32
 #pragma comment(lib, "Lib\\distorm.lib")
@@ -29,5 +30,6 @@ private:
 	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
 	bool IsJump(std::string mnemonic);
 	bool IsRegister(std::string operand);
+	bool IsFunctionOperandValid(std::string operand);
 };
 

@@ -2,6 +2,12 @@
 #include "PEFunctions.h"
 #include "Node.h"
 
+typedef struct _FunctionAddress
+{
+	DWORD dwCallOffset;
+	int dwOffset;
+} FunctionAddress;
+
 class Graph
 {
 public:
@@ -20,6 +26,11 @@ public:
 // the Node labeled current(argument)
 	Node* FindNode(Node* current, DWORD offset);
 
+// Add a function offset value to the Graph. Based on
+// call function argument
+	void AddFunctionOffset(DWORD dwCallOffset, int dwOffset);
+
 private:
 	Node* root;
+	std::vector<FunctionAddress> offsets;
 };

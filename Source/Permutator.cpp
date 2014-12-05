@@ -30,8 +30,12 @@ void Permutator::CreateGraph()
 
 	DWORD dwSectionSize = (*pSectionHeader)->SizeOfRawData;
 
+	// Calculate entry point offset
+	DWORD dwEpOffset = pNtHeader->OptionalHeader.AddressOfEntryPoint - 
+		(*pSectionHeader)->VirtualAddress;
+
 	// Create Graph
-	_CreateGraph(sectionData, 0, dwSectionSize, 0);
+	_CreateGraph(sectionData + dwEpOffset, dwEpOffset, dwSectionSize, 0);
 
 	return;
 }
@@ -68,6 +72,14 @@ bool Permutator::IsRegister(std::string operand)
 	return std::find(std::begin(registers), std::end(registers), operand) != registers.end();
 }
 
+bool Permutator::IsFunctionOperandValid(std::string operand)
+{
+	if (operand.find("DWORD") != std::string::npos)
+		return false;
+
+	return true;
+}
+
 void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset)
 {
 	_DecodeResult res;
@@ -77,6 +89,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 	_OffsetType offsetEnd;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
 	unsigned int i;
+	DWORD tmpOffset = blockOffset;
 	std::string mnemonic, operand;
 
 	while (1)
@@ -98,6 +111,18 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 			{
 				break;
 			}
+
+			if (mnemonic.compare("CALL") == 0)
+			{
+				std::string functionOperand = reinterpret_cast<char*> (decodedInstructions[i].operands.p);
+				if (IsRegister(functionOperand) || !IsFunctionOperandValid(functionOperand))
+					continue;
+
+				int functionOffset = std::stoll(functionOperand, nullptr, 0);
+				graph.AddFunctionOffset(tmpOffset, functionOffset - tmpOffset);
+			}
+
+			tmpOffset += decodedInstructions[i].size;
 		}
 
 		// Main part of graph creation
@@ -118,10 +143,11 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 			return;
 
 		operand = reinterpret_cast<char*>(decodedInstructions[i].operands.p);
+		operand.resize(decodedInstructions[i].operands.length);
 		if (IsRegister(operand))
 			return;
 
-		int newOffset = std::stoi(operand, nullptr, 0);
+		int newOffset = std::stoll(operand, nullptr, 0);
 
 		_CreateGraph(sectionData + blockSize + (newOffset - offsetEnd - decodedInstructions[i].size),
 					 newOffset,

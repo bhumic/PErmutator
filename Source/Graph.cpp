@@ -35,6 +35,15 @@ int Graph::AddNode(Node* node, DWORD offsetParent)
 	return parent->AppendChild(node);
 }
 
+void Graph::AddFunctionOffset(DWORD dwCallOffset, int dwOffset)
+{
+	FunctionAddress fa;
+	fa.dwCallOffset = dwCallOffset;
+	fa.dwOffset = dwOffset;
+
+	offsets.push_back(fa);
+}
+
 Node* Graph::FindNode(Node* current, DWORD offset)
 {
 	if (current->GetOffset() == offset)
