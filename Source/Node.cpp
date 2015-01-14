@@ -20,6 +20,11 @@ DWORD Node::GetOffset()
 	return dwOffset;
 }
 
+DWORD Node::GetSize()
+{
+	return dwSize;
+}
+
 BYTE* Node::GetInstructions()
 {
 	return instructions;

@@ -1,11 +1,11 @@
 #pragma once
 #include <iostream>
-#include<iomanip>
-#include<string>
-#include<string.h>
-#include<fstream>
-#include<stdlib.h>
-#include<stdexcept>
+#include <iomanip>
+#include <string>
+#include <string.h>
+#include <fstream>
+#include <stdlib.h>
+#include <stdexcept>
 #include "Types.h"
 
 // Opens a file and returns a handle to it

@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
 	{
 		Permutator permutator(hInputFile);
 		permutator.CreateGraph();
+		permutator.VisualizeGraph();
 	}
 	catch (std::runtime_error& error)
 	{

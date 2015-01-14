@@ -168,3 +168,70 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 	}
 }
 
+bool Permutator::VisualizeGraph()
+{
+	std::ofstream gvFile ("graph.gh");
+	_DecodeResult res;
+	unsigned int decodedInstructionsCount = 0, next;
+	_DecodeType dt = Decode32Bits;
+	_OffsetType offset = 0;
+	_OffsetType offsetEnd;
+	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
+
+	std::string digraphStart = "digraph g {\n"
+		"graph [fontsize=30 labelloc=\"t\" label=\"\" splines=true overlap=false rankdir = \"LR\"];\n"
+		"ratio = auto;\n";
+	std::string digraphEnd = "}";
+
+	std::string stateStyleStart = "[ style = \"filled\" penwidth = 1 fillcolor = \"white\" fontname = \"Courier New\" "
+		"shape = \"Mrecord\" label =<<table border=\"0\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">\"";
+	std::string stateStyleEnd = "</table>> ];\n";
+
+	std::string stateHeaderStart = "<tr><td bgcolor=\"black\" align=\"center\" colspan=\"2\"><font color=\"white\">";
+	std::string stateHeaderEnd = "</font></td></tr>";
+
+	std::string stateDataStart = "<tr><td align=\"left\">";
+	std::string stateDataEnd = "</td></tr>";
+
+	gvFile.write(digraphStart.c_str(), digraphStart.length());
+	
+	Node n = *graph.GetRoot();
+	BYTE* instructions = n.GetInstructions();
+	std::stringstream stream;
+	stream << std::hex << n.GetOffset();
+	std::string stateName = "\"0x" + stream.str() + "\"";
+
+	gvFile.write(stateName.c_str(), stateName.length());
+	gvFile.write(stateStyleStart.c_str(), stateStyleStart.length());
+	gvFile.write(stateHeaderStart.c_str(), stateHeaderStart.length());
+	gvFile.write(stateName.c_str(), stateName.length());
+	gvFile.write(stateHeaderEnd.c_str(), stateHeaderEnd.length());
+	while (1)
+	{
+		res = distorm_decode(n.GetOffset(), (const unsigned char*)instructions, n.GetSize(),
+			dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
+		if (res == DECRES_INPUTERR) {
+			std::cout << "VisualizeGraph(): Disassembly error" << std::endl;
+			return false;
+		}
+
+		for (int i = 0; i < decodedInstructionsCount; ++i)
+		{
+			gvFile.write(stateDataStart.c_str(), stateDataStart.length());
+			gvFile.write((char*)decodedInstructions[i].mnemonic.p, decodedInstructions[i].mnemonic.length);
+			if (decodedInstructions[i].operands.length != 0)
+			{
+				gvFile.write(" ", 1);
+				gvFile.write((char*)decodedInstructions[i].operands.p, decodedInstructions[i].operands.length);
+			}
+			gvFile.write(stateDataEnd.c_str(), stateDataEnd.length());
+		}
+
+		if (res == DECRES_SUCCESS) break;
+	}
+	gvFile.write(stateStyleEnd.c_str(), stateStyleEnd.length());
+
+	gvFile.write(digraphEnd.c_str(), digraphEnd.length());
+	gvFile.close();
+	return true;
+}

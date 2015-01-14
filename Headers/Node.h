@@ -18,6 +18,7 @@ public:
 // Getters and setters
 	DWORD GetOffset();
 	BYTE* GetInstructions();
+	DWORD GetSize();
 	std::vector<Node* > GetChildren();
 	void SetEnd(BOOL value);
 	void SetOffset(DWORD offset);

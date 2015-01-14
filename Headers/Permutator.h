@@ -18,6 +18,7 @@ public:
 	~Permutator();
 
 	void CreateGraph();
+	bool VisualizeGraph();
 
 private:
 	std::fstream* hInputFile;
