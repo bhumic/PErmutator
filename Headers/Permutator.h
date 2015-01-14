@@ -32,5 +32,7 @@ private:
 	bool IsJump(std::string mnemonic);
 	bool IsRegister(std::string operand);
 	bool IsFunctionOperandValid(std::string operand);
+	void ProcessNode(Node* n, std::ofstream& gvFile);
+	void CreatePath(Node* n, std::ofstream& gvFile);
 };
 

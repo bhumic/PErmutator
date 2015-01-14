@@ -171,17 +171,31 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 bool Permutator::VisualizeGraph()
 {
 	std::ofstream gvFile ("graph.gh");
+
+	std::string digraphStart = "digraph g {\n"
+		"graph [fontsize=12 labelloc=\"t\" label=\"\" splines=true overlap=false];\n"
+		"ratio = auto;\n";
+	std::string digraphEnd = "}";
+	gvFile.write(digraphStart.c_str(), digraphStart.length());
+	
+	Node* n = graph.GetRoot();
+
+	ProcessNode(n, gvFile);
+	CreatePath(n, gvFile);
+
+	gvFile.write(digraphEnd.c_str(), digraphEnd.length());
+	gvFile.close();
+	return true;
+}
+
+void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
+{
 	_DecodeResult res;
 	unsigned int decodedInstructionsCount = 0, next;
 	_DecodeType dt = Decode32Bits;
 	_OffsetType offset = 0;
 	_OffsetType offsetEnd;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
-
-	std::string digraphStart = "digraph g {\n"
-		"graph [fontsize=30 labelloc=\"t\" label=\"\" splines=true overlap=false rankdir = \"LR\"];\n"
-		"ratio = auto;\n";
-	std::string digraphEnd = "}";
 
 	std::string stateStyleStart = "[ style = \"filled\" penwidth = 1 fillcolor = \"white\" fontname = \"Courier New\" "
 		"shape = \"Mrecord\" label =<<table border=\"0\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">\"";
@@ -193,12 +207,9 @@ bool Permutator::VisualizeGraph()
 	std::string stateDataStart = "<tr><td align=\"left\">";
 	std::string stateDataEnd = "</td></tr>";
 
-	gvFile.write(digraphStart.c_str(), digraphStart.length());
-	
-	Node n = *graph.GetRoot();
-	BYTE* instructions = n.GetInstructions();
+	BYTE* instructions = n->GetInstructions();
 	std::stringstream stream;
-	stream << std::hex << n.GetOffset();
+	stream << std::hex << n->GetOffset();
 	std::string stateName = "\"0x" + stream.str() + "\"";
 
 	gvFile.write(stateName.c_str(), stateName.length());
@@ -208,11 +219,11 @@ bool Permutator::VisualizeGraph()
 	gvFile.write(stateHeaderEnd.c_str(), stateHeaderEnd.length());
 	while (1)
 	{
-		res = distorm_decode(n.GetOffset(), (const unsigned char*)instructions, n.GetSize(),
+		res = distorm_decode(n->GetOffset(), (const unsigned char*)instructions, n->GetSize(),
 			dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
 		if (res == DECRES_INPUTERR) {
 			std::cout << "VisualizeGraph(): Disassembly error" << std::endl;
-			return false;
+			return;
 		}
 
 		for (int i = 0; i < decodedInstructionsCount; ++i)
@@ -231,7 +242,32 @@ bool Permutator::VisualizeGraph()
 	}
 	gvFile.write(stateStyleEnd.c_str(), stateStyleEnd.length());
 
-	gvFile.write(digraphEnd.c_str(), digraphEnd.length());
-	gvFile.close();
-	return true;
+	for (int i = 0; i < n->GetChildren().size(); ++i)
+	{
+		ProcessNode(n->GetChildren().at(i), gvFile);
+	}
+
+	return;
+}
+
+void Permutator::CreatePath(Node* n, std::ofstream& gvFile)
+{
+	std::stringstream stream;
+	std::string pathAttribute = "[ penwidth = 5];\n";
+	
+	stream << std::hex << n->GetOffset();
+	std::string stateName = "\"0x" + stream.str() + "\"";
+	stream.str(std::string());
+
+	for (int i = 0; i < n->GetChildren().size(); ++i)
+	{
+		stream << std::hex << n->GetChildren().at(i)->GetOffset();
+		std::string childName = "\"0x" + stream.str() + "\"";
+		std::string pathValue = stateName + " -> " + childName + " " + pathAttribute;
+		gvFile.write(pathValue.c_str(), pathValue.length());
+		CreatePath(n->GetChildren().at(i), gvFile);
+		stream.str(std::string());
+	}
+
+	return;
 }
