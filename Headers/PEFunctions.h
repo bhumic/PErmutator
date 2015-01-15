@@ -15,7 +15,7 @@ void OpenFile(const char* fileName, std::fstream& hFile);
 BYTE* LoadSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader);
 
 // Writes the given section back to file on disk
-BOOL WriteSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, unsigned char *buffer);
+BOOL WriteSection(std::ofstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, unsigned char *buffer);
 
 // Read the header to memory based on its size and offset in file on disk
 LPVOID ReadHeader(std::fstream& hFile, DWORD dwHeaderSize, DWORD dwOffset);
@@ -33,14 +33,14 @@ BYTE* ReadData(unsigned char*buffer, DWORD dwOffset, DWORD dwSize);
 BOOL IsFunctionName(char *buffer);
 
 // Write the PE section header at the appropriate offset in file
-BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID, std::fstream& hFile, DWORD dwFstSctHeaderOffset);
+BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID, std::ofstream& hFile, DWORD dwFstSctHeaderOffset);
 
 // Add a new section to file
 PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData, DWORD dwSectionDataSize,
 	DWORD dwFstSectionHeaderOffset, PIMAGE_NT_HEADERS pNtHeader, const char *sectionName);
 
 // Write certain amount of data to file
-BOOL WriteData(std::fstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data);
+BOOL WriteData(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data);
 
 // Load the section which contains executable code to memory
 BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, PIMAGE_NT_HEADERS pNtHeader,

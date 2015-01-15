@@ -17,15 +17,22 @@ public:
 	Permutator(std::fstream& hInputFile);
 	~Permutator();
 
+	Graph* GetGraph();
+
 	void CreateGraph();
-	bool VisualizeGraph();
+	bool VisualizeGraph(Node* n);
+	bool WriteModifiedFile();
 
 private:
 	std::fstream* hInputFile;
+	std::ofstream outputFile;
 	PIMAGE_DOS_HEADER pDosHeader;
 	PIMAGE_NT_HEADERS pNtHeader;
 	DWORD dwFstSctHdrOffset;
 	Graph graph;
+	std::vector<Node* > dataNodes;
+	BYTE* dataBytes;
+	DWORD dataSize;
 		
 	void InitPermutator();
 	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
@@ -34,5 +41,8 @@ private:
 	bool IsFunctionOperandValid(std::string operand);
 	void ProcessNode(Node* n, std::ofstream& gvFile);
 	void CreatePath(Node* n, std::ofstream& gvFile);
+	void CreateDataNodes(BYTE* sectionData);
+	void WriteGraph(Node* n, BYTE* sectionData);
+	void WriteData(BYTE* sectionData);
 };
 

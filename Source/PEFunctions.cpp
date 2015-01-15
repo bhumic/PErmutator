@@ -19,9 +19,9 @@ BYTE* LoadSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader)
 
 	return buffer;
 }
-BOOL WriteSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, unsigned char *buffer)
+BOOL WriteSection(std::ofstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, unsigned char *buffer)
 {
-	hFile.seekg(pSectionHeader->PointerToRawData, std::ios::beg);
+	hFile.seekp(pSectionHeader->PointerToRawData, std::ios::beg);
 	hFile.write((char*) buffer, pSectionHeader->SizeOfRawData);
 
 	return TRUE;
@@ -109,12 +109,12 @@ BOOL IsFunctionName(char *buffer)
 
 	return TRUE;
 }
-BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID, std::fstream& hFile, DWORD dwFstSctHeaderOffset)
+BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID, std::ofstream& hFile, DWORD dwFstSctHeaderOffset)
 {
 	DWORD dwSectionOffset;
 
 	dwSectionOffset = dwFstSctHeaderOffset + IMAGE_SIZEOF_SECTION_HEADER*dwSectionID;
-	hFile.seekg(dwSectionOffset, std::ios::beg);
+	hFile.seekp(dwSectionOffset, std::ios::beg);
 	hFile.write((char*)pSectionHeader, IMAGE_SIZEOF_SECTION_HEADER);
 
 	return TRUE;
@@ -175,9 +175,9 @@ PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData
 
 	return pSectionHeader;
 }
-BOOL WriteData(std::fstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data)
+BOOL WriteData(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data)
 {
-	hFile.seekg(dwOffset, std::ios::beg);
+	hFile.seekp(dwOffset, std::ios::beg);
 	hFile.write((char*) data, dwSize);
 
 	return TRUE;

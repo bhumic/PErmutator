@@ -34,8 +34,14 @@ void Permutator::CreateGraph()
 	DWORD dwEpOffset = pNtHeader->OptionalHeader.AddressOfEntryPoint - 
 		(*pSectionHeader)->VirtualAddress;
 
+	// Initialize array to differentiate data nodes from code nodes
+	dataSize = (*pSectionHeader)->SizeOfRawData;
+	dataBytes = (BYTE*)malloc(dataSize);
+	std::memset((BYTE*)dataBytes, 0, dataSize);
+
 	// Create Graph
 	_CreateGraph(sectionData + dwEpOffset, dwEpOffset, dwSectionSize, 0);
+	CreateDataNodes(sectionData);
 
 	return;
 }
@@ -130,6 +136,12 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 		DWORD blockSize = offsetEnd + decodedInstructions[i].size - offset;
 		Node* node = new Node();
 
+		// Set 1 to block places in dataBytes
+		for (DWORD j = 0; j < blockSize; ++j)
+		{
+			dataBytes[blockOffset + j] = 1;
+		}
+
 		node->SetOffset(offset);
 		node->SetInstructions(sectionData, blockSize);
 		
@@ -168,7 +180,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 	}
 }
 
-bool Permutator::VisualizeGraph()
+bool Permutator::VisualizeGraph(Node* n)
 {
 	std::ofstream gvFile ("graph.gh");
 
@@ -178,7 +190,7 @@ bool Permutator::VisualizeGraph()
 	std::string digraphEnd = "}";
 	gvFile.write(digraphStart.c_str(), digraphStart.length());
 	
-	Node* n = graph.GetRoot();
+	//Node* n = graph.GetRoot();
 
 	ProcessNode(n, gvFile);
 	CreatePath(n, gvFile);
@@ -270,4 +282,102 @@ void Permutator::CreatePath(Node* n, std::ofstream& gvFile)
 	}
 
 	return;
+}
+
+void Permutator::CreateDataNodes(BYTE* sectionData)
+{
+	DWORD dataEnd;
+
+	for (DWORD i = 0; i < dataSize; ++i)
+	{
+		if (dataBytes[i] == 1)
+			continue;
+
+		Node* n = new Node();
+		dataEnd = i;
+		while (dataBytes[dataEnd] == 0 && dataEnd < dataSize)
+		{
+			dataEnd++;
+		}
+
+		n->SetOffset(i);
+		n->SetInstructions(sectionData + i, dataEnd - i);
+		dataNodes.push_back(n);
+
+		i = dataEnd - 1;
+	}
+}
+
+bool Permutator::WriteModifiedFile()
+{
+	outputFile.open("permutatedFile.exe", std::ios::out | std::ios::binary);
+	
+	// Write DOS header
+	outputFile.write((char*)pDosHeader, sizeof(IMAGE_DOS_HEADER));
+
+	// Write NT header
+	outputFile.seekp(pDosHeader->e_lfanew, std::ios::beg);
+	outputFile.write((char*)pNtHeader, sizeof(IMAGE_NT_HEADERS));
+
+	// Write section headers and section data
+	BYTE* sectionData = nullptr;
+	PIMAGE_SECTION_HEADER pSectionHeader = nullptr;
+
+	for (WORD i = 0; i < pNtHeader->FileHeader.NumberOfSections; ++i)
+	{
+		pSectionHeader = (PIMAGE_SECTION_HEADER)ReadHeader(*hInputFile, IMAGE_SIZEOF_SECTION_HEADER, dwFstSctHdrOffset + i*IMAGE_SIZEOF_SECTION_HEADER);
+		if (pSectionHeader == nullptr)
+		{
+			return nullptr;
+		}
+		
+		WriteSectionHeader(pSectionHeader, i, outputFile, dwFstSctHdrOffset);
+
+		if ((pNtHeader->OptionalHeader.AddressOfEntryPoint >= pSectionHeader->VirtualAddress) &&
+			(pNtHeader->OptionalHeader.AddressOfEntryPoint < (pSectionHeader->VirtualAddress + pSectionHeader->Misc.VirtualSize)))
+		{
+			sectionData = (BYTE*)malloc(pSectionHeader->SizeOfRawData);
+			WriteGraph(graph.GetRoot(), sectionData);
+			WriteData(sectionData);
+			WriteSection(outputFile, pSectionHeader, sectionData);
+		}
+		else
+		{
+			sectionData = LoadSection(*hInputFile, pSectionHeader);
+			WriteSection(outputFile, pSectionHeader, sectionData);
+		}
+		
+
+		free(pSectionHeader);
+		free(sectionData);
+		sectionData = nullptr;
+		pSectionHeader = nullptr;
+	}
+
+
+	outputFile.close();
+	return true;
+}
+
+void Permutator::WriteGraph(Node* n, BYTE* sectionData)
+{
+	std::memcpy((BYTE*)sectionData + n->GetOffset(), n->GetInstructions(), n->GetSize());
+	for (DWORD i = 0; i < n->GetChildren().size(); ++i)
+		WriteGraph(n->GetChildren().at(i), sectionData);
+
+	return;
+}
+
+void Permutator::WriteData(BYTE* sectionData)
+{
+	for (DWORD i = 0; i < dataNodes.size(); ++i)
+	{
+		Node n = *dataNodes.at(i);
+		std::memcpy((BYTE*)sectionData + n.GetOffset(), n.GetInstructions(), n.GetSize());
+	}
+}
+
+Graph* Permutator::GetGraph()
+{
+	return &graph;
 }
