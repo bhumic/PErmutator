@@ -8,20 +8,26 @@ CFLAGS_D = -fPIC -O2 -Wall -DSUPPORT_64BIT_OFFSET -DDISTORM_STATIC
 
 default: PErmutator
 
-PErmutator: PEFunctions.o Disassembler.o TestMain.o Permutator.o distorm3.a
+PErmutator: PEFunctions.o Disassembler.o TestMain.o Permutator.o Graph.o Node.o distorm3.a
 	$(CC) $(CFLAGS) -o PErmutator TestMain.o Permutator.o PEFunctions.o Disassembler.o -lstdc++ distorm3.a
 	
 TestMain.o: Source/TestMain.cpp Headers/PEFunctions.h Headers/Disassembler.h
-	$(CC) $(CFLAGS) -c Source/TestMain.cpp -lstdc++
+	$(CC) $(CFLAGS) -c Source/TestMain.cpp -lstdc++ -std=c++11
 	
 Permutator.o: Source/Permutator.cpp Headers/Permutator.h
-	$(CC) $(CFLAGS) -c Source/Permutator.cpp -lstdc++
+	$(CC) $(CFLAGS) -c Source/Permutator.cpp -lstdc++ -std=c++11
 	
 PEFunctions.o: Source/PEFunctions.cpp Headers/PEFunctions.h
-	$(CC) $(CFLAGS) -c Source/PEFunctions.cpp -lstdc++
+	$(CC) $(CFLAGS) -c Source/PEFunctions.cpp -lstdc++ -std=c++11
 	
 Disassembler.o: Source/Disassembler.cpp Headers/Disassembler.h Headers/distorm.h
-	$(CC) $(CFLAGS) -c Source/Disassembler.cpp -lstdc++
+	$(CC) $(CFLAGS) -c Source/Disassembler.cpp -lstdc++ -std=c++11
+
+Graph.o: Source/Graph.cpp Headers/Graph.h
+	$(CC) $(CFLAGS) -c Source/Graph.cpp -lstdc++ -std=c++11
+
+Node.o: Source/Node.cpp Headers/Node.h
+	$(CC) $(CFLAGS) -c Source/Node.cpp -lstdc++ -std=c++11
 	
 distorm3.a: ${COBJS}
 	${CC} ${CFLAGS} ${VERSION} ${COBJS} -shared -o ${TARGET}
