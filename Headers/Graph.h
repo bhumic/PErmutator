@@ -4,8 +4,8 @@
 
 typedef struct _FunctionAddress
 {
-	DWORD dwCallOffset;
-	int dwOffset;
+	QWORD dwCallOffset;
+	QWORD dwOffset;
 } FunctionAddress;
 
 class Graph
@@ -28,7 +28,7 @@ public:
 
 // Add a function offset value to the Graph. Based on
 // call function argument
-	void AddFunctionOffset(DWORD dwCallOffset, int dwOffset);
+	void AddFunctionOffset(QWORD dwCallOffset, QWORD dwOffset);
 
 private:
 	Node* root;

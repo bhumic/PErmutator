@@ -35,7 +35,7 @@ int Graph::AddNode(Node* node, DWORD offsetParent)
 	return parent->AppendChild(node);
 }
 
-void Graph::AddFunctionOffset(DWORD dwCallOffset, int dwOffset)
+void Graph::AddFunctionOffset(QWORD dwCallOffset, QWORD dwOffset)
 {
 	FunctionAddress fa;
 	fa.dwCallOffset = dwCallOffset;

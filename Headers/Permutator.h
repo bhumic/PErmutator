@@ -36,6 +36,7 @@ private:
 		
 	void InitPermutator();
 	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
+	bool CheckRange(QWORD qOffset);
 	bool IsJump(std::string mnemonic);
 	bool IsRegister(std::string operand);
 	bool IsFunctionOperandValid(std::string operand);

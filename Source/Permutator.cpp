@@ -89,13 +89,13 @@ bool Permutator::IsFunctionOperandValid(std::string operand)
 void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset)
 {
 	_DecodeResult res;
-	unsigned int decodedInstructionsCount = 0, next;
+	unsigned int decodedInstructionsCount = 0;
 	_DecodeType dt = Decode32Bits;
 	_OffsetType offset = blockOffset;
 	_OffsetType offsetEnd;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
 	unsigned int i;
-	DWORD tmpOffset = blockOffset;
+	QWORD tmpOffset = blockOffset;
 	std::string mnemonic, operand;
 
 	while (1)
@@ -113,7 +113,8 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 			mnemonic = (reinterpret_cast<char*>(decodedInstructions[i].mnemonic.p));
 			if (IsJump(mnemonic) ||
 				mnemonic.compare("RET") == 0 ||
-				mnemonic.compare("RETN") == 0)
+				mnemonic.compare("RETN") == 0 ||
+				mnemonic.substr(0, 2).compare("DB") == 0)
 			{
 				break;
 			}
@@ -124,7 +125,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 				if (IsRegister(functionOperand) || !IsFunctionOperandValid(functionOperand))
 					continue;
 
-				int functionOffset = std::stoll(functionOperand, nullptr, 0);
+				QWORD functionOffset = std::stoll(functionOperand, nullptr, 0);
 				graph.AddFunctionOffset(tmpOffset, functionOffset - tmpOffset);
 			}
 
@@ -133,7 +134,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 
 		// Main part of graph creation
 		offsetEnd = decodedInstructions[i].offset;
-		DWORD blockSize = offsetEnd + decodedInstructions[i].size - offset;
+		DWORD blockSize = (DWORD)(offsetEnd + decodedInstructions[i].size - offset);
 		Node* node = new Node();
 
 		// Set 1 to block places in dataBytes
@@ -142,16 +143,17 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 			dataBytes[blockOffset + j] = 1;
 		}
 
-		node->SetOffset(offset);
+		node->SetOffset((DWORD)offset);
 		node->SetInstructions(sectionData, blockSize);
 		
-		if (graph.AddNode(node, parentOffset))
+		if (graph.AddNode(node, (DWORD)parentOffset))
 		{
 			return;
 		}
 
 		if (mnemonic.compare("RET") == 0 ||
-			mnemonic.compare("RETN") == 0)
+			mnemonic.compare("RETN") == 0 ||
+			mnemonic.substr(0, 2).compare("DB") == 0)
 			return;
 
 		operand = reinterpret_cast<char*>(decodedInstructions[i].operands.p);
@@ -159,25 +161,36 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 		if (IsRegister(operand))
 			return;
 
-		int newOffset = std::stoll(operand, nullptr, 0);
+		QWORD newOffset = std::stoll(operand, nullptr, 0);
+
+		if (!CheckRange(newOffset))
+		{
+			std::cout << "Offset out of CODE section!" << std::endl;
+			return;
+		}
 
 		_CreateGraph(sectionData + blockSize + (newOffset - offsetEnd - decodedInstructions[i].size),
 					 newOffset,
-					 dwSectionSize - newOffset + offset,
+					 dwSectionSize - (DWORD)newOffset + (DWORD)offset,
 					 node->GetOffset());
 
 		if (mnemonic.compare("JMP") == 0)
 			return;
 
-		int jumpFalseOffset = offsetEnd + decodedInstructions[i].size;
+		QWORD jumpFalseOffset = offsetEnd + decodedInstructions[i].size;
 		
 		_CreateGraph(sectionData + jumpFalseOffset - offset,
 			jumpFalseOffset,
-			dwSectionSize - jumpFalseOffset + offset,
+			dwSectionSize - (DWORD)jumpFalseOffset + (DWORD)offset,
 			node->GetOffset());
 
 		break;
 	}
+}
+
+bool Permutator::CheckRange(QWORD qOffset)
+{
+	return (qOffset < dataSize);
 }
 
 bool Permutator::VisualizeGraph(Node* n)
@@ -203,10 +216,9 @@ bool Permutator::VisualizeGraph(Node* n)
 void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
 {
 	_DecodeResult res;
-	unsigned int decodedInstructionsCount = 0, next;
+	unsigned int decodedInstructionsCount = 0;
 	_DecodeType dt = Decode32Bits;
 	_OffsetType offset = 0;
-	_OffsetType offsetEnd;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
 
 	std::string stateStyleStart = "[ style = \"filled\" penwidth = 1 fillcolor = \"white\" fontname = \"Courier New\" "
@@ -238,7 +250,7 @@ void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
 			return;
 		}
 
-		for (int i = 0; i < decodedInstructionsCount; ++i)
+		for (unsigned int i = 0; i < decodedInstructionsCount; ++i)
 		{
 			gvFile.write(stateDataStart.c_str(), stateDataStart.length());
 			gvFile.write((char*)decodedInstructions[i].mnemonic.p, decodedInstructions[i].mnemonic.length);
@@ -254,7 +266,7 @@ void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
 	}
 	gvFile.write(stateStyleEnd.c_str(), stateStyleEnd.length());
 
-	for (int i = 0; i < n->GetChildren().size(); ++i)
+	for (unsigned int i = 0; i < n->GetChildren().size(); ++i)
 	{
 		ProcessNode(n->GetChildren().at(i), gvFile);
 	}
@@ -271,7 +283,7 @@ void Permutator::CreatePath(Node* n, std::ofstream& gvFile)
 	std::string stateName = "\"0x" + stream.str() + "\"";
 	stream.str(std::string());
 
-	for (int i = 0; i < n->GetChildren().size(); ++i)
+	for (unsigned int i = 0; i < n->GetChildren().size(); ++i)
 	{
 		stream << std::hex << n->GetChildren().at(i)->GetOffset();
 		std::string childName = "\"0x" + stream.str() + "\"";

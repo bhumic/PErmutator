@@ -19,6 +19,7 @@ typedef void* LPVOID;
 typedef unsigned long DWORD;
 typedef unsigned short WORD;
 typedef long LONG;
+typedef unsigned long long QWORD;
 
 
 #define IMAGE_SIZEOF_SHORT_NAME              8
