@@ -9,7 +9,7 @@ CFLAGS_D = -fPIC -O2 -Wall -DSUPPORT_64BIT_OFFSET -DDISTORM_STATIC
 default: PErmutator
 
 PErmutator: PEFunctions.o Disassembler.o TestMain.o Permutator.o Graph.o Node.o distorm3.a
-	$(CC) $(CFLAGS) -o PErmutator TestMain.o Permutator.o PEFunctions.o Disassembler.o -lstdc++ distorm3.a
+	$(CC) $(CFLAGS) -o PErmutator TestMain.o Permutator.o PEFunctions.o Disassembler.o Graph.o Node.o -lstdc++ distorm3.a
 	
 TestMain.o: Source/TestMain.cpp Headers/PEFunctions.h Headers/Disassembler.h
 	$(CC) $(CFLAGS) -c Source/TestMain.cpp -lstdc++ -std=c++11
