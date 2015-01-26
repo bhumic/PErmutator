@@ -1,7 +1,9 @@
 #pragma once
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cstring>
 #include <string.h>
 #include <fstream>
 #include <stdlib.h>
