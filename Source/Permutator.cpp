@@ -218,7 +218,6 @@ void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
 	_DecodeResult res;
 	unsigned int decodedInstructionsCount = 0;
 	_DecodeType dt = Decode32Bits;
-	_OffsetType offset = 0;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
 
 	std::string stateStyleStart = "[ style = \"filled\" penwidth = 1 fillcolor = \"white\" fontname = \"Courier New\" "
