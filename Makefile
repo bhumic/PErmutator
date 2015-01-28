@@ -35,4 +35,4 @@ distorm3.a: ${COBJS}
 	
 	
 clean:
-	rm -rf PErmutator *.o
+	rm -rf PErmutator *.o ExternalLib/distorm3/src/*.o
