@@ -175,7 +175,7 @@ PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData
 
 	return pSectionHeader;
 }
-BOOL WriteData(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data)
+BOOL WriteDataToFile(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data)
 {
 	hFile.seekp(dwOffset, std::ios::beg);
 	hFile.write((char*) data, dwSize);
@@ -226,4 +226,47 @@ BOOL ValidateFile(std::fstream& hFile)
 
 
 	return TRUE;
+}
+BYTE* ExtractOverlays(std::fstream& hFile, PIMAGE_SECTION_HEADER pLastSectionHeader, DWORD *overlay_size)
+{
+	DWORD fileSize;
+	DWORD overlaySize;
+	DWORD begin, end;
+	unsigned char *overlayBuffer;
+
+	// Get the file size
+	hFile.seekg(0, std::ios::beg);
+	begin = (DWORD)hFile.tellg();
+	hFile.seekg(0, std::ios::end);
+	end = (DWORD)hFile.tellg();
+	fileSize = end - begin;
+
+	// Position where the overlay starts
+	DWORD overlayStart = pLastSectionHeader->PointerToRawData + pLastSectionHeader->SizeOfRawData;
+
+	// Check if the overlay exists
+	if (overlayStart == fileSize)
+	{
+		// NO overlay
+		return nullptr;
+	}
+
+	// Position the file pointer to the beginning of overlay
+	hFile.seekg(overlayStart, std::ios::beg);
+
+	// Calculate overlay size and allocate memory for buffer
+	overlaySize = fileSize - overlayStart;
+	overlayBuffer = (unsigned char *)malloc(overlaySize * sizeof(unsigned char));
+	if (overlayBuffer == NULL)
+	{
+		std::cout << "Overlay: Insufficient memory for overlay buffer!" << std::endl;
+		std::cout << "----------------------------------------" << std::endl;
+		return nullptr;
+	}
+
+	// Read the overlay into the buffer
+	hFile.read((char*)overlayBuffer, overlaySize);
+	*overlay_size = overlaySize;
+
+	return overlayBuffer;
 }

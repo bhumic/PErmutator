@@ -529,6 +529,15 @@ bool Permutator::WriteModifiedFile()
 		pSectionHeader = nullptr;
 	}
 
+// Write overlays if any
+	PIMAGE_SECTION_HEADER pLastSectionHeader = (PIMAGE_SECTION_HEADER)ReadHeader(*hInputFile, IMAGE_SIZEOF_SECTION_HEADER,
+		dwFstSctHdrOffset + IMAGE_SIZEOF_SECTION_HEADER * (pNtHeader->FileHeader.NumberOfSections - 1));
+	DWORD overlaySize;
+	BYTE* overlay = ExtractOverlays(*hInputFile, pLastSectionHeader, &overlaySize);
+	if (overlay != nullptr && overlaySize != 0)
+	{
+		WriteDataToFile(outputFile, pLastSectionHeader->PointerToRawData + pLastSectionHeader->SizeOfRawData, overlaySize, overlay);
+	}
 
 	outputFile.close();
 	return true;

@@ -42,7 +42,7 @@ PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData
 	DWORD dwFstSectionHeaderOffset, PIMAGE_NT_HEADERS pNtHeader, const char *sectionName);
 
 // Write certain amount of data to file
-BOOL WriteData(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data);
+BOOL WriteDataToFile(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data);
 
 // Load the section which contains executable code to memory
 BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, PIMAGE_NT_HEADERS pNtHeader,
@@ -50,3 +50,5 @@ BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, P
 
 // Check if a given file is a valid PE file
 BOOL ValidateFile(std::fstream& hFile);
+
+BYTE* ExtractOverlays(std::fstream& hFile, PIMAGE_SECTION_HEADER pLastSectionHeader, DWORD *overlay_size);
