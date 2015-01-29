@@ -33,9 +33,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		Permutator permutator(hInputFile);
-		int creationMode;
-		std::cout << "Enter 0 for recursive creation or 1 for queue like creation: ";
-		std::cin >> creationMode;
+		int creationMode = 1;
 		if (permutator.CreateGraph(creationMode) != 0)
 			return 1;
 		permutator.VisualizeGraph(permutator.GetGraph()->GetRoot());
