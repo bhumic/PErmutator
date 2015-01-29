@@ -312,7 +312,7 @@ void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD
 		if (!CheckRange(newOffset))
 		{
 			std::cout << "Offset out of CODE section!" << std::endl;
-			return;
+			continue;
 		}
 
 		Block positiveJumpBlock;
@@ -324,6 +324,12 @@ void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD
 			continue;
 
 		QWORD jumpFalseOffset = offsetEnd + decodedInstructions[i].size;
+
+		if (!CheckRange(newOffset))
+		{
+			std::cout << "Offset out of CODE section!" << std::endl;
+			continue;
+		}
 
 		Block negativeJumpBlock;
 		negativeJumpBlock.offset = jumpFalseOffset;
