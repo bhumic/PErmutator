@@ -15,7 +15,7 @@ Permutator::~Permutator()
 {
 }
 
-void Permutator::CreateGraph()
+int Permutator::CreateGraph(int creationMode)
 {
 	BYTE* sectionData = nullptr;
 	PIMAGE_SECTION_HEADER *pSectionHeader = nullptr;
@@ -23,10 +23,16 @@ void Permutator::CreateGraph()
 	PIMAGE_SECTION_HEADER ppSectionHeader;
 	pSectionHeader = &ppSectionHeader;
 
+	if (pNtHeader->FileHeader.Machine != 0x014C)
+	{
+		std::cout << "Only 32 bit PE files supported." << std::endl;
+		return -1;
+	}
+
 	sectionData = LoadExecutableSection(*hInputFile, pDosHeader, pNtHeader, dwFstSctHdrOffset, pSectionHeader);
 
 	if (sectionData == nullptr)
-		return;
+		return -1;
 
 	DWORD dwSectionSize = (*pSectionHeader)->SizeOfRawData;
 
@@ -40,10 +46,21 @@ void Permutator::CreateGraph()
 	std::memset((BYTE*)dataBytes, 0, dataSize);
 
 	// Create Graph
-	_CreateGraph(sectionData + dwEpOffset, dwEpOffset, dwSectionSize, 0);
+	switch (creationMode)
+	{
+	case 0:
+		_CreateGraph(sectionData + dwEpOffset, dwEpOffset, dwSectionSize, 0);
+		break;
+	case 1:
+		__CreateGraph(sectionData, dwEpOffset, dwSectionSize, 0);
+		break;
+	default:
+		std::cout << "Invalid argument for graph creation: Enter 0 for Recursive Creation or 1 for Queue Createion" << std::endl;
+		return 1;
+	}
 	CreateDataNodes(sectionData);
 
-	return;
+	return 0;
 }
 
 void Permutator::InitPermutator()
@@ -186,6 +203,147 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 
 		break;
 	}
+}
+
+void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset)
+{
+	_DecodeResult res;
+	unsigned int decodedInstructionsCount = 0;
+	_DecodeType dt = Decode32Bits;
+	_OffsetType offset = blockOffset;
+	_OffsetType offsetEnd;
+	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
+	unsigned int i;
+	QWORD tmpOffset = blockOffset;
+	std::string mnemonic, operand;
+
+	std::vector<Block> targets;
+	std::queue<Block> blockQueue;
+	bool skipFlag;
+	bool disasmStopFlag;
+
+	Block block;
+	block.offset = blockOffset;
+	block.parentOffset = parentOffset;
+	blockQueue.push(block);
+
+	while (!blockQueue.empty())
+	{
+		skipFlag = false;
+		Block currentBlock = blockQueue.front();
+		blockQueue.pop();
+
+		for (std::vector<Block>::iterator it = targets.begin(); it != targets.end(); ++it)
+		{
+			if (((*it).offset == currentBlock.offset) && (*it).parentOffset == currentBlock.parentOffset)
+			{
+				skipFlag = true;
+				break;
+			}
+		}
+		if (skipFlag)
+			continue;
+
+// Disassembly part
+		while (1)
+		{
+			disasmStopFlag = false;
+			res = distorm_decode(currentBlock.offset, (const unsigned char*)(sectionData + currentBlock.offset),
+				(DWORD)(dwSectionSize - currentBlock.offset),
+				dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
+			if (res == DECRES_INPUTERR)
+			{
+				free(sectionData);
+				return;
+			}
+
+			for (i = 0; i < decodedInstructionsCount; ++i)
+			{
+				mnemonic = (reinterpret_cast<char*>(decodedInstructions[i].mnemonic.p));
+				if (IsJump(mnemonic) ||
+					mnemonic.compare("RET") == 0 ||
+					mnemonic.compare("RETN") == 0 ||
+					mnemonic.substr(0, 2).compare("DB") == 0)
+				{
+					disasmStopFlag = true;
+					break;
+				}
+
+				if (mnemonic.compare("CALL") == 0)
+				{
+					std::string functionOperand = reinterpret_cast<char*> (decodedInstructions[i].operands.p);
+					if (IsRegister(functionOperand) || !IsFunctionOperandValid(functionOperand))
+						continue;
+
+					QWORD functionOffset = std::stoll(functionOperand, nullptr, 0);
+					graph.AddFunctionOffset(tmpOffset, functionOffset - tmpOffset);
+				}
+
+				tmpOffset += decodedInstructions[i].size;
+			}
+			if (disasmStopFlag)
+				break;
+		}
+
+		offsetEnd = decodedInstructions[i].offset;
+		DWORD blockSize = (DWORD)(offsetEnd + decodedInstructions[i].size - currentBlock.offset);
+		currentBlock.blockSize = blockSize;
+
+		// Set 1 to block places in dataBytes
+		for (DWORD j = 0; j < blockSize; ++j)
+		{
+			dataBytes[currentBlock.offset + j] = 1;
+		}
+
+		targets.push_back(currentBlock);
+
+		if (mnemonic.compare("RET") == 0 ||
+			mnemonic.compare("RETN") == 0 ||
+			mnemonic.substr(0, 2).compare("DB") == 0)
+			continue;
+
+		operand = reinterpret_cast<char*>(decodedInstructions[i].operands.p);
+		operand.resize(decodedInstructions[i].operands.length);
+		if (IsRegister(operand))
+			continue;
+
+		QWORD newOffset = std::stoll(operand, nullptr, 0);
+
+		if (!CheckRange(newOffset))
+		{
+			std::cout << "Offset out of CODE section!" << std::endl;
+			return;
+		}
+
+		Block positiveJumpBlock;
+		positiveJumpBlock.offset = newOffset;
+		positiveJumpBlock.parentOffset = currentBlock.offset;
+		blockQueue.push(positiveJumpBlock);
+
+		if (mnemonic.compare("JMP") == 0)
+			continue;
+
+		QWORD jumpFalseOffset = offsetEnd + decodedInstructions[i].size;
+
+		Block negativeJumpBlock;
+		negativeJumpBlock.offset = jumpFalseOffset;
+		negativeJumpBlock.parentOffset = currentBlock.offset;
+		blockQueue.push(negativeJumpBlock);
+	}
+	
+// Graph creation
+
+	for (DWORD i = 0; i < targets.size(); ++i)
+	{
+		Block b = targets.at(i);
+		Node* n = new Node();
+
+		n->SetOffset((DWORD) b.offset);
+		n->SetInstructions((BYTE*)(sectionData + b.offset), b.blockSize);
+		graph.AddNode(n, (DWORD)b.parentOffset);
+	}
+
+	return;
 }
 
 bool Permutator::CheckRange(QWORD qOffset)

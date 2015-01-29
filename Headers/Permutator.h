@@ -3,6 +3,7 @@
 #include "Graph.h"
 #include "distorm.h"
 #include <vector>
+#include <queue>
 #include <sstream>
 
 #ifdef _WIN32
@@ -10,6 +11,13 @@
 #endif
 
 #define MAX_INSTRUCTIONS (100)
+
+typedef struct _Block
+{
+	_OffsetType offset;
+	_OffsetType parentOffset;
+	DWORD blockSize = 0;
+} Block;
 
 class Permutator
 {
@@ -19,7 +27,7 @@ public:
 
 	Graph* GetGraph();
 
-	void CreateGraph();
+	int CreateGraph(int creationMode);
 	bool VisualizeGraph(Node* n);
 	bool WriteModifiedFile();
 
@@ -36,6 +44,7 @@ private:
 		
 	void InitPermutator();
 	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
+	void __CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
 	bool CheckRange(QWORD qOffset);
 	bool IsJump(std::string mnemonic);
 	bool IsRegister(std::string operand);
