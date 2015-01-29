@@ -210,7 +210,6 @@ void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD
 	_DecodeResult res;
 	unsigned int decodedInstructionsCount = 0;
 	_DecodeType dt = Decode32Bits;
-	_OffsetType offset = blockOffset;
 	_OffsetType offsetEnd;
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
 	unsigned int i;
