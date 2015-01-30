@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -fPIC -O2 -ggdb
 TARGET = libdistorm3.so
 COBJS = ExternalLib/distorm3/src/mnemonics.o ExternalLib/distorm3/src/wstring.o ExternalLib/distorm3/src/textdefs.o \
 ExternalLib/distorm3/src/prefix.o ExternalLib/distorm3/src/operands.o ExternalLib/distorm3/src/insts.o \
