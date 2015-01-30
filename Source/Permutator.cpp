@@ -396,6 +396,7 @@ bool Permutator::VisualizeGraph(Node* n)
 	CreatePath(n, gvFile);
 
 	gvFile.write(digraphEnd.c_str(), digraphEnd.length());
+	gvFile.flush();
 	gvFile.close();
 	return true;
 }
@@ -564,6 +565,7 @@ bool Permutator::WriteModifiedFile()
 		WriteDataToFile(outputFile, pLastSectionHeader->PointerToRawData + pLastSectionHeader->SizeOfRawData, overlaySize, overlay);
 	}
 
+	outputFile.flush();
 	outputFile.close();
 	return true;
 }
