@@ -34,18 +34,18 @@ int main(int argc, char* argv[])
 	{
 		Permutator permutator(hInputFile);
 		int creationMode;
+
 		std::cout << "Enter graph creation mode:" << std::endl;
 		std::cout << "0 - Recursive creation algorithm" << std::endl;
 		std::cout << "1 - Non-Recursive creation algorithm" << std::endl;
 		std::cin >> creationMode;
-
 		if (permutator.CreateGraph(creationMode) != 0)
 			return 1;
-		std::cout << "Graph created in memory!" << std::endl;
+		std::cout << "Graph created in memory!" << std::endl << std::endl;
 
 		std::cout << "Generating graphviz file..." << std::endl;
 		permutator.VisualizeGraph(permutator.GetGraph()->GetRoot());
-		std::cout << "Graphviz file created!" << std::endl;
+		std::cout << "Graphviz file created!" << std::endl << std::endl;
 
 		std::cout << "Writing graph to modified file on disk..." << std::endl;
 		permutator.WriteModifiedFile();
