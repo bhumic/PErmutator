@@ -46,16 +46,17 @@ int Permutator::CreateGraph(int creationMode)
 	std::memset((BYTE*)dataBytes, 0, dataSize);
 
 	// Create Graph
+	std::vector<Block> targets;
 	switch (creationMode)
 	{
 	case 0:
-		_CreateGraph(sectionData + dwEpOffset, dwEpOffset, dwSectionSize, 0);
+		_CreateGraph(sectionData + dwEpOffset, dwEpOffset, dwSectionSize, 0, targets);
 		break;
 	case 1:
 		__CreateGraph(sectionData, dwEpOffset, dwSectionSize, 0);
 		break;
 	default:
-		std::cout << "Invalid argument for graph creation: Enter 0 for Recursive Creation or 1 for Queue Createion" << std::endl;
+		std::cout << "Invalid argument for graph creation: Exiting" << std::endl;
 		return 1;
 	}
 	CreateDataNodes(sectionData);
@@ -103,7 +104,8 @@ bool Permutator::IsFunctionOperandValid(std::string operand)
 	return true;
 }
 
-void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset)
+void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset,
+	std::vector<Block>& targets)
 {
 	_DecodeResult res;
 	unsigned int decodedInstructionsCount = 0;
@@ -114,6 +116,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 	unsigned int i;
 	QWORD tmpOffset = blockOffset;
 	std::string mnemonic, operand;
+	bool skipFlag;
 
 	while (1)
 	{
@@ -162,7 +165,24 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 
 		node->SetOffset((DWORD)offset);
 		node->SetInstructions(sectionData, blockSize);
-		
+
+// Newly added code
+		skipFlag = false;
+		for (std::vector<Block>::iterator it = targets.begin(); it != targets.end(); ++it)
+		{
+			if (((*it).offset == node->GetOffset()) && (*it).parentOffset == parentOffset)
+			{
+				skipFlag = true;
+				break;
+			}
+		}
+		if (skipFlag)
+			return;
+		Block b;
+		b.offset = node->GetOffset();
+		b.parentOffset = parentOffset;
+		targets.push_back(b);
+
 		if (graph.AddNode(node, (DWORD)parentOffset))
 		{
 			return;
@@ -189,7 +209,8 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 		_CreateGraph(sectionData + blockSize + (newOffset - offsetEnd - decodedInstructions[i].size),
 					 newOffset,
 					 dwSectionSize - (DWORD)newOffset + (DWORD)offset,
-					 node->GetOffset());
+					 node->GetOffset(),
+					 targets);
 
 		if (mnemonic.compare("JMP") == 0)
 			return;
@@ -199,7 +220,8 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 		_CreateGraph(sectionData + jumpFalseOffset - offset,
 			jumpFalseOffset,
 			dwSectionSize - (DWORD)jumpFalseOffset + (DWORD)offset,
-			node->GetOffset());
+			node->GetOffset(),
+			targets);
 
 		break;
 	}

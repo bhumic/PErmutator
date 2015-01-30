@@ -43,7 +43,8 @@ private:
 	DWORD dataSize;
 		
 	void InitPermutator();
-	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
+	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset, 
+		std::vector<Block>& targets);
 	void __CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);
 	bool CheckRange(QWORD qOffset);
 	bool IsJump(std::string mnemonic);

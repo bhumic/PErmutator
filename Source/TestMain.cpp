@@ -33,7 +33,12 @@ int main(int argc, char* argv[])
 	try
 	{
 		Permutator permutator(hInputFile);
-		int creationMode = 1;
+		int creationMode;
+		std::cout << "Enter graph creation mode:" << std::endl;
+		std::cout << "0 - Recursive creation algorithm" << std::endl;
+		std::cout << "1 - Non-Recursive creation algorithm" << std::endl;
+		std::cin >> creationMode;
+
 		if (permutator.CreateGraph(creationMode) != 0)
 			return 1;
 		permutator.VisualizeGraph(permutator.GetGraph()->GetRoot());
