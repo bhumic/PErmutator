@@ -380,7 +380,9 @@ bool Permutator::CheckRange(QWORD qOffset)
 
 bool Permutator::VisualizeGraph(Node* n)
 {
-	std::ofstream gvFile ("graph.gh");
+	gvFile.open ("graph.gh", std::ios::out);
+	if (!gvFile.is_open() || !gvFile.good())
+		return false;
 
 	std::string digraphStart = "digraph g {\n"
 		"graph [fontsize=12 labelloc=\"t\" label=\"\" splines=true overlap=false];\n"
@@ -507,6 +509,8 @@ void Permutator::CreateDataNodes(BYTE* sectionData)
 bool Permutator::WriteModifiedFile()
 {
 	outputFile.open("permutatedFile.exe", std::ios::out | std::ios::binary);
+	if (!outputFile.is_open() || !outputFile.good())
+		return false;
 	
 	// Write DOS header
 	outputFile.write((char*)pDosHeader, sizeof(IMAGE_DOS_HEADER));

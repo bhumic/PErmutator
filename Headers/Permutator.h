@@ -34,6 +34,7 @@ public:
 private:
 	std::fstream* hInputFile;
 	std::ofstream outputFile;
+	std::ofstream gvFile;
 	PIMAGE_DOS_HEADER pDosHeader;
 	PIMAGE_NT_HEADERS pNtHeader;
 	DWORD dwFstSctHdrOffset;
