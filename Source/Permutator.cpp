@@ -23,11 +23,11 @@ int Permutator::CreateGraph(int creationMode)
 	PIMAGE_SECTION_HEADER ppSectionHeader;
 	pSectionHeader = &ppSectionHeader;
 
-	if (pNtHeader->FileHeader.Machine != 0x014C)
-	{
-		std::cout << "Only 32 bit PE files supported." << std::endl;
-		return -1;
-	}
+//	if (pNtHeader->FileHeader.Machine != 0x014C)
+//	{
+//		std::cout << "Only 32 bit PE files supported." << std::endl;
+//		return -1;
+//	}
 
 	sectionData = LoadExecutableSection(*hInputFile, pDosHeader, pNtHeader, dwFstSctHdrOffset, pSectionHeader);
 
