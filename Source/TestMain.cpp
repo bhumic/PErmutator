@@ -41,8 +41,15 @@ int main(int argc, char* argv[])
 
 		if (permutator.CreateGraph(creationMode) != 0)
 			return 1;
+		std::cout << "Graph created in memory!" << std::endl;
+
+		std::cout << "Generating graphviz file..." << std::endl;
 		permutator.VisualizeGraph(permutator.GetGraph()->GetRoot());
+		std::cout << "Graphviz file created!" << std::endl;
+
+		std::cout << "Writing graph to modified file on disk..." << std::endl;
 		permutator.WriteModifiedFile();
+		std::cout << "File successfully written!" << std::endl;
 	}
 	catch (std::runtime_error& error)
 	{
