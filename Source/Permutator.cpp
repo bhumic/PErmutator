@@ -21,7 +21,7 @@ int Permutator::CreateGraph(int creationMode)
 
 //	if (pNtHeader->FileHeader.Machine != 0x014C)
 //	{
-//		std::cout << "Only 32 bit PE files supported." << std::endl;
+//		std::cerr << "Only 32 bit PE files supported." << std::endl;
 //		return -1;
 //	}
 
@@ -52,7 +52,7 @@ int Permutator::CreateGraph(int creationMode)
 		__CreateGraph(sectionData, dwEpOffset, dwSectionSize, 0);
 		break;
 	default:
-		std::cout << "Invalid argument for graph creation: Exiting" << std::endl;
+		std::cerr << "Invalid argument for graph creation: Exiting" << std::endl;
 		return 1;
 	}
 	CreateDataNodes(sectionData);
@@ -198,7 +198,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 
 		if (!CheckRange(newOffset))
 		{
-			std::cout << "Offset out of CODE section!" << std::endl;
+			std::cerr << "Offset out of CODE section!" << std::endl;
 			return;
 		}
 
@@ -328,7 +328,7 @@ void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD
 
 		if (!CheckRange(newOffset))
 		{
-			std::cout << "Offset out of CODE section!" << std::endl;
+			std::cerr << "Offset out of CODE section!" << std::endl;
 			continue;
 		}
 
@@ -344,7 +344,7 @@ void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD
 
 		if (!CheckRange(newOffset))
 		{
-			std::cout << "Offset out of CODE section!" << std::endl;
+			std::cerr << "Offset out of CODE section!" << std::endl;
 			continue;
 		}
 
@@ -429,7 +429,7 @@ void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
 		res = distorm_decode(n->GetOffset(), (const unsigned char*)instructions, n->GetSize(),
 			dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
 		if (res == DECRES_INPUTERR) {
-			std::cout << "VisualizeGraph(): Disassembly error" << std::endl;
+			std::cerr << "VisualizeGraph(): Disassembly error" << std::endl;
 			return;
 		}
 

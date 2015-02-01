@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 
 	if (argc != 2)
 	{
-		std::cout << "Usage: PErmutator <path_to_executable>" << std::endl;
+		std::cerr << "Usage: PErmutator <path_to_executable>" << std::endl;
 		return 1;
 	}
 
@@ -15,12 +15,12 @@ int main(int argc, char* argv[])
 	OpenFile(argv[1], hInputFile);
 	if (!hInputFile.is_open())
 	{
-		std::cout << "Invalid input file" << std::endl;
+		std::cerr << "Invalid input file" << std::endl;
 		return 1;
 	}
 	if (!ValidateFile(hInputFile))
 	{
-		std::cout << "Invalid PE file" << std::endl;
+		std::cerr << "Invalid PE file" << std::endl;
 		return 1;
 	}
 
@@ -35,8 +35,8 @@ int main(int argc, char* argv[])
 		std::cin >> creationMode;
 		if (permutator.CreateGraph(creationMode) != 0)
 		{
-			std::cout << "Unable to create grah in memory." << std::endl;
-			std::cout << "Exiting program..." << std::endl;
+			std::cerr << "Unable to create grah in memory." << std::endl;
+			std::cerr << "Exiting program..." << std::endl;
 			return 1;
 		}
 		std::cout << "Graph created in memory!" << std::endl << std::endl;
@@ -45,17 +45,17 @@ int main(int argc, char* argv[])
 		if (permutator.VisualizeGraph(permutator.GetGraph()->GetRoot()))
 			std::cout << "Graphviz file created!" << std::endl << std::endl;
 		else
-			std::cout << "Error occured while creating graphviz file!" << std::endl;
+			std::cerr << "Error occured while creating graphviz file!" << std::endl;
 
 		std::cout << "Writing graph to modified file on disk..." << std::endl;
 		if (permutator.WriteModifiedFile())
 			std::cout << "File successfully written!" << std::endl;
 		else
-			std::cout << "Error occured while writing the modified file" << std::endl;
+			std::cerr << "Error occured while writing the modified file" << std::endl;
 	}
 	catch (std::runtime_error& error)
 	{
-		std::cout << error.what() << std::endl;
+		std::cerr << error.what() << std::endl;
 	}
 
 	hInputFile.close();

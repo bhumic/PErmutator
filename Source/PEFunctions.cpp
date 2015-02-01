@@ -255,8 +255,8 @@ BYTE* ExtractOverlays(std::fstream& hFile, PIMAGE_SECTION_HEADER pLastSectionHea
 	overlayBuffer = (unsigned char *)malloc(overlaySize * sizeof(unsigned char));
 	if (overlayBuffer == NULL)
 	{
-		std::cout << "Overlay: Insufficient memory for overlay buffer!" << std::endl;
-		std::cout << "----------------------------------------" << std::endl;
+		std::cerr << "Overlay: Insufficient memory for overlay buffer!" << std::endl;
+		std::cerr << "----------------------------------------" << std::endl;
 		return nullptr;
 	}
 
