@@ -19,10 +19,10 @@
 
 #include "Disassembler.h"
 
-Disassembler::Disassembler(std::fstream& hInputFile)
+Disassembler::Disassembler(char* fileName)
 {
-	this->hInputFile = &hInputFile;
-	InitDisassembler();
+	hInputFile.exceptions(std::fstream::badbit | std::fstream::failbit);
+	InitDisassembler(fileName);
 }
 
 Disassembler::~Disassembler()
@@ -31,18 +31,39 @@ Disassembler::~Disassembler()
 	free(pNtHeader);
 }
 
-void Disassembler::InitDisassembler()
+void Disassembler::InitDisassembler(char* fileName)
 {
+	try
+	{
+		hInputFile.open(fileName, std::ios::in | std::ios::binary);
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "InitDisassembler: Error while opening input file: " << e.what() << std::endl;
+		exit(-1);
+	}
+
+	if (!ValidateFile(hInputFile))
+	{
+		std::cerr << "InitDisassembler: Not a valid PE file (MZ signature)" << std::endl;
+		exit(-1);
+	}
 
 	// Read the DOS header
-	pDosHeader = (PIMAGE_DOS_HEADER)ReadHeader(*hInputFile, sizeof(IMAGE_DOS_HEADER), 0);
+	pDosHeader = (PIMAGE_DOS_HEADER)ReadHeader(hInputFile, sizeof(IMAGE_DOS_HEADER), 0);
 	if (pDosHeader == nullptr)
-		throw std::runtime_error("Invalid DOS header");
+	{
+		std::cerr << "InitDisassembler: Invalid DOS header" << std::endl;
+		exit(-1);
+	}
 
 	// Read the PE Header
-	pNtHeader = (PIMAGE_NT_HEADERS)ReadHeader(*hInputFile, sizeof(IMAGE_NT_HEADERS), pDosHeader->e_lfanew);
+	pNtHeader = (PIMAGE_NT_HEADERS)ReadHeader(hInputFile, sizeof(IMAGE_NT_HEADERS), pDosHeader->e_lfanew);
 	if (pNtHeader == nullptr)
-		throw std::runtime_error("Invalid PE header");
+	{
+		std::cerr << "InitDisassembler: Invalid NT header" << std::endl;
+		exit(-1);
+	}
 
 	// Find the file offset to the first section header
 	dwFstSctHdrOffset = pDosHeader->e_lfanew + 4 + IMAGE_SIZEOF_FILE_HEADER + pNtHeader->FileHeader.SizeOfOptionalHeader;
@@ -56,17 +77,20 @@ void Disassembler::Disassemble(_DecodedInst* decodedInstructions)
 	unsigned int decodedInstructionsCount = 0, next;
 	_DecodeType dt = Decode32Bits;
 	_OffsetType offset = 0;
-	PIMAGE_SECTION_HEADER *pSectionHeader = nullptr;
 	
-	PIMAGE_SECTION_HEADER ppSectionHeader;
-	pSectionHeader = &ppSectionHeader;
+	pExecSectionHeader = FindSection(hInputFile, pNtHeader->OptionalHeader.AddressOfEntryPoint, dwFstSctHdrOffset,
+		pNtHeader->FileHeader.NumberOfSections);
+	if (pExecSectionHeader == nullptr)
+	{
+		std::cerr << "CreateGraph: Unable to read section header for executable code" << std::endl;
+		exit(-1);
+	}
 
-	sectionData = LoadExecutableSection(*hInputFile, pDosHeader, pNtHeader, dwFstSctHdrOffset, pSectionHeader);
-
+	sectionData = LoadSection(hInputFile, pExecSectionHeader);
 	if (sectionData == nullptr)
 		return;
 
-	DWORD dwSectionSize = (*pSectionHeader)->SizeOfRawData;
+	DWORD dwSectionSize = pExecSectionHeader->SizeOfRawData;
 	
 	while (1)
 	{

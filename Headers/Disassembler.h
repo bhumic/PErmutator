@@ -34,7 +34,7 @@
 class Disassembler
 {
 public:
-	Disassembler(std::fstream& hInputFile);
+	Disassembler(char* fileName);
 	~Disassembler();
 
 //	*A function which takes a pointer to _DecodedInst structure which at the 
@@ -44,13 +44,14 @@ public:
 	PIMAGE_DOS_HEADER GetDosHeader();
 	PIMAGE_NT_HEADERS GetNtHeader();
 private:
-	std::fstream* hInputFile;
+	std::fstream hInputFile;
 	PIMAGE_DOS_HEADER pDosHeader;
 	PIMAGE_NT_HEADERS pNtHeader;
+	PIMAGE_SECTION_HEADER pExecSectionHeader;
 	DWORD dwFstSctHdrOffset;
 
 //	Init the disassembler by loading the DOS and PE headers and obtaining the offset
 //	To the first section header.
-	void InitDisassembler();
+	void InitDisassembler(char* fileName);
 };
 
