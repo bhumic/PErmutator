@@ -1,13 +1,29 @@
-#ifdef _WIN32
-	#include "PEFunctions.h"
-#elif __linux__
-	#include "../Headers/PEFunctions.h"
-#endif
+/*
+ * Tool for fine grained PE code permutation
+ * Copyright (C) 2015 Bruno Humic
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+#include "PEFunctions.h"
 
 void OpenFile(const char *fileName, std::fstream& hFile)
 {
 	hFile.open(fileName, std::ios::in | std::ios::binary);
 }
+
 BYTE* LoadSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader)
 {
 	unsigned char *buffer;
@@ -19,6 +35,7 @@ BYTE* LoadSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader)
 
 	return buffer;
 }
+
 BOOL WriteSection(std::ofstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, unsigned char *buffer)
 {
 	hFile.seekp(pSectionHeader->PointerToRawData, std::ios::beg);
@@ -26,6 +43,7 @@ BOOL WriteSection(std::ofstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, un
 
 	return TRUE;
 }
+
 LPVOID ReadHeader(std::fstream& hFile, DWORD dwHeaderSize, DWORD dwOffset)
 {
 	LPVOID pHeader;
@@ -41,6 +59,7 @@ LPVOID ReadHeader(std::fstream& hFile, DWORD dwHeaderSize, DWORD dwOffset)
 
 	return pHeader;
 }
+
 PIMAGE_SECTION_HEADER FindSection(std::fstream hFile, DWORD dwRVA, DWORD dwFstSectionHeader, WORD wNumSections)
 {
 	PIMAGE_SECTION_HEADER pSectionHeader = NULL;
@@ -64,10 +83,12 @@ PIMAGE_SECTION_HEADER FindSection(std::fstream hFile, DWORD dwRVA, DWORD dwFstSe
 
 	return nullptr;
 }
+
 DWORD AlignUp(DWORD dwSize, DWORD dwAlign)
 {
 	return ((dwSize + dwAlign - 1) - (dwSize + dwAlign - 1) % dwAlign);
 }
+
 BYTE* ReadData(unsigned char*buffer, DWORD dwOffset, DWORD dwSize)
 {
 	unsigned char *data_segment;
@@ -90,6 +111,7 @@ BYTE* ReadData(unsigned char*buffer, DWORD dwOffset, DWORD dwSize)
 
 	return data_segment;
 }
+
 BOOL IsFunctionName(char *buffer)
 {
 	DWORD length = strlen(buffer);
@@ -109,6 +131,7 @@ BOOL IsFunctionName(char *buffer)
 
 	return TRUE;
 }
+
 BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID, std::ofstream& hFile, DWORD dwFstSctHeaderOffset)
 {
 	DWORD dwSectionOffset;
@@ -119,6 +142,7 @@ BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID,
 
 	return TRUE;
 }
+
 PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData, DWORD dwSectionDataSize,
 	DWORD dwFstSectionHeaderOffset, PIMAGE_NT_HEADERS pNtHeader, const char *sectionName)
 {
@@ -175,6 +199,7 @@ PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData
 
 	return pSectionHeader;
 }
+
 BOOL WriteDataToFile(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data)
 {
 	hFile.seekp(dwOffset, std::ios::beg);
@@ -182,6 +207,7 @@ BOOL WriteDataToFile(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* d
 
 	return TRUE;
 }
+
 BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, PIMAGE_NT_HEADERS pNtHeader,
 	DWORD dwFstSctHdrOffset, PIMAGE_SECTION_HEADER* pSectionHeader)
 {
@@ -215,6 +241,7 @@ BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, P
 
 	return sectionData;
 }
+
 BOOL ValidateFile(std::fstream& hFile)
 {
 	BYTE buffer[2];
@@ -227,6 +254,7 @@ BOOL ValidateFile(std::fstream& hFile)
 
 	return TRUE;
 }
+
 BYTE* ExtractOverlays(std::fstream& hFile, PIMAGE_SECTION_HEADER pLastSectionHeader, DWORD *overlay_size)
 {
 	DWORD fileSize;
@@ -259,8 +287,8 @@ BYTE* ExtractOverlays(std::fstream& hFile, PIMAGE_SECTION_HEADER pLastSectionHea
 	overlayBuffer = (unsigned char *)malloc(overlaySize * sizeof(unsigned char));
 	if (overlayBuffer == NULL)
 	{
-		std::cout << "Overlay: Insufficient memory for overlay buffer!" << std::endl;
-		std::cout << "----------------------------------------" << std::endl;
+		std::cerr << "Overlay: Insufficient memory for overlay buffer!" << std::endl;
+		std::cerr << "----------------------------------------" << std::endl;
 		return nullptr;
 	}
 

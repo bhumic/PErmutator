@@ -1,3 +1,22 @@
+/*
+ * Tool for fine grained PE code permutation
+ * Copyright (C) 2015 Bruno Humic
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 #pragma once
 
 #define TRUE 1
@@ -8,10 +27,7 @@
 #define IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE 0x0040
 #define IMAGE_DLLCHARACTERISTICS_NX_COMPAT 0x0100
 
-#ifdef __linux__
-#define nullptr NULL
-#endif
-
+#ifdef _WIN32
 typedef void* HANDLE;
 typedef unsigned char BYTE;
 typedef int BOOL;
@@ -20,7 +36,16 @@ typedef unsigned long DWORD;
 typedef unsigned short WORD;
 typedef long LONG;
 typedef unsigned long long QWORD;
-
+#else /* Linux */
+typedef void* HANDLE;
+typedef uint8_t BYTE;
+typedef int16_t BOOL;
+typedef void* LPVOID;
+typedef uint32_t DWORD;
+typedef uint16_t WORD;
+typedef uint32_t LONG;
+typedef uint64_t QWORD;
+#endif /* _WIN32 */
 
 #define IMAGE_SIZEOF_SHORT_NAME              8
 

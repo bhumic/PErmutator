@@ -1,19 +1,32 @@
-#ifdef _WIN32
-	#include "PEFunctions.h"
-	#include "Disassembler.h"
-	#include "Permutator.h"
-#elif __linux__
-	#include "../Headers/PEFunctions.h"
-	#include "../Headers/Disassembler.h"
-	#include "../Headers/Permutator.h"
-#endif
+/*
+ * Tool for fine grained PE code permutation
+ * Copyright (C) 2015 Bruno Humic
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+#include "PEFunctions.h"
+#include "Disassembler.h"
+#include "Permutator.h"
 
 int main(int argc, char* argv[])
 {
 
 	if (argc != 2)
 	{
-		std::cout << "Usage: PErmutator <path_to_executable>" << std::endl;
+		std::cerr << "Usage: PErmutator <path_to_executable>" << std::endl;
 		return 1;
 	}
 
@@ -21,12 +34,12 @@ int main(int argc, char* argv[])
 	OpenFile(argv[1], hInputFile);
 	if (!hInputFile.is_open())
 	{
-		std::cout << "Invalid input file" << std::endl;
+		std::cerr << "Invalid input file" << std::endl;
 		return 1;
 	}
 	if (!ValidateFile(hInputFile))
 	{
-		std::cout << "Invalid PE file" << std::endl;
+		std::cerr << "Invalid PE file" << std::endl;
 		return 1;
 	}
 
@@ -41,8 +54,8 @@ int main(int argc, char* argv[])
 		std::cin >> creationMode;
 		if (permutator.CreateGraph(creationMode) != 0)
 		{
-			std::cout << "Unable to create grah in memory." << std::endl;
-			std::cout << "Exiting program..." << std::endl;
+			std::cerr << "Unable to create grah in memory." << std::endl;
+			std::cerr << "Exiting program..." << std::endl;
 			return 1;
 		}
 		std::cout << "Graph created in memory!" << std::endl << std::endl;
@@ -51,17 +64,17 @@ int main(int argc, char* argv[])
 		if (permutator.VisualizeGraph(permutator.GetGraph()->GetRoot()))
 			std::cout << "Graphviz file created!" << std::endl << std::endl;
 		else
-			std::cout << "Error occured while creating graphviz file!" << std::endl;
+			std::cerr << "Error occured while creating graphviz file!" << std::endl;
 
 		std::cout << "Writing graph to modified file on disk..." << std::endl;
 		if (permutator.WriteModifiedFile())
 			std::cout << "File successfully written!" << std::endl;
 		else
-			std::cout << "Error occured while writing the modified file" << std::endl;
+			std::cerr << "Error occured while writing the modified file" << std::endl;
 	}
 	catch (std::runtime_error& error)
 	{
-		std::cout << error.what() << std::endl;
+		std::cerr << error.what() << std::endl;
 	}
 
 	hInputFile.close();

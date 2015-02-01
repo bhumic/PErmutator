@@ -1,8 +1,23 @@
-#ifdef _WIN32
-	#include "Permutator.h"
-#elif __linux__
-	#include "../Headers/Permutator.h"
-#endif
+/*
+ * Tool for fine grained PE code permutation
+ * Copyright (C) 2015 Bruno Humic
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+#include "Permutator.h"
 
 Permutator::Permutator(std::fstream& hInputFile)
 {
@@ -25,7 +40,7 @@ int Permutator::CreateGraph(int creationMode)
 
 //	if (pNtHeader->FileHeader.Machine != 0x014C)
 //	{
-//		std::cout << "Only 32 bit PE files supported." << std::endl;
+//		std::cerr << "Only 32 bit PE files supported." << std::endl;
 //		return -1;
 //	}
 
@@ -56,7 +71,7 @@ int Permutator::CreateGraph(int creationMode)
 		__CreateGraph(sectionData, dwEpOffset, dwSectionSize, 0);
 		break;
 	default:
-		std::cout << "Invalid argument for graph creation: Exiting" << std::endl;
+		std::cerr << "Invalid argument for graph creation: Exiting" << std::endl;
 		return 1;
 	}
 	CreateDataNodes(sectionData);
@@ -202,7 +217,7 @@ void Permutator::_CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD 
 
 		if (!CheckRange(newOffset))
 		{
-			std::cout << "Offset out of CODE section!" << std::endl;
+			std::cerr << "Offset out of CODE section!" << std::endl;
 			return;
 		}
 
@@ -332,7 +347,7 @@ void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD
 
 		if (!CheckRange(newOffset))
 		{
-			std::cout << "Offset out of CODE section!" << std::endl;
+			std::cerr << "Offset out of CODE section!" << std::endl;
 			continue;
 		}
 
@@ -348,7 +363,7 @@ void Permutator::__CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD
 
 		if (!CheckRange(newOffset))
 		{
-			std::cout << "Offset out of CODE section!" << std::endl;
+			std::cerr << "Offset out of CODE section!" << std::endl;
 			continue;
 		}
 
@@ -380,7 +395,7 @@ bool Permutator::CheckRange(QWORD qOffset)
 
 bool Permutator::VisualizeGraph(Node* n)
 {
-	gvFile.open ("graph.gh", std::ios::out);
+	gvFile.open ("graph.dot", std::ios::out);
 	if (!gvFile.is_open() || !gvFile.good())
 		return false;
 
@@ -433,7 +448,7 @@ void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
 		res = distorm_decode(n->GetOffset(), (const unsigned char*)instructions, n->GetSize(),
 			dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
 		if (res == DECRES_INPUTERR) {
-			std::cout << "VisualizeGraph(): Disassembly error" << std::endl;
+			std::cerr << "VisualizeGraph(): Disassembly error" << std::endl;
 			return;
 		}
 
