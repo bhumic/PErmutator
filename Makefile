@@ -35,4 +35,4 @@ distorm3.a: ${COBJS}
 	ar rs distorm3.a ${COBJS}
 
 clean:
-	rm -rf PErmutator *.o ExternalLib/distorm3/src/*.o *.so *.a
+	rm -rf PErmutator *.o ExternalLib/distorm3/src/*.o *.so *.a graph.dot permutatedFile.exe

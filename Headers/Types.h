@@ -8,6 +8,7 @@
 #define IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE 0x0040
 #define IMAGE_DLLCHARACTERISTICS_NX_COMPAT 0x0100
 
+#ifdef _WIN32
 typedef void* HANDLE;
 typedef unsigned char BYTE;
 typedef int BOOL;
@@ -16,7 +17,16 @@ typedef unsigned long DWORD;
 typedef unsigned short WORD;
 typedef long LONG;
 typedef unsigned long long QWORD;
-
+#else /* Linux */
+typedef void* HANDLE;
+typedef uint8_t BYTE;
+typedef int16_t BOOL;
+typedef void* LPVOID;
+typedef uint32_t DWORD;
+typedef uint16_t WORD;
+typedef uint32_t LONG;
+typedef uint64_t QWORD;
+#endif /* _WIN32 */
 
 #define IMAGE_SIZEOF_SHORT_NAME              8
 
