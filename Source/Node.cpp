@@ -1,8 +1,4 @@
-#ifdef _WIN32
-	#include "Node.h"
-#elif __linux__
-	#include "../Headers/Node.h"
-#endif
+#include "Node.h"
 
 Node::Node()
 {

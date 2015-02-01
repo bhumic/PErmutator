@@ -1,8 +1,4 @@
-#ifdef _WIN32
-	#include "Permutator.h"
-#elif __linux__
-	#include "../Headers/Permutator.h"
-#endif
+#include "Permutator.h"
 
 Permutator::Permutator(std::fstream& hInputFile)
 {

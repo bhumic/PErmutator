@@ -1,12 +1,6 @@
-#ifdef _WIN32
-	#include "PEFunctions.h"
-	#include "Disassembler.h"
-	#include "Permutator.h"
-#elif __linux__
-	#include "../Headers/PEFunctions.h"
-	#include "../Headers/Disassembler.h"
-	#include "../Headers/Permutator.h"
-#endif
+#include "PEFunctions.h"
+#include "Disassembler.h"
+#include "Permutator.h"
 
 int main(int argc, char* argv[])
 {

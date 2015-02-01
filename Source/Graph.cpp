@@ -1,9 +1,4 @@
-#ifdef _WIN32
-	#include "Graph.h"
-#elif __linux__
-	#include "../Headers/Graph.h"
-#endif
-
+#include "Graph.h"
 
 Graph::Graph()
 {

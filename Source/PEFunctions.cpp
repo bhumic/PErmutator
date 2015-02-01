@@ -1,8 +1,4 @@
-#ifdef _WIN32
-	#include "PEFunctions.h"
-#elif __linux__
-	#include "../Headers/PEFunctions.h"
-#endif
+#include "PEFunctions.h"
 
 void OpenFile(const char *fileName, std::fstream& hFile)
 {

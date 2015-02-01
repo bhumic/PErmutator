@@ -1,8 +1,4 @@
-#ifdef _WIN32
-	#include "Disassembler.h"
-#elif __linux__
-	#include "../Headers/Disassembler.h"
-#endif
+#include "Disassembler.h"
 
 Disassembler::Disassembler(std::fstream& hInputFile)
 {
