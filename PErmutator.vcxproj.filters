@@ -22,6 +22,12 @@
     <Filter Include="ExternalLib\distorm3\include">
       <UniqueIdentifier>{fdd055f3-3142-4d9b-a74c-da22bae0ddc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="thesis">
+      <UniqueIdentifier>{c9564af5-815d-4d20-ab0f-9e2db790e732}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thesis\slike">
+      <UniqueIdentifier>{500d7dc5-3d19-4901-8e1d-4f21e897ca1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Disassembler.h">
@@ -133,5 +139,97 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
+    <None Include="thesis\diplomski.tex">
+      <Filter>thesis</Filter>
+    </None>
+    <None Include="thesis\fer.bst">
+      <Filter>thesis</Filter>
+    </None>
+    <None Include="thesis\fer.cls">
+      <Filter>thesis</Filter>
+    </None>
+    <None Include="thesis\literatura.bib">
+      <Filter>thesis</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="thesis\slike\AD_CM1_graph.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\aslr.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\aslr_permutacija.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\aslr_v2.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\buffer_overflow_legitdata.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\buffer_overflow_nodata.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\buffer_overflow_overflow.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\control_flow_graph.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\dos_stub.PNG">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\double_free.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\free_heap_block.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\free_lists_entries.PNG">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\heap_2_allocated_blocks.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\heap_structure.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\image_dos_header.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\memory_corruption.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\pe_format.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\permutator_graph_part.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\permutator_graph_permutated.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\primjer_rva.PNG">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\ret2lib.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\ret2lib_stackFrame.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\rop_add34.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\rop_add56.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\rop_add78.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\used_heap_block.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -41,7 +41,7 @@ typedef struct _Block
 class Permutator
 {
 public:
-	Permutator(std::fstream& hInputFile);
+	Permutator(char* fileName);
 	~Permutator();
 
 	Graph* GetGraph();
@@ -51,18 +51,19 @@ public:
 	bool WriteModifiedFile();
 
 private:
-	std::fstream* hInputFile;
+	std::fstream hInputFile;
 	std::ofstream outputFile;
 	std::ofstream gvFile;
 	PIMAGE_DOS_HEADER pDosHeader;
 	PIMAGE_NT_HEADERS pNtHeader;
+	PIMAGE_SECTION_HEADER pExecSectionHeader;
 	DWORD dwFstSctHdrOffset;
 	Graph graph;
 	std::vector<Node* > dataNodes;
 	BYTE* dataBytes;
 	DWORD dataSize;
 		
-	void InitPermutator();
+	void InitPermutator(char* fileName);
 	void _CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset, 
 		std::vector<Block>& targets);
 	void __CreateGraph(BYTE* sectionData, _OffsetType blockOffset, DWORD dwSectionSize, _OffsetType parentOffset);

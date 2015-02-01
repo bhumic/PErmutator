@@ -19,10 +19,14 @@
 
 #include "Permutator.h"
 
-Permutator::Permutator(std::fstream& hInputFile)
+Permutator::Permutator(char* fileName)
 {
-	this->hInputFile = &hInputFile;
-	InitPermutator();
+// Init exceptions for file IO
+	hInputFile.exceptions(std::fstream::badbit | std::fstream::failbit);
+	gvFile.exceptions(std::fstream::badbit | std::fstream::failbit);
+	outputFile.exceptions(std::fstream::badbit | std::fstream::failbit);
+
+	InitPermutator(fileName);
 }
 
 
@@ -33,10 +37,6 @@ Permutator::~Permutator()
 int Permutator::CreateGraph(int creationMode)
 {
 	BYTE* sectionData = nullptr;
-	PIMAGE_SECTION_HEADER *pSectionHeader = nullptr;
-
-	PIMAGE_SECTION_HEADER ppSectionHeader;
-	pSectionHeader = &ppSectionHeader;
 
 //	if (pNtHeader->FileHeader.Machine != 0x014C)
 //	{
@@ -44,20 +44,35 @@ int Permutator::CreateGraph(int creationMode)
 //		return -1;
 //	}
 
-	sectionData = LoadExecutableSection(*hInputFile, pDosHeader, pNtHeader, dwFstSctHdrOffset, pSectionHeader);
-
+	pExecSectionHeader = FindSection(hInputFile, pNtHeader->OptionalHeader.AddressOfEntryPoint, dwFstSctHdrOffset,
+		pNtHeader->FileHeader.NumberOfSections);
+	if (pExecSectionHeader == nullptr)
+	{
+		std::cerr << "CreateGraph: Unable to read section header for executable code" << std::endl;
+		exit(-1);
+	}
+	
+	sectionData = LoadSection(hInputFile, pExecSectionHeader);
 	if (sectionData == nullptr)
-		return -1;
+	{
+		std::cerr << "CreateGraph: Unable to load executable section to memory" << std::endl;
+		exit(-1);
+	}
 
-	DWORD dwSectionSize = (*pSectionHeader)->SizeOfRawData;
+	DWORD dwSectionSize = pExecSectionHeader->SizeOfRawData;
 
 	// Calculate entry point offset
 	DWORD dwEpOffset = pNtHeader->OptionalHeader.AddressOfEntryPoint - 
-		(*pSectionHeader)->VirtualAddress;
+		pExecSectionHeader->VirtualAddress;
 
 	// Initialize array to differentiate data nodes from code nodes
-	dataSize = (*pSectionHeader)->SizeOfRawData;
+	dataSize = pExecSectionHeader->SizeOfRawData;
 	dataBytes = (BYTE*)malloc(dataSize);
+	if (dataBytes == nullptr)
+	{
+		std::cerr << "CreateGraph: Unable to allocate memory for data bytes: " << dataSize << std::endl;
+		exit(-1);
+	}
 	std::memset((BYTE*)dataBytes, 0, dataSize);
 
 	// Create Graph
@@ -79,17 +94,40 @@ int Permutator::CreateGraph(int creationMode)
 	return 0;
 }
 
-void Permutator::InitPermutator()
+void Permutator::InitPermutator(char* fileName)
 {
+// Open file for IO operations
+	try
+	{
+		hInputFile.open(fileName, std::ios::in | std::ios::binary);
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "InitPermutator: Error while opening input file: " << e.what() << std::endl;
+		exit(-1);
+	}
+
+	if (!ValidateFile(hInputFile))
+	{
+		std::cerr << "InitPermutator: Not a valid PE file (MZ signature)" << std::endl;
+		exit(-1);
+	}
+
 	// Read the DOS header
-	pDosHeader = (PIMAGE_DOS_HEADER)ReadHeader(*hInputFile, sizeof(IMAGE_DOS_HEADER), 0);
+	pDosHeader = (PIMAGE_DOS_HEADER)ReadHeader(hInputFile, sizeof(IMAGE_DOS_HEADER), 0);
 	if (pDosHeader == nullptr)
-		throw std::runtime_error("Invalid DOS header");
+	{
+		std::cerr << "InitPermutator: Invalid DOS header" << std::endl;
+		exit(-1);
+	}
 
 	// Read the PE Header
-	pNtHeader = (PIMAGE_NT_HEADERS)ReadHeader(*hInputFile, sizeof(IMAGE_NT_HEADERS), pDosHeader->e_lfanew);
+	pNtHeader = (PIMAGE_NT_HEADERS)ReadHeader(hInputFile, sizeof(IMAGE_NT_HEADERS), pDosHeader->e_lfanew);
 	if (pNtHeader == nullptr)
-		throw std::runtime_error("Invalid PE header");
+	{
+		std::cerr << "InitPermutator: Invalid NT header" << std::endl;
+		exit(-1);
+	}
 
 	// Find the file offset to the first section header
 	dwFstSctHdrOffset = pDosHeader->e_lfanew + 4 + IMAGE_SIZEOF_FILE_HEADER + pNtHeader->FileHeader.SizeOfOptionalHeader;			
@@ -395,24 +433,48 @@ bool Permutator::CheckRange(QWORD qOffset)
 
 bool Permutator::VisualizeGraph(Node* n)
 {
-	gvFile.open ("graph.dot", std::ios::out);
-	if (!gvFile.is_open() || !gvFile.good())
+	try
+	{
+		gvFile.open("graph.dot", std::ios::out);
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "VisualizeGraph: Unable to open output file for graphviz: " << e.what() << std::endl;
 		return false;
+	}
 
 	std::string digraphStart = "digraph g {\n"
 		"graph [fontsize=12 labelloc=\"t\" label=\"\" splines=true overlap=false];\n"
 		"ratio = auto;\n";
 	std::string digraphEnd = "}";
-	gvFile.write(digraphStart.c_str(), digraphStart.length());
+
+	try
+	{
+		gvFile.write(digraphStart.c_str(), digraphStart.length());
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "VisualizeGraph: Unable to write graph prologue to graphviz output file: " << e.what() << std::endl;
+		return false;
+	}
 	
 	//Node* n = graph.GetRoot();
 
 	ProcessNode(n, gvFile);
 	CreatePath(n, gvFile);
 
-	gvFile.write(digraphEnd.c_str(), digraphEnd.length());
-	gvFile.flush();
-	gvFile.close();
+	try
+	{
+		gvFile.write(digraphEnd.c_str(), digraphEnd.length());
+		gvFile.flush();
+		gvFile.close();
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "VisualizeGraph: Error while writing graph epilogue to graphviz output file: " << e.what() << std::endl;
+		return false;
+	}
+	
 	return true;
 }
 
@@ -438,39 +500,47 @@ void Permutator::ProcessNode(Node* n, std::ofstream& gvFile)
 	stream << std::hex << n->GetOffset();
 	std::string stateName = "\"0x" + stream.str() + "\"";
 
-	gvFile.write(stateName.c_str(), stateName.length());
-	gvFile.write(stateStyleStart.c_str(), stateStyleStart.length());
-	gvFile.write(stateHeaderStart.c_str(), stateHeaderStart.length());
-	gvFile.write(stateName.c_str(), stateName.length());
-	gvFile.write(stateHeaderEnd.c_str(), stateHeaderEnd.length());
-	while (1)
+	try
 	{
-		res = distorm_decode(n->GetOffset(), (const unsigned char*)instructions, n->GetSize(),
-			dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
-		if (res == DECRES_INPUTERR) {
-			std::cerr << "VisualizeGraph(): Disassembly error" << std::endl;
-			return;
-		}
-
-		for (unsigned int i = 0; i < decodedInstructionsCount; ++i)
+		gvFile.write(stateName.c_str(), stateName.length());
+		gvFile.write(stateStyleStart.c_str(), stateStyleStart.length());
+		gvFile.write(stateHeaderStart.c_str(), stateHeaderStart.length());
+		gvFile.write(stateName.c_str(), stateName.length());
+		gvFile.write(stateHeaderEnd.c_str(), stateHeaderEnd.length());
+		while (1)
 		{
-			gvFile.write(stateDataStart.c_str(), stateDataStart.length());
-			gvFile.write((char*)decodedInstructions[i].mnemonic.p, decodedInstructions[i].mnemonic.length);
-			if (decodedInstructions[i].operands.length != 0)
-			{
-				gvFile.write(" ", 1);
-				gvFile.write((char*)decodedInstructions[i].operands.p, decodedInstructions[i].operands.length);
+			res = distorm_decode(n->GetOffset(), (const unsigned char*)instructions, n->GetSize(),
+				dt, decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
+			if (res == DECRES_INPUTERR) {
+				std::cerr << "ProcessNode: Disassembly error" << std::endl;
+				return;
 			}
-			gvFile.write(stateDataEnd.c_str(), stateDataEnd.length());
+
+			for (unsigned int i = 0; i < decodedInstructionsCount; ++i)
+			{
+				gvFile.write(stateDataStart.c_str(), stateDataStart.length());
+				gvFile.write((char*)decodedInstructions[i].mnemonic.p, decodedInstructions[i].mnemonic.length);
+				if (decodedInstructions[i].operands.length != 0)
+				{
+					gvFile.write(" ", 1);
+					gvFile.write((char*)decodedInstructions[i].operands.p, decodedInstructions[i].operands.length);
+				}
+				gvFile.write(stateDataEnd.c_str(), stateDataEnd.length());
+			}
+
+			if (res == DECRES_SUCCESS) break;
 		}
+		gvFile.write(stateStyleEnd.c_str(), stateStyleEnd.length());
 
-		if (res == DECRES_SUCCESS) break;
+		for (unsigned int i = 0; i < n->GetChildren().size(); ++i)
+		{
+			ProcessNode(n->GetChildren().at(i), gvFile);
+		}
 	}
-	gvFile.write(stateStyleEnd.c_str(), stateStyleEnd.length());
-
-	for (unsigned int i = 0; i < n->GetChildren().size(); ++i)
+	catch (std::fstream::failure e)
 	{
-		ProcessNode(n->GetChildren().at(i), gvFile);
+		std::cerr << "ProcessNode: Error while writing node information to graphviz file: " << e.what() << std::endl;
+		return;
 	}
 
 	return;
@@ -490,7 +560,16 @@ void Permutator::CreatePath(Node* n, std::ofstream& gvFile)
 		stream << std::hex << n->GetChildren().at(i)->GetOffset();
 		std::string childName = "\"0x" + stream.str() + "\"";
 		std::string pathValue = stateName + " -> " + childName + " " + pathAttribute;
-		gvFile.write(pathValue.c_str(), pathValue.length());
+		try
+		{
+			gvFile.write(pathValue.c_str(), pathValue.length());
+		}
+		catch (std::fstream::failure e)
+		{
+			std::cerr << "CreatePath: Error while writing paths to graphviz output file: " << e.what() << std::endl;
+			return;
+		}
+		
 		CreatePath(n->GetChildren().at(i), gvFile);
 		stream.str(std::string());
 	}
@@ -524,16 +603,31 @@ void Permutator::CreateDataNodes(BYTE* sectionData)
 
 bool Permutator::WriteModifiedFile()
 {
-	outputFile.open("permutatedFile.exe", std::ios::out | std::ios::binary);
-	if (!outputFile.is_open() || !outputFile.good())
+	try
+	{
+		outputFile.open("permutatedFile.exe", std::ios::out | std::ios::binary);
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "WriteModifiedFile: Error while opening stream to modified file: " << e.what() << std::endl;
 		return false;
+	}
 	
-	// Write DOS header
-	outputFile.write((char*)pDosHeader, sizeof(IMAGE_DOS_HEADER));
+	try
+	{
+		// Write DOS header
+		outputFile.write((char*)pDosHeader, sizeof(IMAGE_DOS_HEADER));
 
-	// Write NT header
-	outputFile.seekp(pDosHeader->e_lfanew, std::ios::beg);
-	outputFile.write((char*)pNtHeader, sizeof(IMAGE_NT_HEADERS));
+		// Write NT header
+		outputFile.seekp(pDosHeader->e_lfanew, std::ios::beg);
+		outputFile.write((char*)pNtHeader, sizeof(IMAGE_NT_HEADERS));
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "WriteModifiedFile: Error while writing DOS/NT headers to modified file: " << e.what() << std::endl;
+		return false;
+	}
+	
 
 	// Write section headers and section data
 	BYTE* sectionData = nullptr;
@@ -541,13 +635,18 @@ bool Permutator::WriteModifiedFile()
 
 	for (WORD i = 0; i < pNtHeader->FileHeader.NumberOfSections; ++i)
 	{
-		pSectionHeader = (PIMAGE_SECTION_HEADER)ReadHeader(*hInputFile, IMAGE_SIZEOF_SECTION_HEADER, dwFstSctHdrOffset + i*IMAGE_SIZEOF_SECTION_HEADER);
+		pSectionHeader = (PIMAGE_SECTION_HEADER)ReadHeader(hInputFile, IMAGE_SIZEOF_SECTION_HEADER, dwFstSctHdrOffset + i*IMAGE_SIZEOF_SECTION_HEADER);
 		if (pSectionHeader == nullptr)
 		{
-			return nullptr;
+			std::cerr << "WriteModifiedFile: Invalid section header read" << std::endl;
+			return false;
 		}
 		
-		WriteSectionHeader(pSectionHeader, i, outputFile, dwFstSctHdrOffset);
+		if (!WriteSectionHeader(pSectionHeader, i, outputFile, dwFstSctHdrOffset))
+		{
+			std::cerr << "WriteModifiedFile: Error writing the section header: " << pSectionHeader->Name << std::endl;
+			continue;
+		}
 
 		if ((pNtHeader->OptionalHeader.AddressOfEntryPoint >= pSectionHeader->VirtualAddress) &&
 			(pNtHeader->OptionalHeader.AddressOfEntryPoint < (pSectionHeader->VirtualAddress + pSectionHeader->Misc.VirtualSize)))
@@ -555,12 +654,25 @@ bool Permutator::WriteModifiedFile()
 			sectionData = (BYTE*)malloc(pSectionHeader->SizeOfRawData);
 			WriteGraph(graph.GetRoot(), sectionData);
 			WriteData(sectionData);
-			WriteSection(outputFile, pSectionHeader, sectionData);
+			if (!WriteSection(outputFile, pSectionHeader, sectionData))
+			{
+				std::cerr << "WriteModifiedFile: Error while writing data of executable section: " << pSectionHeader->Name << std::endl;
+				continue;
+			}
 		}
 		else
 		{
-			sectionData = LoadSection(*hInputFile, pSectionHeader);
-			WriteSection(outputFile, pSectionHeader, sectionData);
+			sectionData = LoadSection(hInputFile, pSectionHeader);
+			if (sectionData == nullptr)
+			{
+				std::cerr << "WriteModifiedFile: Unable to load section: " << pSectionHeader->Name << std::endl;
+				continue;
+			}
+			if (!WriteSection(outputFile, pSectionHeader, sectionData))
+			{
+				std::cerr << "WriteModifiedFile: Error while writing data of section: " << pSectionHeader->Name << std::endl;
+				continue;
+			}
 		}
 		
 
@@ -571,17 +683,31 @@ bool Permutator::WriteModifiedFile()
 	}
 
 // Write overlays if any
-	PIMAGE_SECTION_HEADER pLastSectionHeader = (PIMAGE_SECTION_HEADER)ReadHeader(*hInputFile, IMAGE_SIZEOF_SECTION_HEADER,
+	PIMAGE_SECTION_HEADER pLastSectionHeader = (PIMAGE_SECTION_HEADER)ReadHeader(hInputFile, IMAGE_SIZEOF_SECTION_HEADER,
 		dwFstSctHdrOffset + IMAGE_SIZEOF_SECTION_HEADER * (pNtHeader->FileHeader.NumberOfSections - 1));
 	DWORD overlaySize;
-	BYTE* overlay = ExtractOverlays(*hInputFile, pLastSectionHeader, &overlaySize);
+	BYTE* overlay = ExtractOverlays(hInputFile, pLastSectionHeader, &overlaySize);
 	if (overlay != nullptr && overlaySize != 0)
 	{
-		WriteDataToFile(outputFile, pLastSectionHeader->PointerToRawData + pLastSectionHeader->SizeOfRawData, overlaySize, overlay);
+		if (!WriteDataToFile(outputFile, pLastSectionHeader->PointerToRawData + pLastSectionHeader->SizeOfRawData,
+			overlaySize, overlay))
+		{
+			std::cerr << "WriteModifiedFile: Error while writing overlay data to modified file" << std::endl;
+			return false;
+		}
 	}
 
-	outputFile.flush();
-	outputFile.close();
+	try
+	{
+		outputFile.flush();
+		outputFile.close();
+	}
+	catch (std::fstream::failure e)
+	{
+		std::cerr << "WriteModifiedFile: Error while closing modified file stream: " << e.what() << std::endl;
+		return false;
+	}
+
 	return true;
 }
 

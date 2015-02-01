@@ -122,6 +122,38 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
+    <None Include="thesis\diplomski.tex" />
+    <None Include="thesis\fer.bst" />
+    <None Include="thesis\fer.cls" />
+    <None Include="thesis\literatura.bib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="thesis\slike\AD_CM1_graph.png" />
+    <Image Include="thesis\slike\aslr.png" />
+    <Image Include="thesis\slike\aslr_permutacija.png" />
+    <Image Include="thesis\slike\aslr_v2.png" />
+    <Image Include="thesis\slike\buffer_overflow_legitdata.png" />
+    <Image Include="thesis\slike\buffer_overflow_nodata.png" />
+    <Image Include="thesis\slike\buffer_overflow_overflow.png" />
+    <Image Include="thesis\slike\control_flow_graph.png" />
+    <Image Include="thesis\slike\dos_stub.PNG" />
+    <Image Include="thesis\slike\double_free.png" />
+    <Image Include="thesis\slike\free_heap_block.png" />
+    <Image Include="thesis\slike\free_lists_entries.PNG" />
+    <Image Include="thesis\slike\heap_2_allocated_blocks.png" />
+    <Image Include="thesis\slike\heap_structure.png" />
+    <Image Include="thesis\slike\image_dos_header.png" />
+    <Image Include="thesis\slike\memory_corruption.png" />
+    <Image Include="thesis\slike\permutator_graph_part.png" />
+    <Image Include="thesis\slike\permutator_graph_permutated.png" />
+    <Image Include="thesis\slike\pe_format.png" />
+    <Image Include="thesis\slike\primjer_rva.PNG" />
+    <Image Include="thesis\slike\ret2lib.png" />
+    <Image Include="thesis\slike\ret2lib_stackFrame.png" />
+    <Image Include="thesis\slike\rop_add34.png" />
+    <Image Include="thesis\slike\rop_add56.png" />
+    <Image Include="thesis\slike\rop_add78.png" />
+    <Image Include="thesis\slike\used_heap_block.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
