@@ -4,6 +4,7 @@ void OpenFile(const char *fileName, std::fstream& hFile)
 {
 	hFile.open(fileName, std::ios::in | std::ios::binary);
 }
+
 BYTE* LoadSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader)
 {
 	unsigned char *buffer;
@@ -15,6 +16,7 @@ BYTE* LoadSection(std::fstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader)
 
 	return buffer;
 }
+
 BOOL WriteSection(std::ofstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, unsigned char *buffer)
 {
 	hFile.seekp(pSectionHeader->PointerToRawData, std::ios::beg);
@@ -22,6 +24,7 @@ BOOL WriteSection(std::ofstream& hFile, PIMAGE_SECTION_HEADER pSectionHeader, un
 
 	return TRUE;
 }
+
 LPVOID ReadHeader(std::fstream& hFile, DWORD dwHeaderSize, DWORD dwOffset)
 {
 	LPVOID pHeader;
@@ -37,6 +40,7 @@ LPVOID ReadHeader(std::fstream& hFile, DWORD dwHeaderSize, DWORD dwOffset)
 
 	return pHeader;
 }
+
 PIMAGE_SECTION_HEADER FindSection(std::fstream hFile, DWORD dwRVA, DWORD dwFstSectionHeader, WORD wNumSections)
 {
 	PIMAGE_SECTION_HEADER pSectionHeader = NULL;
@@ -60,10 +64,12 @@ PIMAGE_SECTION_HEADER FindSection(std::fstream hFile, DWORD dwRVA, DWORD dwFstSe
 
 	return nullptr;
 }
+
 DWORD AlignUp(DWORD dwSize, DWORD dwAlign)
 {
 	return ((dwSize + dwAlign - 1) - (dwSize + dwAlign - 1) % dwAlign);
 }
+
 BYTE* ReadData(unsigned char*buffer, DWORD dwOffset, DWORD dwSize)
 {
 	unsigned char *data_segment;
@@ -86,6 +92,7 @@ BYTE* ReadData(unsigned char*buffer, DWORD dwOffset, DWORD dwSize)
 
 	return data_segment;
 }
+
 BOOL IsFunctionName(char *buffer)
 {
 	DWORD length = strlen(buffer);
@@ -105,6 +112,7 @@ BOOL IsFunctionName(char *buffer)
 
 	return TRUE;
 }
+
 BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID, std::ofstream& hFile, DWORD dwFstSctHeaderOffset)
 {
 	DWORD dwSectionOffset;
@@ -115,6 +123,7 @@ BOOL WriteSectionHeader(PIMAGE_SECTION_HEADER pSectionHeader, DWORD dwSectionID,
 
 	return TRUE;
 }
+
 PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData, DWORD dwSectionDataSize,
 	DWORD dwFstSectionHeaderOffset, PIMAGE_NT_HEADERS pNtHeader, const char *sectionName)
 {
@@ -171,6 +180,7 @@ PIMAGE_SECTION_HEADER AddSection(std::fstream& hFile, unsigned char *sectionData
 
 	return pSectionHeader;
 }
+
 BOOL WriteDataToFile(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* data)
 {
 	hFile.seekp(dwOffset, std::ios::beg);
@@ -178,6 +188,7 @@ BOOL WriteDataToFile(std::ofstream& hFile, DWORD dwOffset, DWORD dwSize, BYTE* d
 
 	return TRUE;
 }
+
 BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, PIMAGE_NT_HEADERS pNtHeader,
 	DWORD dwFstSctHdrOffset, PIMAGE_SECTION_HEADER* pSectionHeader)
 {
@@ -211,6 +222,7 @@ BYTE* LoadExecutableSection(std::fstream& hFile, PIMAGE_DOS_HEADER pDosHeader, P
 
 	return sectionData;
 }
+
 BOOL ValidateFile(std::fstream& hFile)
 {
 	BYTE buffer[2];
@@ -223,6 +235,7 @@ BOOL ValidateFile(std::fstream& hFile)
 
 	return TRUE;
 }
+
 BYTE* ExtractOverlays(std::fstream& hFile, PIMAGE_SECTION_HEADER pLastSectionHeader, DWORD *overlay_size)
 {
 	DWORD fileSize;

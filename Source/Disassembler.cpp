@@ -5,11 +5,13 @@ Disassembler::Disassembler(std::fstream& hInputFile)
 	this->hInputFile = &hInputFile;
 	InitDisassembler();
 }
+
 Disassembler::~Disassembler()
 {
 	free(pDosHeader);
 	free(pNtHeader);
 }
+
 void Disassembler::InitDisassembler()
 {
 
