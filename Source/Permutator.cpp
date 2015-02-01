@@ -376,7 +376,7 @@ bool Permutator::CheckRange(QWORD qOffset)
 
 bool Permutator::VisualizeGraph(Node* n)
 {
-	gvFile.open ("graph.gh", std::ios::out);
+	gvFile.open ("graph.dot", std::ios::out);
 	if (!gvFile.is_open() || !gvFile.good())
 		return false;
 
