@@ -8,10 +8,6 @@
 #define IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE 0x0040
 #define IMAGE_DLLCHARACTERISTICS_NX_COMPAT 0x0100
 
-#ifdef __linux__
-#define nullptr NULL
-#endif
-
 typedef void* HANDLE;
 typedef unsigned char BYTE;
 typedef int BOOL;
