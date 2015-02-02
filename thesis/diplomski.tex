@@ -49,20 +49,20 @@ korisnika Interneta. Međutim, postavlja se pitanje koliko je to
 danas dovoljno. S intenzivnim razvojem tehnologije koja nam
 svakodnevno može pomoći, dolazi i do razvoja onog dijela
 tehnologije koji je tu radi remećenja mira u računalnom svijetu:
-maliciozni programi. Iako se danas ulažu veliki napori kako bi se
+malicioznih programa. Iako se danas ulažu veliki napori kako bi se
 sustavi održali sigurnima te kako bi se smanjio broj ranjivosti u
 postojećim aplikacijama, autori malicioznih programa i dalje
 uspijevaju pronaći propuste u sustavima te razviti programe koji
 te propuste iskorištavaju. Značajan dio propusta u sustavima
-nastaje radi "ljudske pogreške" te se ti propusti manifestiraju u
-obliku poput prelijevanja spremnika (engl. \emph{Buffer
-Overflow}). Radi se o jednoj od najčešćih ranjivosti danas te
+nastaje radi "ljudske pogreške" te se ti propusti manifestiraju u		% Zašto je u navodnicima ljudska pogreska?
+raznim oblicima, poput prelijevanja spremnika (engl. \emph{Buffer
+Overflow}). Prelijevanje spremnika je jedna od najčešćih ranjivosti danas te
 ukoliko napadači znaju u kojim dijelovima programskog koda bi se
 takve pogreške mogle dogoditi, oni ih uspješno iskorištavaju.
 Kako bi se napadačima otežao pronalazak ranjivih dijelova
 programskog koda, uvodi se mehanizam zaštite koji aplikacije i
 njene dijelove učitava na slučajno odabrane početne adrese u
-memoriji. Na taj način napadačima je značajno otežan postupak
+memoriji. Na taj način napadačima je značajno otežan postupak			% Pronalaženje ranjivosti ili iskorištavanje?
 pronalaženja ranjivih dijelova koda jer prije bilo kakvog
 pokušaja napada ubacivanjem koda (engl. \emph{Injection Attack}),
 koji uglavnom prethodi napadima prelijevanja spremnika, napadači
@@ -85,43 +85,46 @@ Ovaj rad sastoji se od šest poglavlja. Svako od tih šest
 poglavlja sadrži informacije koje su važne kako bi se shvatila
 potreba za jednim ovakvim alatom. Osim toga, pojedina poglavlja
 sadrže sve potrebne informacije o implementaciji alata te o
-problemima s kojima se prilikom implementacije susrećemo. U
-nastavku ovog poglavlja slijedi detaljan opis svih šest
-poglavlja:
+problemima s kojima se prilikom implementacije susrelo.
+Poglavlja i njihov sadržaj je sljedeći:
 
 \begin{enumerate}
-\item Uvod: Trenutno poglavlje koje
-ukratko opisuje zašto je jedan takav alat poput modula za
-promjenu koda potreban. Osim toga, uvodno poglavlje daje kratak
-opis svih ostalih poglavlja unutar rada.
-\item Format Izvršnih
-Datoteka: Prije nego se uopće krene u promjenu strukture izvršnih
-datoteka, potrebno je detaljno opisati najvažnije dijelove istih.
-Upravo tome služi navedeno poglavlje jer su unutar njega opisani
-najvažniji dijelovi izvršnih datoteka na Microsoft Windows
-platformi. Navedeno poglavlje pomaže nam u pronalasku
-odgovarajućih dijelova izvršne datoteke, koji su kasnije potrebni
-prilikom implementacije modula za promjenu koda.
-\item Postojeći
-Mehanizmi Zaštite: Navedeno poglavlje sadrži informacije o
-postojećim, sličnim mehanizmima zaštite protiv napada usmjerenih
-na korupciju memorije. U sklopu poglavlja opisani su mehanizmi
-zaštite na razini samog operacijskog sustava, kao i mehanizmi
-zaštite koji djeluju kao programi u korisničkom prostoru.  \item
-Korupcija Memorije: U navedenom poglavlju detaljno su opisani
-najpoznatiji napadi vezani uz iskorištavanje korupcije memorije.
-Postojanje jednog takvog poglavlja je važno jer daje čitatelju
-uvid u način funkcioniranja napada te opisuje na koji način modul
-za permutaciju koda i ostali mehanizmi zaštite pomažu u
-sprječavanju navedenih napada.
-\item PErmutator Program: Sadrži
-sve informacije vezane uz modul za promjenu koda. Unutar ovog
-poglavlja nalazi se detaljan opis pojedinih dijelova razvijenog
-modula te detalji o njihovoj implementaciji. Osim toga, nalazi se
-i popis problema s kojima smo se susreli prilikom implementacije
-te moguća rješenja za te probleme.
-\item Zaključak: Sadrži
-pregled o svemu dotada napisanom.
+\item Uvod: Trenutno poglavlje koje ukratko opisuje zašto je			% Izbacio bi ovo, Uvod se nikada ne opisuje.
+jedan takav alat poput modula za promjenu koda potreban. Osim
+toga, uvodno poglavlje daje kratak opis svih ostalih poglavlja
+unutar rada.
+
+\item Format Izvršnih Datoteka: Prije nego se uopće krene u
+promjenu strukture izvršnih datoteka, potrebno je detaljno
+opisati najvažnije dijelove istih.  Upravo tome služi navedeno
+poglavlje jer su unutar njega opisani najvažniji dijelovi
+izvršnih datoteka na Microsoft Windows platformi. Navedeno
+poglavlje pomaže nam u pronalasku odgovarajućih dijelova izvršne
+datoteke, koji su kasnije potrebni prilikom implementacije modula
+za promjenu koda.
+
+\item Postojeći Mehanizmi Zaštite: Navedeno poglavlje sadrži
+informacije o postojećim, sličnim mehanizmima zaštite protiv
+napada usmjerenih na korupciju memorije. U sklopu poglavlja
+opisani su mehanizmi zaštite na razini samog operacijskog
+sustava, kao i mehanizmi zaštite koji djeluju kao programi u			% Mislite u sklopu štićene aplikacije?
+korisničkom prostoru.
+
+\item Korupcija Memorije: U navedenom poglavlju detaljno su
+opisani najpoznatiji napadi vezani uz iskorištavanje korupcije
+memorije.  To je važno kako bi se dao 
+uvid u način funkcioniranja napada te objasnilo na koji
+način modul za permutaciju koda i ostali mehanizmi zaštite pomažu
+u sprječavanju navedenih napada.
+
+\item PErmutator Program: Sadrži sve informacije vezane uz modul
+za promjenu koda. Unutar ovog poglavlja nalazi se detaljan opis
+pojedinih dijelova razvijenog modula te detalji o njihovoj
+implementaciji. Osim toga, nalazi se i popis problema s kojima
+smo se susreli prilikom implementacije te moguća rješenja za te
+probleme.
+
+\item Zaključak: Sadrži pregled o svemu dotada napisanom.			% Zaključak nije pregled, to je sažetak!
 \end{enumerate}
 
 Nakon zaključka slijedi još i popis literature te dva dodatka
@@ -145,8 +148,8 @@ analize pojedinih dijelova izvršnih datoteka.
 
 \section{PE Format}
 
-PE (engl.\emph{Portable Executable}) zajednički je naziv za sve
-izvršne datoteke, DLL-ove (engl.\emph{Dynamic Link Library}) te
+PE (engl. \emph{Portable Executable}) zajednički je naziv za sve			% Razmak iza točke
+izvršne datoteke, DLL-ove (engl. \emph{Dynamic Link Library}) te
 objektne datoteke karakteristične za Microsoft Windows
 operacijski sustav. Navedeni format je identičan za izvršne
 datoteke i DLL-ove, s razlikom što DLL-ovi imaju postavljen
@@ -163,7 +166,7 @@ resurse i izvršni kod kako bi se proces mogao normalno odvijati.
 Doduše, valja napomenuti kako se svi dijelovi PE datoteke ne
 mapiraju u memoriju. Dijelovi koji se ne mapiraju su informacije
 o relokacijama, te informacije korisne kod traženja pogrešaka
-(engl.\emph{Debug Information}). Na slici \ref{fig:pe_format}
+(engl. \emph{Debug Information}). Na slici \ref{fig:pe_format}
 prikazana je struktura te pojedini dijelovi PE datoteka. U
 nastavku slijedi opis najvažnijih dijelova pojedinog zaglavlja.
 
@@ -176,7 +179,7 @@ nastavku slijedi opis najvažnijih dijelova pojedinog zaglavlja.
 \label{fig:pe_format} 
 \end{figure} 
 
-\pagebreak
+\pagebreak										% U LaTeX-u se rijetko ubacuju prijelomi stranica!
 
 Znači, kao što je vidljivo na slici \ref{fig:pe_format}, svaka PE
 datoteka može se podijeliti na sljedeće dijelove:
@@ -189,19 +192,20 @@ datoteka može se podijeliti na sljedeće dijelove:
 	\item Opcionalno zaglavlje
 	\item Tablice
 	\end{itemize}
-\item Zaglavlje sekcija
+\item Zaglavlje sekcija									% Doista idu prvo sva zaglavlja, pa svi podaci? Ili su zaglavlje+podaci u paketu?
 \item Podaci sekcija
 \end{itemize}
+
 \pagebreak
 
 \subsection{Relokacije i Relativne Virtualne Adrese}
 
-Prije samog uvoda o PE formatu datoteka potrebno je ukratko
+Prije samog opsa PE formata datoteka potrebno je ukratko
 opisati pojmove relokacija i relativnih virtualnih adresa.
 Navedeni pojmovi su od ključne važnosti za učitavanje PE datoteka
 u memoriju te ih je potrebno razumjeti kako bi se ideja o
 implementaciji permutacija nad izvršnim kodom PE datoteka mogla
-ostvariti. U nastavku su dane najvažnije informacije o oba pojma.
+ostvariti. U nastavku su dane najvažnije informacije o oba pojma.			% Rekao bi da su objašnjeni, a ne da su dane informacije
 
 \subsubsection{Relativne Virtualne Adrese}
 \label{sct:rva}
@@ -218,21 +222,21 @@ kojega je moguće specificirati adrese koje su neovisne o lokaciji
 na koju je datoteka učitana u memoriju.
 
 Iz prethodno navedenih razloga, uvedene su relativne virtualne
-adrese. Da pojednostavimo, relativne virtualne adrese su pomaci u
+adrese. Pojednostavljeno, relativne virtualne adrese su pomaci u
 odnosu na početnu adresu na koju je PE datoteka učitana u
 memoriju. Za primjer, uzmimo sljedeću situaciju: Neka je PE
 datoteka učitana na adresu \emph{0x400000} u memoriji te neka je
-njena sekcija(\ref{sec:sekcije}) s izvršnim kodom učitana na
+njena sekcija (\ref{sec:sekcije}) s izvršnim kodom učitana na				% Razmaci prije i poslije zagrada!
 adresi \emph{0x401000}. Relativna virtualna adresa sekcije se iz
-navedenih podataka računa na sljedeći način: (Adresa
+navedenih podataka računa na sljedeći način: (Adresa					% Prepisati, nije potrebno ovako raspisivati!
 sekcije)\emph{0x401000} - (Adresa datoteke)\emph{0x400000} =
 (Relativna virtualna adresa)\emph{0x1000}.
 
 Obrnuti proces, tj. pretvorbu relativne virtualne adrese u
 apsolutnu adresu provodi se tako što se relativna virtualna
 adresa (\emph{0x1000}) zbroji sa adresom na koju je datoteka
-učitana u memoriju (\emph{0x400000}). Ta apsolutna adresa naziva
-se virtualnom adresom. Na odsječku koda \ref{lst:primjer_rva}
+učitana u memoriju (\emph{0x400000}). Ta apsolutna adresa naziva			% Ta adresa, bez virtualna?
+se virtualnom adresom. Na odsječku koda \ref{lst:primjer_rva}				% Sve ``odsječke koda'' zamijeniti s ``ispis''
 prikazan je primjer relativne virtualne adrese. Niz okteta
 \emph{E8 45010000} označava operacijski kod \emph{CALL}
 instrukcije. Navedena instrukcija poziva funkciju koja se nalazi
@@ -249,9 +253,9 @@ A3 54304000                   MOV DWORD PTR DS:[403054],EAX
 \subsubsection{Relokacije}
 
 Sada kada je objašnjen pojam relativnih virtualnih adresa, moguće
-je krenuti na pojam relokacija. Kao što je već navedeno, svaka PE
+je opisati pojam relokacija. Kao što je već navedeno, svaka PE
 datoteka sadrži značajan broj memorijskih adresa preko kojih
-referenciraju varijable, funkcije itd. Kod DLL-ova, velik broj
+referenciraju varijable, funkcije itd. Kod DLL-ova, velik broj				% Doista? DLL-ovi koriste apsolutne adrese?
 adresa je apsolutan te je izračunat s obzirom na preferiranu
 adresu na koju se datoteka pokušava učitati u memoriju. Te adrese
 će biti ispravna samo u slučaju kada se PE datoteka uistinu učita
@@ -264,7 +268,7 @@ program radio ispravno.
 
 Upravo tu do izražaja dolaze osnovne relokacije. Cilj osnovnih
 relokacija je obavijestiti program za učitavanje
-(engl.\emph{loader}) o svim lokacijama unutar datoteke koje je
+(engl. \emph{loader}) o svim lokacijama unutar datoteke koje je
 potrebno modificirati ukoliko se datoteka ne učita na preferiranu
 adresu. To je ostvareno na način što program za učitavanje zna da
 postoji lista unutar PE datoteke koja sadrži informacije o tim
@@ -281,7 +285,7 @@ memorijske lokacije u ECX registar (odsječak koda
 
 Kao što je vidljivo instrukcija se nalazi na adresi
 \emph{0x00401020} te je duga šest okteta. Prva dva okteta
-(\emph{0x8D 0x0D}) sačinjavaju operacijski kod instrukcije dok
+(\emph{0x8D 0x0D}) sačinjavaju operacijski kod instrukcije dok				% Krivi oktet!
 ostala četiri okteta čine apsolutnu adresu (\emph{0x0040D434}). U
 ovom slučaju PE datoteka je učitana na preferiranu adresu koja
 iznosi \emph{0x00400000} te se varijabla koju je potrebno učitati
@@ -317,7 +321,7 @@ typedef struct _IMAGE_BASE_RELOCATION {
 typedef IMAGE_BASE_RELOCATION;
 \end{lstlisting}
 
-Svaka \emph{IMAGE\_BASE\_RELOCATION} struktura sastoji se od dva
+Svaka \emph{IMAGE\_BASE\_RELOCATION} struktura sastoji se od dva			% Ovo mi nije jasno!?
 elementa. Prvi element, \emph{VirtualAddress}, sadrži relativnu
 virtualnu adresu koja označava početak bloka memorije na koji
 treba primijeniti relokacije. Element \emph{SizeOfBlock} označava
@@ -332,6 +336,7 @@ vrijednosti može se rastaviti na dva dijela:
 \item Gornja 4 bita označavaju tip relokacije koji treba
 primijeniti. Postoji nekoliko tipova relokacija te su svi opisani
 u službenoj specifikaciji za PE format \citep{pe_spec}.
+
 \item Donjih 12 bitova označavaju pomak u odnosu na element
 \emph{VirtualAddress}, iz strukture
 \emph{IMAGE\_BASE\_RELCOATION}, na koji je potrebno primijeniti
@@ -383,14 +388,14 @@ datoteka te uvijek mora sadržavati vrijednost "MZ", tj. 0x5A4D u
 heksadecimalnom obliku. Ukoliko su ta prva dva okteta različita
 od "MZ", PE datoteka se ne smatra valjanom. Posljednji element u
 strukturi (\emph{e\_lfanew}) je najvažniji element
-\emph{IMAGE\_DOS\_HEADER} strukture jer pokazuje na početak
+\emph{IMAGE\_DOS\_HEADER} strukture jer pokazuje na početak				% Kako se računa taj početak?
 sljedećeg zaglavlja, tj. na \emph{NT zaglavlje}.
 
 Osim \emph{IMAGE\_DOS\_HEADER} strukture, MZ-DOS zaglavlje sadrži
 i tzv. DOS dopunski program (engl.\emph{DOS stub
 program})\citep{dos_stub}. DOS dopunski program ima samo jednu
 namjenu, a to je da ispiše kratak tekst i završi sa izvršavanjem
-ukoliko se PE datoteka proba izvršiti na 16-bitnom DOS računalu.
+ukoliko se PE datoteka pokuša pokrenuti na 16-bitnom DOS računalu.
 Potreba za time seže još u same početke razvoja Windows
 operacijskog sustava kakav se koristi danas. Razvoj PE datoteka
 započeo je još dok su računala sa DOS-om bila prilično raširena u
@@ -425,12 +430,12 @@ ključna dijela:
 
 Potpis PE zaglavlja, slično kao i kod MZ-DOS zaglavlja,
 sačinjavaju 4 okteta (0x00004550) koji predstavljaju znakovni niz
-"PE". Kako bi PE datoteka bila pravilna, nužno je da potpis
+"PE". Kako bi PE datoteka bila valjana, nužno je da potpis
 sadrži valjanu vrijednost. 
 
 PE zaglavlje (engl.\emph{PE File Header}) definirano je unutar
 strukture \emph{IMAGE\_FILE\_HEADER}. Veličina zaglavlja je 20
-okteta te je njegovu strukturu moguće vidjeti na odsječku koda
+	okteta te je njegovu strukturu moguće vidjeti na odsječku koda				% Te je njegova struktura prikazana na ispisu
 \ref{lst:imgFileHeader}
 
 \begin{lstlisting}[frame=single, caption=IMAGE\_FILE\_HEADER struktura, label={lst:imgFileHeader}]
@@ -474,6 +479,8 @@ samo najvažniji od njih. Opcionalno zaglavlje definirano je
 unutar strukture \emph{IMAGE\_OPTIONAL\_HEADER}. Izgled navedene
 strukture prikazan je na odsječku koda \ref{lst:imgOptHeader}.
 
+%% Svuda promijeniti da pise "Strukutra XYZ"
+
 \begin{lstlisting}[frame=single, caption=IMAGE\_OPTIONAL\_HEADER struktura, label={lst:imgOptHeader}]
 typedef struct _IMAGE_OPTIONAL_HEADER {
 	WORD    Magic;
@@ -510,7 +517,7 @@ typedef struct _IMAGE_OPTIONAL_HEADER {
 } IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;
 \end{lstlisting}
 
-Najvažniji dijelovi opcionalnog zaglavlja i njihovi opisi
+Najvažniji dijelovi opcionalnog zaglavlja i njihovi opisi			% Izbjegavati to "navedeni su u nastavku", samo kazes da "su", i to je to...
 navedeni su u nastavku:
 
 \begin{itemize}
@@ -577,8 +584,6 @@ opcionalnom zaglavlju prije nego se krene u potragu za određenom
 tablicom. Naziv i kratak opis svih podatkovnih tablica prikazan
 je na tablici \ref{tbl:imgDataDir}.
 
-\\
-\\
 {\small
 \begin{longtable}{|l|p{6cm}|}
 \caption{Popis tablica u opcionalnom zaglavlju} \label{tbl:imgDataDir} \\
@@ -638,7 +643,7 @@ typedef struct _IMAGE_SECTION_HEADER {
 \end{lstlisting}
 
 Prikazana \emph{IMAGE\_SECTION\_HEADER} struktura sastoji se od
-10 elemenata. U nastavku slijedi opis svakog od navedenih
+10 elemenata. U nastavku slijedi opis svakog od navedenih				% Značenja pojedinih polja su sljedeća:
 elemenata:
 
 \begin{itemize}
@@ -717,7 +722,8 @@ sekcije može mijenjati, ali ne i izvršavati.
 \end{itemize}
 
 
-\section{Alati}
+
+\section{Alati}									% Ovdje se počinje o svim alatima, pa razvoj, pa opet svi alati... to malo bolje strukturirati...
 
 Postoji velik broj alata za rad sa PE datotekama. Ukoliko se želi
 započeti sa razvojem vlastitih alata za rad sa PE datotekama,
@@ -730,22 +736,21 @@ postojećih alata koji olakšavaju analizu pojedinih dijelova PE
 datoteka. Neki od njih su:
 
 \begin{itemize}
-\item PeView: Alat koji pregledno prikazuje strukturu bilo koje
+\item PeView: Alat koji pregledno prikazuje strukturu bilo koje			% U literaturu staviti linkove na alate i pozvati se na reference!
 PE datoteke. Ne nudi mogućnost promjene pojedinih elemenata u PE
 datoteci, ali značajno olakšava snalaženje unutar pojedinih
 dijelova datoteke.
 
-\item LordPE: Moćan alat koji osim analize pojedinih elemenata u
+\item LordPE: Moćan alat koji osim analize pojedinih elemenata u		% Umjesto "moćan" staviti "s mnoštvom mogućnosti" ili nešto slično
 PE datoteci, nudi i mogućnost promjene vrijednosti čime se dobiva
 potpuno nova PE datoteka sa novim svojstvima.
 
 \end{itemize}
 
-
 \chapter{Postojeći Mehanizmi Zaštite}
 
 Cilj ovog poglavlja je dati kratak uvod u postojeće mehanizme
-zaštite koji značajno pomažu u sprječavanju napada usmjerenih na
+zaštite koji značajno pomažu u sprječavanju napada usmjerenih na		% Ovo je malo krivo rečeno "na memoriju", na propuste u radu s memorijom ili nešto slično
 memoriju. Konkretno, radi se o mehanizmima: ASLR (engl.
 \emph{Address Space Layout Randomization}), DEP (engl. \emph{Data
 Execution Prevention}) i ASLP (engl.\emph{Address Space Layout
@@ -763,7 +768,7 @@ napada usmjerenih na memoriju poput preljev spremnika (engl.
 ključni dijelovi programa učitavaju na slučajne lokacije u
 memoriji. Ti ključni dijelovi su početna adresa na koju je
 izvršna datoteka učitana, pozicija vanjskih biblioteka, pozicija
-gomile (engl. \emph{Heap}) te pozicija stoga (engl.\emph{Stack})
+gomile (engl. \emph{Heap}) te pozicija stoga (engl.\emph{Stack})		% Na niz mjesta nema razmaka iza točke...
 unutar procesnog adresnog prostora.
 
 ASLR značajno otežava napadačima pronalaženje točnih adresa na
@@ -790,7 +795,7 @@ izvršne datoteke ili DLL-a na nasumičnu adresu, učitavanje gomile
 na nasumičnu adresu te učitavanje stoga na nasumična adresu. 
 
 Proces odabira nasumične početne adrese provodi se na sljedeći
-način: Prilikom učitavanja PE(engl. \emph{Portable Executable})
+način: Prilikom učitavanja PE(engl. \emph{Portable Executable})			% Razmak prije zagrade!
 datoteke u memoriju, Windows operacijski sustav pročita
 vrijednost TSC(engl. \emph{Time Stamp Counter}) registra
 procesora. TSC registar sadrži broj ciklusa procesora nakon
@@ -837,7 +842,7 @@ sustava.
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=10cm, height=10cm]{slike/aslr_v2}
-\caption{Primjer ASLR-a između dva pokretanja}
+\caption{Primjer ASLR-a između dva pokretanja}					% Primjer djelovanja ASLR-a između...
 \label{fig:aslr} 
 \end{figure} 
 
@@ -852,18 +857,18 @@ DEP onemogućava pokretanje koda iz gomile ili sa stoga te se
 pojavljuje u dva načina rada:
 
 \begin{itemize}
-\item Sklopovski pojačan DEP: prepoznaje pokretanje koda iz gomile ili sa stoga te generira iznimku kada do izvršavanja dođe.
+\item Sklopovski pojačan DEP: prepoznaje pokretanje koda iz gomile ili sa stoga te generira iznimku kada do izvršavanja dođe.		% Detektira pokušaj izvršavanja (nečega) na stogu...
 \item Programski pojačan DEP: može spriječiti da zloćudni kod koristi mehanizme za rukovanje iznimkama u sustavu Windows.
 \end{itemize}
 
-Hardverski pojačan DEP označava sve memorijske lokacije kao ne
-izvršne, osim ako neka od njih eksplicitno ne sadrži programski
-kod. Ovaj oblik DEP-a oslanja se na procesor kako bi označio
+Hardverski pojačan DEP označava sve memorijske lokacije kao ne			% Maloprije je bio sklopovski... osim toga, jel "pojačan" ili "podržan"?
+izvršne, osim ako neka od njih eksplicitno ne sadrži programski			% neizvršive...
+kod. Ovaj oblik DEP-a oslanja se na procesor kako bi označio			% Procesor detektira pokušaj, a OS je taj koji označava...
 memoriju atributom koji govori kako se iz nje ne bi smio
 izvršavati programski kod.
 
 Arhitektura procesora određuje način na koji je DEP implementiran
-u sklopovlju i na koji označava stranicu u virtualnoj memoriji.
+u sklopovlju i na koji označava stranicu u virtualnoj memoriji.			% te kako se označavaju neizvršive stranice...
 Na taj način procesori koji podržavaju DEP mogu generirati
 iznimku kada se počne izvršavati kod sa stranica označenih
 odgovarajućim skupom atributa.
@@ -883,7 +888,7 @@ omogućava 32-bitnom procesoru da adresira više od 4 giga-bajta
 memorije. To se ostvaruje tako što se procesorska arhitektura
 proširuje na način da se umjesto 32 bita za adrese koristi 36
 bita. Valja još napomenuti kako operacijski sustav Windows
-automatski omogućava PAE radi podrške za DEP. Time nije potrebno
+automatski omogućava PAE radi podrške za DEP. Time nije potrebno		% Na taj način korisnike ne mora eksplicitno omogućiti PAE...
 tražiti od korisnika da zasebno omoguće PAE prilikom pokretanja
 sustava.
 
@@ -904,7 +909,7 @@ se iznimkama prilikom pokretanja dodatnog koda.
 \section{ASLP}
 \label{sct:aslp}
 
-ASLP\citep{aslp} (engl.\emph{Address Space Layout Permutation})
+ASLP\citep{aslp} (engl.\emph{Address Space Layout Permutation})			% Razmak prije citata
 je alat za operacijski sustav Linux koji omogućava pomicanje
 (permutaciju) dijelova koda i podataka iz izvršnih ELF datoteka
 na slučajno odabrane nove lokacije unutar izvršne ELF datoteke.
@@ -1987,8 +1992,8 @@ funkciji \emph{func1()} ubaci lažni okvir stoga čime će se
 pozvati funkcija \emph{add()} sa parametrima 5 i 6.
  
 \begin{lstlisting}[frame=single, caption=Primjera programa za
-programiranje "ret" blokovima, label={lst:rop_example}] #include
-<string.h>
+programiranje "ret" blokovima, label={lst:rop_example}]
+#include <string.h>
  
 void func1 (char *s) { char buffer[80]; strcpy(buffer, s); }
 
