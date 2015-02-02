@@ -940,7 +940,7 @@ permutacija unutar samih dijelova. U sklopu te dodatne
 permutacije provodi se slučajna reorganizacija tijela funkcija
 unutar dijela s izvršnim kodom, te reorganizacija statičnih i
 globalnih varijabli unutar dijela s podacima. Glavni problem koji
-se ovdje javlja (isto je i s modulom za promjenu koda koji
+se ovdje javlja (isto je i s modulom za promjenu koda koji			% Izbjegavati zagrade
 razvijamo) je ažuriranje svih referenci među raznim objektima u
 programu.
 
@@ -965,7 +965,7 @@ varijable. Konkretno, pomoću navedene opcije povezivaču,
 generiraju se sljedeće četiri sekcije:
 
 \begin{itemize}
-\item .got(engl. \emph{Global Offset Table}) sekcija: Sadrži pokazivače na sve statične varijable unutar datoteke.
+\item .got(engl. \emph{Global Offset Table}) sekcija: Sadrži pokazivače na sve statične varijable unutar datoteke.			% Razmaci prije otvorene zagrade!
 \item .plt(engl. \emph{Procedure Linkage Table}) sekcija: Sadrži pokazivače na sve funkcije unutar datoteke.
 \item .rel.text(engl. \emph{Relocation Text}) sekcija: Sadrži informacije o tome gdje se funkcije koriste unutar programa.
 \item .rel.data(engl. \emph{Relocation Data}) sekcija: Sadrži informacije o tome gdje se varijable koriste unutar programa.
@@ -977,7 +977,7 @@ poglavlja slijedi detaljniji opis operacija u svakome od koraka.
 
 \subsubsection{Krupna Permutacija}
 
-Pod pojmom krupne permutacije nalazi se prvi od dva koraka u
+Pod pojmom krupne permutacije nalazi se prvi od dva koraka u			% ``nalazi se'' -> podrazumijeva se
 postupku permutacije izvršnih ELF datoteka na Linux operacijskom
 sustavu. Cilj krupne permutacije je pomaknuti podatkovne i
 izvršne dijelove ELF datoteke ovisno o vrijednostima pomaka koje
@@ -996,7 +996,7 @@ Point}) ovisno o vrijednosti pomaka za izvršni segment.
 \item Prepisivanje zaglavlja programa: U drugom koraku krupne
 permutacije potrebno je promijeniti dva elementa u zaglavlju
 programa: \emph{p\_vaddr} i \emph{p\_paddr}. Navedeni elementi
-sadrže virtualne i fizičke adrese od podatkovnih i izvršnih
+sadrže virtualne i fizičke adrese od podatkovnih i izvršnih			% Bez ``od''
 segmenata programa te ih je potrebno modificirati sukladno
 vrijednostima pomaka koje je korisnik predao kao argument.
 Navedene adrese moraju biti ažurirane kako bi program učitavač
@@ -1058,7 +1058,7 @@ jezgre operacijskog sustava Linux.
 
 Kako bi permutacija u jezgri operacijskog sustava bila moguća,
 potrebno je provesti određene promjene na jezgri. U ovom koraku
-se ASLP značajno razlikuje od modula za promjenu jer ima
+se ASLP značajno razlikuje od modula za promjenu jer ima			% Sto je ``modul za promjenu''?
 mogućnost vršenja modifikacija na samoj jezgri operacijskog
 sustava dok je navedeno kod modula za promjenu koda nemoguće jer
 se radi o Microsoft Windows aplikaciji.
@@ -1119,7 +1119,7 @@ memorijskih dijelova.
 
 \subsubsection{Memorija za Učitavanje Vanjskih Biblioteka}
 
-Memorija za učitavanje vanjskih biblioteka (\emph{mmap()})
+Memorija za učitavanje vanjskih biblioteka (\emph{mmap()})				% mmap( je jezgrina funkcija, a ne ``memorija za ucitavanje vanjskih biblioteka''!)
 obuhvaća sve dijeljene biblioteke koje aplikacija želi učitati u
 memoriju. 
 
@@ -1149,7 +1149,7 @@ instrukcija uspije, PaXtest program javlja kako je navedena
 memorijska regija ranjiva na napade. Drugi test testira svaku
 pojedinu memorijsku regiju na randomizaciju, tj. koliko se bitova
 adrese može koristiti u postupku randomizacije. Na tablici
-\ref{tbl:paxtest_results} prikazani su rezultati drugog testa na
+\ref{tbl:paxtest_results} prikazani su rezultati drugog testa na			% Tko je vrsio to testiranje?
 jednom Linux stroju.
 
 \begin{table}[htb]
@@ -1180,11 +1180,11 @@ za permutaciju u podatkovnim i izvršnim dijelovima.
 Cilj ovog poglavlja je dati uvod u metode napada, pritom se
 orijenirajući na napade usmjerene na memoriju (engl.\emph{Memory
 Corruption Attacks}).  Napadi usmjereni na memoriju temelje se na
-korupciji memorije te su jedni od najstarijih, pri čemu svoj
-vrhunac doživljavaju tijekom 90-ih godina prošlog stoljeća. 
+korupciji memorije te su jedni od najstarijih napada, pri čemu svoj
+vrhunac doživljavaju tijekom 90-ih godina prošlog stoljeća. 				% To nisu ljudi ili bica koji ``dozivljavaju vrhunac''!
 
 Pod pojmom korupcije memorije misli se na one situacije u kojima
-se sadržaj memorije ne namjerno mijenja. Najčešći uzrok takvim
+se sadržaj memorije ne namjerno mijenja. Najčešći uzrok takvim				% Mislim da se pise ``nenamjerno''
 situacijama su programerske pogreške. Ukoliko se kasnije, tijekom
 izvođenja programa, pokuša pristupiti promijenjenim memorijskim
 lokacijama, velika je vjerojatnost kako će doći do gašenja
@@ -1195,7 +1195,7 @@ uzrokuje ne definirano ponašanje programa.
 Programski jezici kao što su C i C++ omogućuju programerima
 direktni pristup memoriji putem pokazivača (engl.\emph{Pointer})
 pri čemu nepravilna uporaba istih može dovesti do značajnih
-pogrešaka u memoriji. 
+pogrešaka u memoriji. 									% Svuda treba koristiti izraz ``pogresaka u radu s memorijom''!
 
 Pogreške uzrokovane korupcijom memorije dosta je teško otkriti.
 Postoje dva razloga za to:
@@ -1217,7 +1217,7 @@ Pogreške uzrokovane korupcijom memorije moguće je podijeliti u
 
 \begin{enumerate}
 
-\item Upotreba ne inicijalizirane memorije: Sadržaj ne
+\item Upotreba ne inicijalizirane memorije: Sadržaj ne					% Ne se pise zajedno s rjecju koja slijedi osim u nekim slucajevima. Pogledajte pravopis i popravite to!
 inicijalizirane memorije tretira se kao "smeće". Korištenje
 vrijednosti iz takve memorije može uzrokovati ne definirano
 ponašanje programa.
