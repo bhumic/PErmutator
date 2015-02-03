@@ -2049,6 +2049,7 @@ int main(int argc, char *argv)
 	func1(argv[1]);
 }
 \end{ispis}
+
 Izgled stoga prilikom poziva funkcije \emph{add(3,4)} prikazan je na slici \ref{fig:rop_add34} dok je za funkciju \emph{func1()} prikazan na slici \ref{fig:ret2lib_stackFrame}.
 
 \begin{figure}[!htb]
@@ -2064,6 +2065,7 @@ Kako bi se preko \emph{func1()} funkcije mogla pozvati funkcija \emph{add(5,6)} 
 \item Izazvati preljev spremnika u funkciji \emph{func1()} tako da se povratna adresa prepiše adresom funkcije \emph{add()}. Adresu funkcije \emph{add()} moguće je jednostavno naći unutar \emph{debugger} programa ukoliko nije aktivan mehanizam zaštite ASLR \ref{sct:aslr}.
 \item Uz prepisivanje povratne adrese, potrebno je na stog postaviti i lažni okvir stoga za funkciju \emph{add(5,6)} koju želimo pozvati.
 \end{itemize}
+
 U konačnici stog bi trebao izgledati kako je prikazano na slici \ref{fig:rop_add56}.
 
 \begin{figure}[!htb]
@@ -2074,6 +2076,7 @@ U konačnici stog bi trebao izgledati kako je prikazano na slici \ref{fig:rop_ad
 \caption{Izgled stoga nakon preljeva u funkciji \emph{func1()}}
 \label{fig:rop_add56} 
 \end{figure}
+
 Nakon što funkcija \emph{func1()} završi s izvršavanjem, kao povratna adresa pročitati će se adresa funkcije \emph{add()} te će na vrhu stoga biti raspon adresa \emph{a + 4} do \emph{a + 12} kako je prikazano na slici \ref{fig:rop_add56}. Time će se funkcija \emph{add(5,6)} izvršiti pri čemu napadač opet ima u kontroli povratnu adresu, tj. registar EIP.
 
 Za primjer, uzmimo da napadač želi prvo pozvati funkciju \emph{add(5,6)} te nakon nje funkciju \emph{add(7,8)}. Kako se funkcija \emph{func1()} poziva samo jedanput, potrebno je njezin ulazni znakovni niz oblikovati na način da se povratna adresa iz funkcije \emph{add(5,6)} iskoristi kako bi izvršavanje mogli prebaciti na funkciju \emph{add(7,8)}. Ovdje valja obratiti pažnju na još jednu stvar. Nakon što funkcija \emph{add(5,6)} završi s radom, na stogu i dalje ostaju njezini argumenti. Takvo nešto neće izazvati pravilan rad programa jer će okvir stoga za funkciju \emph{add(7,8,)} biti nepravilan. Kako bi se nepotrebni argumenti uklonili sa stoga potrebno je pronaći adresu niza instrukcija \emph{POP/POP/RET} te navedenu adresu zapisati kao povratnu adresu funkciji \emph{add(5,6)}. Na taj način će se argumenti funkcije \emph{add(5,6)} ukloniti sa stoga te će se izvršavanje pravilno nastaviti od funkcije \emph{add(7,8)} kao što je i planirano u početku. Navedeni postupak i izgled stoga prikazani su na slici \ref{fig:rop_add78}. 
@@ -2086,16 +2089,19 @@ Za primjer, uzmimo da napadač želi prvo pozvati funkciju \emph{add(5,6)} te na
 \caption{Izgled stoga nakon preljeva u funkciji \emph{func1()}. Dvostruki poziv \emph{add()} funkciji.}
 \label{fig:rop_add78} 
 \end{figure}
+
 Iz primjera prikazanih u ovom poglavlju vidljivo je kako programiranje temeljeno na "ret" blokovima predstavlja značajnu prijetnju za aplikacija koje su ranjive na napade tipa preljeva spremnika. Vjerojatno najveća opasnost koju programiranje temeljeno na "ret" blokovima predstavlja je potpuno zaobilaženje DEP mehanizma zaštite. Postavlja se stoga pitanje: Na koji način je moguće spriječiti ovaj oblik iskorištavanja propusta vezanih za korupciju memorije? 
 
 Odgovor na to pitanje leži u randomizaciji dijelova programa i dijeljenih biblioteka koje program koristi. Upravo je tako i nastao mehanizam zaštite ASLR (\ref{sct:aslr}) koji značajno otežava napadaču pronalazak točnih lokacija određenih dijelova programskog koda koji bi se u konačnici mogli upotrijebiti prilikom konstruiranja potrebnih "ret" blokova. Međutim, ASLR ima nedostatke i moguće ga je zaobići. Ukoliko neki program koristi dijeljenu biblioteku kojoj nije omogućen ASLR (određuje se prilikom prevođenja), ta biblioteka će uvijek biti učitana na poznatu lokaciju te će napadač znati na kojim adresama se nalaze pojedini, zanimljivi dijelovi programskog koda koji se zatim mogu iskoristiti za konstrukciju "ret" blokova.
 
 Uz ovaj rad napravljena je skripta u programskom jeziku Python (\emph{CheckAslrDep.py}) koja skenira sve PE datoteke u odabranom direktoriju te provjerava jesu li iste zaštićene ASLR i DEP sigurnosnim mehanizmima. Skripta je pokrenuta na potpuno ažuriranom operacijskom sustavu Microsoft Windows 7 Professional te je kao ciljani direktorij odabran \emph{C:\textbackslash Windows\textbackslash System32}. Navedeni direktorij odabran je iz razloga što se unutar njega nalaze sve važne sistemske DLL i EXE datoteke. Kao rezultat dobiveni su sljedeći podaci:
+
 \begin{itemize}
 \item Broj provjerenih PE datoteka: 3065
 \item Broj datoteka sa ASLR zaštitom: 2583 (84\%)
 \item Broj datoteka sa DEP zaštitom: 2575 (84\%)
 \end{itemize}
+
 Kao što je vidljivo iz priloženog, oko 500 sistemskih EXE i DLL datoteka nema ASLR ili DEP mehanizam zaštite aktivan. Napadač stoga lako može saznati o kojim se datotekama radi, te koje aplikacije koriste navedene datoteka. Na taj način, napadaču se pruža mogućnost da iskorištavanjem propusta u obliku preljeva spremnika u aplikaciji pristupi programskom kodu u nezaštićenim sistemskim datotekama te iskoristi isti za konstruiranje "ret" blokova.
 
 Međutim, čak i ako je svim PE datotekama omogućen ASLR, moguće ga je zaobići. Jedan od načina je preko nesigurnih pokazivača (engl. \emph{Dangling/Leaking pointer}). U tom slučaju radi se o pokazivačima koji ne pokazuju na pravilan objekt u memoriju. Konkretno, oni mogu pokazivati na dio memorije koji je prethodno bio oslobođen. Upravo iz tog razloga, moguće je čitati navedene memorijske lokacije te dobiti uvid u način na koji se provodi randomizacija.
@@ -2103,6 +2109,7 @@ Međutim, čak i ako je svim PE datotekama omogućen ASLR, moguće ga je zaobić
 
 \chapter{PErmutator program}
 \label{sct:permutator}
+
 U prethodnim poglavljima obrađene su teme vezane za sam format PE
 datoteka, za korupciju memorije te sigurnosne propuste koji istu
 iskorištavaju. Također, obrađene su i teme vezane uz postojeće
