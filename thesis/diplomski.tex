@@ -2031,7 +2031,7 @@ Glavna ideja je da se preko ranjivosti preljeva spremnika u
 funkciji \emph{func1()} ubaci lažni okvir stoga čime će se
 pozvati funkcija \emph{add()} sa parametrima 5 i 6.
  
-\begin{ispis} {caption=Primjera programa za programiranje "ret" blokovima} {label=lst:rop_example}
+\begin{ispis} {caption=Primjer programa za programiranje "ret" blokovima} {label=lst:rop_example}
 #include <string.h>
  
 void func1 (char *s) { char buffer[80]; strcpy(buffer, s); }
@@ -2090,7 +2090,7 @@ Za primjer, uzmimo da napadač želi prvo pozvati funkciju \emph{add(5,6)} te na
 \label{fig:rop_add78} 
 \end{figure}
 
-Iz primjera prikazanih u ovom poglavlju vidljivo je kako programiranje temeljeno na "ret" blokovima predstavlja značajnu prijetnju za aplikacija koje su ranjive na napade tipa preljeva spremnika. Vjerojatno najveća opasnost koju programiranje temeljeno na "ret" blokovima predstavlja je potpuno zaobilaženje DEP mehanizma zaštite. Postavlja se stoga pitanje: Na koji način je moguće spriječiti ovaj oblik iskorištavanja propusta vezanih za korupciju memorije? 
+Iz primjera prikazanih u ovom poglavlju vidljivo je kako programiranje temeljeno na "ret" blokovima predstavlja značajnu prijetnju za aplikacije koje su ranjive na napade tipa preljeva spremnika. Vjerojatno najveća opasnost koju programiranje temeljeno na "ret" blokovima predstavlja je potpuno zaobilaženje DEP mehanizma zaštite. Postavlja se stoga pitanje: Na koji način je moguće spriječiti ovaj oblik iskorištavanja propusta vezanih za korupciju memorije? 
 
 Odgovor na to pitanje leži u randomizaciji dijelova programa i dijeljenih biblioteka koje program koristi. Upravo je tako i nastao mehanizam zaštite ASLR (\ref{sct:aslr}) koji značajno otežava napadaču pronalazak točnih lokacija određenih dijelova programskog koda koji bi se u konačnici mogli upotrijebiti prilikom konstruiranja potrebnih "ret" blokova. Međutim, ASLR ima nedostatke i moguće ga je zaobići. Ukoliko neki program koristi dijeljenu biblioteku kojoj nije omogućen ASLR (određuje se prilikom prevođenja), ta biblioteka će uvijek biti učitana na poznatu lokaciju te će napadač znati na kojim adresama se nalaze pojedini, zanimljivi dijelovi programskog koda koji se zatim mogu iskoristiti za konstrukciju "ret" blokova.
 
@@ -2416,7 +2416,7 @@ su implementirani vrhovi i bridovi unutar ovog projekta. Vrhovi su definirani
 unutar datoteke \emph{Node.h} čiji najvažniji dijelovi se nalaze na ispisu koda 
 \ref{lst:node}. 
 
-\begin{ispis} {caption=Klasa koja opisuje vrh (čvor) grafa instrukcija} {label=lst:node}
+\begin{ispis} {caption=Klasa koja opisuje vrh u grafu instrukcija} {label=lst:node}
 class Node
 {
 public:
