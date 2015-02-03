@@ -37,7 +37,7 @@ distorm3.a: ${COBJS}
 thesis: thesis/diplomski.pdf
 
 thesis/diplomski.pdf: thesis/diplomski.tex
-	cd thesis && pdflatex diplomski.tex && pdflatex diplomski.tex && pdflatex diplomski.tex
+	cd thesis && rm -f diplomski.aux diplomski.lof diplomski.log diplomski.lot diplomski.pdf diplomski.toc && pdflatex diplomski.tex && bibtex diplomski && pdflatex diplomski.tex && pdflatex diplomski.tex
 
 clean:
 	rm -rf PErmutator *.o ExternalLib/distorm3/src/*.o *.so *.a graph.dot permutatedFile.exe thesis/diplomski.aux thesis/diplomski.dvi thesis/diplomski.lof thesis/diplomski.log thesis/diplomski.lot thesis/diplomski.pdf thesis/diplomski.toc
