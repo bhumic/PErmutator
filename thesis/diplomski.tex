@@ -1287,7 +1287,7 @@ memorije koja se nalazi van granica gomile.
 Iako je na početku ovog poglavlja spomenuto kako pogreške u radu
 s memorijom svoj vrhunac doživljavaju 90-ih godina,
 danas su iste još uvijek dosta zastupljene. OSVDB 
-(engl. \emph{Open Source Vulnerability Database}) je baza podataka			% RAZMAK!!!
+(engl. \emph{Open Source Vulnerability Database}) \citep{osvdb} je baza podataka			% RAZMAK!!!
 osnovana 2002. godine od strane zajednice koja se bavi računalnom
 sigurnošću. Baza je otvorenog koda i njezin cilj je dati točne,
 detaljne te trenutne informacije o sigurnosnim ranjivostima. Na
@@ -1436,7 +1436,7 @@ aktiviran u ovome primjeru, prilikom izvršavanja \emph{ret}
 instrukcije i skoka na adresu \emph{0x3040556E} program će se
 zaustaviti jer DEP onemogućava izvršavanje instrukcija na stogu,
 tj. upotrebom DEP-a sve memorijske lokacije na stogu postavljene
-su kao ne izvršne. Iz tog razloga napadači se trebaju poslužiti
+su kao neizvršive. Iz tog razloga napadači se trebaju poslužiti
 drugim metodama kako bi iskoristili ranjivost preljeva spremnika
 na stogu. Više o toj temi u poglavlju \ref{sct:rop}.
 
@@ -1523,7 +1523,7 @@ Svako zaglavlje sastoji se od sljedećih elemenata:
 \item Indeks segmenta: Indeks segmenta u memoriji unutar kojega se blok nalazi.
 \item Zastavice: Opisuju određena svojstva blokova u pripadajućoj gomili.
 \item Slobodni okteti: Broj slobodnih okteta u bloku.
-\item Količina \emph{indexa} u bloku: Sadrži broj \emph{indexa} od kojih se blok sastoji. 
+\item Broj \emph{indexa} u bloku: Sadrži broj \emph{indexa} od kojih se blok sastoji. 
 \item Flink: Koristi se samo kod slobodnih blokova. Pokazuje na sljedeći slobodni blok u dvostruko povezanoj listi.
 \item Blink: Koristi se samo kod slobodnih blokova. Pokazuje na prethodni slobodni blok u dvostruko povezanoj listi.
 \end{itemize}
@@ -1864,7 +1864,7 @@ Oriented Programming}) je tehnika koja se prvi puta spominje
 iskorištavanja ranjivosti vezanih za korupciju memorije omogućava
 napadaču da preuzme kontrolu nad programom čak i u sustavima u
 kojima je aktivan ranije spomenuti mehanizam zaštite - DEP 
-\ref{sct:dep}. Štoviše, ova tehnika razvijena je upravo kao
+(poglavlje \ref{sct:dep}). Štoviše, ova tehnika razvijena je upravo kao
 protuteža spomenutom mehanizmu zaštite.
 
 Kako bi se programiranje temeljeno na "ret" blokovima uopće moglo
@@ -1896,16 +1896,16 @@ zasnovanim na "ret" blokovima. Glavna ideja ove vrste
 iskorištavanja sigurnosnih propusta je upotreba već postojećih
 dijelova programskog koda. Ti postojeći dijelovi programskog koda 
 (u nastavku teksta nazivaju se \emph{blokovi}) izgrađeni su od
-nekoliko instrukcija pri čemu posljednja instrukcija u bloku mora
+nekoliko instrukcija pri čemu posljednja instrukcija u \emph{bloku} mora
 biti "ret". Iz tog razloga moguće je povezivanjem više manjih
-"ret" blokova, gdje svaki blok obavlja određenu zadaću,
+"ret" \emph{blokova}, gdje svaki \emph{blok} obavlja određenu zadaću,
 konstruirati složene operacije pri čemu se u potpunosti gubi
 potreba za ubacivanjem dodatnog programskog koda od strane napadača. Spomenute
-"ret" blokove moguće je stoga pronaći unutar samog programa čija
+"ret" \emph{blokove} moguće je stoga pronaći unutar samog programa čija
 ranjivost se iskorištava ili unutar dijeljenih biblioteka.
 
 Prije nego se krene u detaljno objašnjenje primjera koji
-prikazuje kako programiranje temeljeno na "ret" blokovima radi,
+prikazuje kako programiranje temeljeno na "ret" \emph{blokovima} radi,
 potrebno je ukratko opisati metodu koja se smatra pretečom ovog
 oblika napada.
 
@@ -1913,7 +1913,7 @@ oblika napada.
 
 Napad ret2lib prvi puta se pojavio još 1997. godine 
 \citep{ret2lib_official} i smatra se pretečom programiranju
-zasnovanom na "ret" blokovima. Glavna ideja ovog napada je ta da
+zasnovanom na "ret" \emph{blokovima}. Glavna ideja ovog napada je ta da
 se tok programa nakon uspješno izvedenog preljeva spremnika na
 stogu, prebaci na već postojeću funkciju. Funkcija koja se pritom
 najčešće pozivala je \emph{system('/bin/sh')} pošto se ista
@@ -1982,20 +1982,20 @@ obaviti neku složenu operaciju.
 \label{sct:rop2}
 
 U prethodnom poglavlju dan je kratak uvod u \emph{ret2lib}
-napade. Programiranje sa "ret" blokovima je zapravo jedan oblik
-\emph{ret2lib} napada. Radi se o tome što je programiranje "ret"
-blokovima zapravo generalizirajući slučaj \emph{ret2lib} napada,
+napade. Programiranje sa "ret" \emph{blokovima} je zapravo jedan oblik
+\emph{ret2lib} napada. Radi se o tome što je programiranje "ret" 
+\emph{blokovima} zapravo generalizirajući slučaj \emph{ret2lib} napada,
 tj. dok se \emph{ret2lib} napad orijentira na poziv funkcija iz
-dijeljenih biblioteka, programiranje temeljeno na "ret" blokovima
+dijeljenih biblioteka, programiranje temeljeno na "ret" \emph{blokovima}
 pretpostavlja kako se bilo koji dio ranjivog programa ili
 dijeljene biblioteke može iskoristiti za obavljanje pojedinih
 zadaća sve dok taj dio (blok koda) završava sa \emph{ret}
-instrukcijom. Te blokove je moguće povezivati kako bi tvorili
+instrukcijom. Te \emph{blokove} je moguće povezivati kako bi tvorili
 smislene cjeline koje u konačnici mogu obaviti i zahtjevnije
 računarske operacije.
 
 Prije nego se krene u detaljan opis programiranja temeljenog na
-"ret" blokovima, potrebno  je spomenuti konvencije poziva
+"ret" \emph{blokovima}, potrebno  je spomenuti konvencije poziva
 funkcija. Konvencije poziva funkcija definiraju način na koji se
 funkcije pozivaju u programu, tj. preko njih se definira kako se
 parametri prenose funkciji te kako je organiziran stog pojedine
@@ -2014,7 +2014,7 @@ parametri se funkciji prenose putem stoga.
 performanse od preostale dvije. Razlog tome je što koristi
 registre procesora za prijenos argumenata funkciji. Konkretno,
 koristi registre ECX i EDX za prijenos prva dva argumenta dok se
-ostatak argumenata prenosi pute stoga. Ovu konvenciju danas
+ostatak argumenata prenosi putem stoga. Ovu konvenciju danas
 koristi većina prevoditelja (engl. \emph{compiler}).
 
 \item \emph{stdcall} konvencija poziva: Za potrebe ovog rada ovo
@@ -2028,7 +2028,7 @@ koji označava koliko argumenata je potrebno ukloniti sa stoga.
 
 Unutar ispisa koda \ref{lst:rop_example} prikazan je primjer
 programa na kojemu je u nastavku prikazan način iskorištavanja
-ranjivosti pomoću programiranja temeljenog na "ret" blokovima.
+ranjivosti pomoću programiranja temeljenog na "ret" \emph{blokovima}.
 Glavna ideja je da se preko ranjivosti preljeva spremnika u
 funkciji \emph{func1()} ubaci lažni okvir stoga čime će se
 pozvati funkcija \emph{add()} s parametrima 5 i 6.
@@ -2064,7 +2064,7 @@ Izgled stoga prilikom poziva funkcije \emph{add(3,4)} prikazan je na slici \ref{
 \end{figure}
 Kako bi se preko \emph{func1()} funkcije mogla pozvati funkcija \emph{add(5,6)} potrebno je učiniti sljedeće:
 \begin{itemize}
-\item Izazvati preljev spremnika u funkciji \emph{func1()} tako da se povratna adresa prepiše adresom funkcije \emph{add()}. Adresu funkcije \emph{add()} moguće je jednostavno naći unutar \emph{debugger} programa ukoliko nije aktivan mehanizam zaštite ASLR \ref{sct:aslr}.
+\item Izazvati preljev spremnika u funkciji \emph{func1()} tako da se povratna adresa prepiše adresom funkcije \emph{add()}. Adresu funkcije \emph{add()} moguće je jednostavno naći unutar \emph{debugger} programa ukoliko nije aktivan mehanizam zaštite ASLR (poglavlje \ref{sct:aslr}).
 \item Uz prepisivanje povratne adrese, potrebno je na stog postaviti i lažni okvir stoga za funkciju \emph{add(5,6)} koju želimo pozvati.
 \end{itemize}
 
@@ -2094,7 +2094,7 @@ Za primjer, uzmimo da napadač želi prvo pozvati funkciju \emph{add(5,6)} te na
 
 Iz primjera prikazanih u ovom poglavlju vidljivo je kako programiranje temeljeno na "ret" blokovima predstavlja značajnu prijetnju za aplikacije koje su ranjive na napade tipa preljeva spremnika. Vjerojatno najveća opasnost koju programiranje temeljeno na "ret" blokovima predstavlja je potpuno zaobilaženje DEP mehanizma zaštite. Postavlja se stoga pitanje: Na koji način je moguće spriječiti ovaj oblik iskorištavanja propusta vezanih za korupciju memorije? 
 
-Odgovor na to pitanje leži u randomizaciji dijelova programa i dijeljenih biblioteka koje program koristi. Upravo je tako i nastao mehanizam zaštite ASLR (\ref{sct:aslr}) koji značajno otežava napadaču pronalazak točnih lokacija određenih dijelova programskog koda koji bi se u konačnici mogli upotrijebiti prilikom konstruiranja potrebnih "ret" blokova. Međutim, ASLR ima nedostatke i moguće ga je zaobići. Ako neki program koristi dijeljenu biblioteku kojoj nije omogućen ASLR (određuje se prilikom prevođenja), ta biblioteka će uvijek biti učitana na poznatu lokaciju te će napadač znati na kojim adresama se nalaze pojedini, zanimljivi dijelovi programskog koda koji se zatim mogu iskoristiti za konstrukciju "ret" blokova.
+Odgovor na to pitanje leži u randomizaciji dijelova programa i dijeljenih biblioteka koje program koristi. Upravo je tako i nastao mehanizam zaštite ASLR (poglavlje \ref{sct:aslr}) koji značajno otežava napadaču pronalazak točnih lokacija određenih dijelova programskog koda koji bi se u konačnici mogli upotrijebiti prilikom konstruiranja potrebnih "ret" \emph{blokova}. Međutim, ASLR ima nedostatke i moguće ga je zaobići. Ako neki program koristi dijeljenu biblioteku kojoj nije omogućen ASLR (određuje se prilikom prevođenja), ta biblioteka će uvijek biti učitana na poznatu lokaciju te će napadač znati na kojim adresama se nalaze pojedini, zanimljivi dijelovi programskog koda koji se zatim mogu iskoristiti za konstrukciju "ret" \emph{blokova}.
 
 Uz ovaj rad napravljena je skripta u programskom jeziku Python (\emph{CheckAslrDep.py}) koja skenira sve PE datoteke u odabranom direktoriju te provjerava jesu li iste zaštićene ASLR i DEP sigurnosnim mehanizmima. Skripta je pokrenuta na potpuno ažuriranom operacijskom sustavu Microsoft Windows 7 Professional te je kao ciljani direktorij odabran \emph{C:\textbackslash Windows\textbackslash System32}. Navedeni direktorij odabran je zato što se unutar njega nalaze sve važne sistemske DLL i EXE datoteke. Kao rezultat dobiveni su sljedeći podaci:
 
@@ -2106,7 +2106,7 @@ Uz ovaj rad napravljena je skripta u programskom jeziku Python (\emph{CheckAslrD
 
 Kao što je vidljivo iz priloženog, oko 500 sistemskih EXE i DLL datoteka nema ASLR ili DEP mehanizam zaštite aktivan. Napadač stoga lako može saznati o kojim se datotekama radi, te koje aplikacije koriste navedene datoteka. Na taj način, napadaču se pruža mogućnost da iskorištavanjem propusta u obliku preljeva spremnika u aplikaciji pristupi programskom kodu u nezaštićenim sistemskim datotekama te iskoristi isti za konstruiranje "ret" blokova.
 
-Međutim, čak i ako je svim PE datotekama omogućen ASLR, moguće ga je zaobići. Jedan od načina je preko nesigurnih pokazivača (engl. \emph{Dangling/Leaking pointer}). U tom slučaju radi se o pokazivačima koji ne pokazuju na pravilan objekt u memoriju. Konkretno, oni mogu pokazivati na dio memorije koji je prethodno bio oslobođen. Upravo iz tog razloga, moguće je čitati navedene memorijske lokacije te dobiti uvid u način na koji se provodi randomizacija.
+Međutim, čak i ako je svim PE datotekama omogućen ASLR, moguće ga je zaobići. Jedan od načina je preko nesigurnih pokazivača (engl. \emph{Dangling/Leaking pointer}). U tom slučaju radi se o pokazivačima koji ne pokazuju na pravilan objekt u memoriji. Konkretno, oni mogu pokazivati na dio memorije koji je prethodno bio oslobođen. Upravo iz tog razloga, moguće je čitati navedene memorijske lokacije te dobiti uvid u način na koji se provodi randomizacija.
 
 
 \chapter{PErmutator program}
@@ -2161,7 +2161,7 @@ u memoriji pri čemu bi funkcionalnost ostala ista.
 
 Razvoj jednog takvog modula za promjenu koda nije nimalo
 jednostavan zadatak. Prije konstruiranja samog modula za promjenu
-koda potrebno dati odgovore na nekoliko ključnih pitanja:
+koda potrebno je dati odgovore na nekoliko ključnih pitanja:
 
 \begin{itemize}
 \item Koje dijelove PE datoteka je potrebno permutirati i mijenjati?
@@ -2176,7 +2176,7 @@ njih sadrži. Pošto je razvoj jednog ovakvog modula namijenjen
 poboljšanju sigurnosti uz postojeći ASLR mehanizam zaštite,
 logičnim se čini kako bi promjena (permutacija) trebala zahvatiti
 sekciju s izvršnim kodom. Međutim, problem koji se tu javlja
-proizlazi iz činjenice kako sekcija se izvršnim kodom često
+proizlazi iz činjenice kako sekcija s izvršnim kodom često
 sadrži i velike količine nepotrebnih okteta i dijelova koji se ne
 izvrše niti u jednoj situaciji rada programa. 
 
@@ -2204,7 +2204,7 @@ referenci i njihovo ažuriranje s obzirom na novi raspored u
 memoriji je izuzetno zahtjevan zadatak. Mnoge od tih referenci je
 nemoguće odrediti u postupku statičke analize. Osim toga navedeni
 modul trebao bi biti konstruiran tako da ne uzrokuje značajan
-pad performansi. Više o navedenom problema moguće je pročitati u
+pad performansi. Više o navedenom problemu moguće je pročitati u
 poglavlju \ref{sct:permutator}.
 
 Kako bi modul za permutaciju koda bilo što jednostavnije
@@ -2301,8 +2301,7 @@ sadržajem PE datoteka, značajno pojednostavljuju. U nastavku
 slijedi popis i opis funkcija za rad s PE datotekama koje su
 implementirane za potrebe ovog rada. Navedene funkcije moguće je
 koristiti i za razvoj drugih alata koji na neki način obavljaju
-analiza sadržaja PE datoteka. Radi preglednog ispisa sve funkcije
-navedene su bez argumenata koje primaju. Za detaljniju analizu
+analiza sadržaja PE datoteka. Za detaljniju analizu
 pojedinih funkcija preporučujem uvid u datoteke
 \emph{PEFunctions.h} i \emph{PEFunctions.cpp} koje su priložene
 ovom radu. Popis funkcija:
@@ -2323,7 +2322,7 @@ u PE datoteku.
 \item {\footnotesize \emph{LPVOID ReadHeader(std::fstream\&
 hFile, DWORD dwHeaderSize, DWORD dwOffset)}}: Funkcija koja, na
 temelju veličine zaglavlja i odmaka zaglavlja od početka
-datoteke, učitava zaglavlje u memoriju kako bi isto mogli biti
+datoteke, učitava zaglavlje u memoriju kako bi isto moglo biti
 spremno za daljnju manipulaciju.
 
 \item {\footnotesize \emph{PIMAGE\_SECTION\_HEADER
@@ -2438,7 +2437,7 @@ private:
 \end{ispis}
 
 Postoji nekoliko ključnih funkcija i varijabli unutar klase koja opisuje vrhove
-stoga su oni opisani u nastavku:
+stoga te su oni opisani u nastavku:
 
 \begin{itemize}
 \item \emph{AppendChild(Node* child)}: Funkcija koja trenutnom čvoru dodaje
@@ -2448,7 +2447,7 @@ ili bezuvjetnog skoka. Također, valja napomenuti kako je ova metoda
 konstruirana tako da sprječava postojanje petlji, tj. ako se pokuša kao
 dijete dodati čvor prema kojemu veza već postoji, isti neće biti dodan te će
 funkcija vratiti pravilnu povratnu vrijednost.
-\item \emph{FindChild(DWORD)offset}: Funkcija koja vraća pokazivač na čvor			% Greska! - Malo sam sada drugačije ovo opisao.
+\item \emph{FindChild(DWORD offset)}: Funkcija koja vraća pokazivač na čvor			% Greska! - Malo sam sada drugačije ovo opisao.
 dijete ako se taj čvor nalazi na odmaku \emph{offset} unutar sekcije s izvršnim kodom.
 \item \emph{dwOffset}: Navedena vrijednost je jedinstveni ključ za svaki
 čvor. Označava gdje se promatrani čvor nalazi s obzirom na početak sekcije
@@ -2530,7 +2529,7 @@ napomenuti nekoliko stvari. U ovome konkretnom primjeru, kao veze između
 spomenuto je kako veze između čvorova mogu biti definirane na razne načine.
 Jedan od dodatnih načina je i korištenje poziva funkcija. Na taj način moguće
 je izdvojiti funkcije kao zasebne čvorove te provoditi određene operacije nad
-njima. Primjer grafa i pripadajućih mu instrukcija generiranog pomoću
+njima. Primjer grafa, i pripadajućih mu instrukcija, generiranog pomoću
 razvijenog modula moguće je vidjeti u dodatku \ref{sct:appPE} i dodatku 
 \ref{sct:appGraph}.
 
@@ -2582,7 +2581,7 @@ korištenjem tablice relokacija. Tablica relokacija sadrži popis svih mjesta
 unutar PE datoteke gdje je potrebno obaviti relokaciju ukoliko datoteka nije
 učitana na željenu početnu adresu. U tom slučaju su sve apsolutne adrese unutar
 programskog koda nepravilne te ih je potrebno promijeniti (relocirati).
-Međutim, prvi problem s relokacijama je što ne sadrže sve PE datoteke sekciju
+Međutim, problem s relokacijama je što ne sadrže sve PE datoteke sekciju
 s relokacijskom tablicom. Takve datoteke, ako se pojavi potreba za
 relokacijom, neće raditi pravilno. Druga opcija je imati popis funkcija iz
 Windows API-a te na osnovu import tablice odrediti koja funkcija se poziva. Na
@@ -2659,7 +2658,7 @@ konstantu. U ovome slučaju je to lako odrediti jer imamo poziv
 prema \emph{DialogBoxParam} funkciji, ali vrlo lako se moglo
 dogoditi da je umjesto poziva prema Windows API funkciji bio
 poziv oblika \emph{CALL EAX} pri čemu bi vrijednost
-\emph{0x0040102B}, koja se postavlja na stog, imala potpuno drugo
+\emph{0x0040102B}, koja se postavlja na stog, mogla imati potpuno drugo
 značenje.  Pripadni graf instrukcija, nakon provedene
 permutacije, prikazan je na slici 
 \ref{fig:control_flow_graph_permutated}. Ovdje valja obratiti
@@ -2838,7 +2837,7 @@ FF25 00204000                 JMP DWORD PTR DS:[<&KERNEL32.GetModuleHandleA>]
 
 U nastavku ovog dodatka nalazi se slika \ref{fig:appGraphInstr} 
 koja prikazuje primjer grafa instrukcija. Graf je generiran
-pomoću razvijenog modula te se sav izvorni kod nalazi u
+pomoću razvijenog modula te nacrtan pomoću alata Graphviz. Sav izvorni kod nalazi se u
 funkcijama \emph{VisualizeGraph(Node* n)} i
 \emph{ProcessNode(Node* n, std::ofstream\& gvFile)}. Sadržaj
 sekcije s izvornim kodom iz koje je graf generiran nalazi se u
