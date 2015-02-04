@@ -116,10 +116,10 @@ sadrže sve potrebne informacije o implementaciji alata te o
 problemima s kojima se prilikom implementacije susrelo.
 Poglavlja i njihov sadržaj je sljedeći:
 
-\begin{enumerate}							% I ovdje se trebaju ispraviti velika slova na pocetku rijeci!
+\begin{enumerate}							% I ovdje se trebaju ispraviti velika slova na pocetku rijeci! -ispravljeno
 \setcounter{enumi}{1}
 
-\item Format Izvršnih Datoteka: Prije nego se uopće krene u
+\item Format izvršnih datoteka: Prije nego se uopće krene u
 promjenu strukture izvršnih datoteka, potrebno je detaljno
 opisati najvažnije dijelove istih.  Upravo tome služi navedeno
 poglavlje jer su unutar njega opisani najvažniji dijelovi
@@ -128,28 +128,28 @@ poglavlje pomaže nam u pronalasku odgovarajućih dijelova izvršne
 datoteke, koji su kasnije potrebni prilikom implementacije modula
 za promjenu koda.
 
-\item Postojeći Mehanizmi Zaštite: Navedeno poglavlje sadrži
+\item Postojeći mehanizmi zaštite: Navedeno poglavlje sadrži
 informacije o postojećim, sličnim mehanizmima zaštite protiv
 napada usmjerenih na korupciju memorije. U sklopu poglavlja
 opisani su mehanizmi zaštite na razini samog operacijskog
 sustava, kao i mehanizmi zaštite koji djeluju kao programi u
 korisničkom prostoru na način što mijenjaju štićenu aplikaciju.
 
-\item Korupcija Memorije: U navedenom poglavlju detaljno su
+\item Korupcija memorije: U navedenom poglavlju detaljno su
 opisani najpoznatiji napadi vezani uz iskorištavanje korupcije
 memorije.  To je važno kako bi se dao 
 uvid u način funkcioniranja napada te objasnilo na koji
 način modul za permutaciju koda i ostali mehanizmi zaštite pomažu
 u sprječavanju navedenih napada.
 
-\item PErmutator Program: Sadrži sve informacije vezane uz modul
+\item PErmutator program: Sadrži sve informacije vezane uz modul
 za promjenu koda. Unutar ovog poglavlja nalazi se detaljan opis
 pojedinih dijelova razvijenog modula te detalji o njihovoj
 implementaciji. Osim toga, nalazi se i popis problema s kojima
 smo se susreli prilikom implementacije te moguća rješenja za te
 probleme.
 
-\item Zaključak: Sadrži sažetak o svemu dotada napisanom.			% O ovome moramo jos raspraviti, nije dobro...
+\item Zaključak: Sadrži sažetak o svemu dotada napisanom.			% O ovome moramo jos raspraviti, nije dobro... -Nemam baš ideje što bi još točno napisao u opisu za zaključak...
 \end{enumerate}
 
 Nakon zaključka slijedi još i popis literature te dva dodatka
@@ -204,7 +204,7 @@ nastavku slijedi opis najvažnijih dijelova pojedinog zaglavlja.
 \label{fig:pe_format} 
 \end{figure} 
 
-\pagebreak										% U LaTeX-u se rijetko ubacuju prijelomi stranica!
+%\pagebreak										% U LaTeX-u se rijetko ubacuju prijelomi stranica! -Izbacio sam ih
 
 Znači, kao što je vidljivo na slici \ref{fig:pe_format}, svaka PE
 datoteka može se podijeliti na sljedeće dijelove:
@@ -221,7 +221,7 @@ datoteka može se podijeliti na sljedeće dijelove:
 \item Podaci sekcija
 \end{itemize}
 
-\pagebreak
+%\pagebreak
 
 \subsection{Relokacije i relativne virtualne adrese}
 
@@ -254,18 +254,18 @@ datoteka učitana na adresu \emph{0x400000} u memoriji te neka je
 njena sekcija (\ref{sec:sekcije}) s izvršnim kodom učitana na
 adresi \emph{0x401000}. Relativna virtualna adresa sekcije se iz
 navedenih podataka računa na sljedeći način:					% Prepisati, nije potrebno ovako raspisivati! -Nisam skroz shvatio što napraviti ovdje. Jeste mislili na brisanje onog opisa u jednadžbi ili?
-\emph{0x401000} - \emph{0x400000} =\emph{0x1000}.
+\emph{0x401000} - \emph{0x400000} = \emph{0x1000}.
 
 Obrnuti proces, tj. pretvorbu relativne virtualne adrese u
 apsolutnu adresu provodi se tako što se relativna virtualna
 adresa (\emph{0x1000}) zbroji sa adresom na koju je datoteka
 učitana u memoriju (\emph{0x400000}). Ta adresa naziva se
-virtualnom adresom. Na ispisu \ref{lst:primjer_rva}
+virtualnom adresom. Na ispisu koda \ref{lst:primjer_rva} 
 prikazan je primjer relativne virtualne adrese. Niz okteta
 \emph{E8 45010000} označava operacijski kod \emph{CALL}
 instrukcije. Navedena instrukcija poziva funkciju koja se nalazi
 na pomaku \emph{0x00000145} od trenutne pozicije. Taj pomak
-naziva se relativna adresa s obzirom na trenutnu poziciju
+naziva se relativna adresa s obzirom na trenutnu poziciju 
 (\emph{CALL} instrukcija). 
 
 \begin{ispis} {caption=Primjer relativne virtualne adrese} {label=lst:primjer_rva}
@@ -300,14 +300,14 @@ lokacijama.
 
 Kako bi bilo jasnije, proučimo sljedeći primjer: Neka u izvršnom
 kodu postoji sljedeća instrukcija koja učitava vrijednost sa neke
-memorijske lokacije u ECX registar (ispis \ref{lst:base_reloc})
+memorijske lokacije u ECX registar (ispis koda \ref{lst:base_reloc})
 
 \begin{ispis} {caption=Primjer za relokacije} {label=lst:base_reloc}
 00401020: 8B 0D 34 D4 40 00  mov ecx,dword ptr [0x0040D434]
 \end{ispis}
 
 Kao što je vidljivo instrukcija se nalazi na adresi
-\emph{0x00401020} te je duga šest okteta. Prva dva okteta
+\emph{0x00401020} te je duga šest okteta. Prva dva okteta 
 (\emph{0x8B 0x0D}) sačinjavaju operacijski kod instrukcije dok
 ostala četiri okteta čine apsolutnu adresu (\emph{0x0040D434}). U
 ovom slučaju PE datoteka je učitana na preferiranu adresu koja
@@ -326,7 +326,7 @@ potrebno učitati te stvarnu adresu na koju je ista učitana. Na
 taj način izračuna se razlika koja u ovom slučaju iznosi
 \emph{0x00100000}. Tu razliku moguće je zatim dodati adresi
 \emph{0x0040D434} kako bi se dobila stvarna adresa na kojoj je
-vrijednost varijable pohranjena. Ukratko, u tablici relokacija
+vrijednost varijable pohranjena. Ukratko, u tablici relokacija 
 (tablica \ref{tbl:imgDataDir}) postoji informacija o potrebnoj
 relokaciji za adresu \emph{0x00401022}.
 
@@ -334,7 +334,7 @@ Ovime je objašnjeno kako funkcioniraju relokacije za PE datoteke.
 Valja još napomenuti način na koji su informacije o relokacijama
 pohranjene u samoj PE datoteci. Svaka relokacija može se opisati
 jednostavnom strukturom \emph{IMAGE\_BASE\_RELCOATION} čiji
-sadržaj je moguće vidjeti u ispisu \ref{lst:imgBaseReloc}.
+sadržaj je moguće vidjeti u ispisu strukture \ref{lst:imgBaseReloc}.
 
 \begin{struktura} {caption=IMAGE\_BASE\_RELOCATION struktura} {label=lst:imgBaseReloc}
 typedef struct _IMAGE_BASE_RELOCATION {
@@ -368,11 +368,11 @@ u službenoj specifikaciji za PE format \citep{pe_spec}.
 \emph{IMAGE\_BASE\_RELCOATION}, na koji je potrebno primijeniti
 relokaciju.
 \end{itemize}
-Uzmimo za primjer instrukciju iz ispisa \ref{lst:imgBaseReloc}. Jedan mogući
+Uzmimo za primjer instrukciju iz ispisa koda \ref{lst:imgBaseReloc}. Jedan mogući
 opis relokacijskih informacija za danu instrukciju prikazan je u nastavku:
 \begin{itemize}
 \item \emph{VirtualAddress}: 0x00401020. Neka memorijski blok na koji treba
-primijeniti relokacije počinje instrukcijom iz ispisa \ref{lst:imgBaseReloc}.
+primijeniti relokacije počinje instrukcijom iz ispisa koda \ref{lst:imgBaseReloc}.
 \item \emph{SizeOfBlock}: 0xA. Zamislimo također da jedino nad zadanom instrukcijom
 je potrebno provesti relokacije. Tada se broj 16 bitnih vrijednosti računa prema 
 prethodno navedenom algoritmu: (0xA - 0x8) / 0x2 = 0x1. Znači postoji samo jedno mjesto 
@@ -388,14 +388,13 @@ Ovime su dane najosnovnije informacije vezane za relativne
 virtualne adrese i relokacije. U nastavku ovog poglavlja opisana
 su osnovna zaglavlja i elementi PE datoteka.
 
-\pagebreak
+%\pagebreak
 
 \subsection{MS-DOS zaglavlje}
 
 MS-DOS zaglavlje je prvo zaglavlje kod PE datoteka te se sastoji
 od dva dijela. Prvi dio opisan je strukturom
-\emph{IMAGE\_DOS\_HEADER} čiji sadržaj je prikazan na odsječku
-koda \ref{lst:imgDosHeader}.
+\emph{IMAGE\_DOS\_HEADER} čiji sadržaj je prikazan na ispisu strukture \ref{lst:imgDosHeader}.
 
 \begin{struktura} {caption=IMAGE\_DOS\_HEADER struktura} {label=lst:imgDosHeader}
 typedef struct _IMAGE_DOS_HEADER {      // DOS .EXE header
@@ -435,7 +434,7 @@ sljedećeg zaglavlja, tj. na \emph{NT zaglavlje}. Naime, element
 započinje NT zaglavlje.
 
 Osim \emph{IMAGE\_DOS\_HEADER} strukture, MS-DOS zaglavlje sadrži
-i tzv. DOS dopunski program (engl.\emph{DOS stub
+i tzv. DOS dopunski program (engl. \emph{DOS stub
 program}) \citep{dos_stub}. DOS dopunski program ima samo jednu
 namjenu, a to je da ispiše kratak tekst i završi sa izvršavanjem
 ukoliko se PE datoteka pokuša pokrenuti na 16-bitnom DOS računalu.
@@ -476,9 +475,9 @@ sačinjavaju 4 okteta (0x00004550) koji predstavljaju znakovni niz
 "PE". Kako bi PE datoteka bila valjana, nužno je da potpis
 sadrži valjanu vrijednost. 
 
-PE zaglavlje (engl.\emph{PE File Header}) definirano je unutar
+PE zaglavlje (engl. \emph{PE File Header}) definirano je unutar
 strukture \emph{IMAGE\_FILE\_HEADER}. Veličina zaglavlja je 20
-okteta te je njegova struktura prikazana na ispisu \ref{lst:imgFileHeader}.
+okteta te je njegova struktura prikazana na ispisu strukture \ref{lst:imgFileHeader}.
 
 \begin{struktura} {caption=IMAGE\_FILE\_HEADER struktura} {label=lst:imgFileHeader}
 typedef struct _IMAGE_FILE_HEADER {
@@ -495,7 +494,7 @@ typedef struct _IMAGE_FILE_HEADER {
 U tablici \ref{tbl:imgFileHdr} nalazi se opis pojedinih elemenata
 \emph{IMAGE\_FILE\_HEADER} strukture.
 
-\pagebreak
+\pagebreak  %Moram staviti ovdje pagebreak jer mi inače ubaci donju tablicu unutar ispisa elemenata strukture IMAGE_OPTIONAL_HEADER
 
 \begin{table}[htb]
 \small
@@ -505,7 +504,7 @@ U tablici \ref{tbl:imgFileHdr} nalazi se opis pojedinih elemenata
 \begin{tabular}{|l|l|l|p{6cm}|}
 \hline
 Pomak & Veličina & Element & Opis \\ \hline
-0 & 2 & Machine & Broj koji definira stroj(arhitekturu) za koju je datoteka namijenjena \\ \hline
+0 & 2 & Machine & Broj koji definira stroj (arhitekturu) za koju je datoteka namijenjena \\ \hline
 2 & 2 & NumberOfSections & Označava koliko sekcija postoji u datoteci. Nakon NT zaglavlja slijedi toliki broj zaglavlja sekcija. \\ \hline
 4 & 4 & TimeDateStamp & Vrijeme i datum kada je datoteka kreirana \\ \hline
 8 & 4 & PointerToSymbolTable & Posmak do tablice simbola karakteristične za COFF format. Sadrži 0 ukoliko tablica ne postoji. \\ \hline
@@ -519,9 +518,9 @@ zaglavlje sadrži veliki broj elemenata od kojih nisu svi nužni za
 razumijevanje ovog rada. Zbog toga su u ovom odjeljku opisani
 samo najvažniji od njih. Opcionalno zaglavlje definirano je
 unutar strukture \emph{IMAGE\_OPTIONAL\_HEADER}. Izgled navedene
-strukture prikazan je na odsječku koda \ref{lst:imgOptHeader}.
+strukture prikazan je na ispisu strukture \ref{lst:imgOptHeader}.
 
-%% Svuda promijeniti da pise "Strukutra XYZ"
+%% Svuda promijeniti da pise "Strukutra XYZ" -Ispravljeno
 
 \begin{struktura} {caption=IMAGE\_OPTIONAL\_HEADER struktura} {label=lst:imgOptHeader}
 typedef struct _IMAGE_OPTIONAL_HEADER {
@@ -603,7 +602,7 @@ višekratnik elementa \emph{FileAlignment}.
 podatkovnih tablica slijedi nakon opcionalnog zaglavlja.
 \end{itemize}
 
-Kao što je već spomenuto, na kraju opcionalnog zaglavlja dolazi popis podatkovnih tablica u PE datoteci. Maksimalan broj tablica iznosi 16. Svaka tablica opisana je preko \emph{IMAGE\_DATA\_DIRECTORY} strukture čiji opis se može vidjeti na ispisu \ref{lst:dataDir}.
+Kao što je već spomenuto, na kraju opcionalnog zaglavlja dolazi popis podatkovnih tablica u PE datoteci. Maksimalan broj tablica iznosi 16. Svaka tablica opisana je preko \emph{IMAGE\_DATA\_DIRECTORY} strukture čiji opis se može vidjeti na ispisu strukture \ref{lst:dataDir}.
 
 \begin{struktura} {caption=IMAGE\_DATA\_DIRECTORY struktura} {label=lst:dataDir}
 typedef struct _IMAGE_DATA_DIRECTORY {
@@ -638,18 +637,18 @@ Tablica Certifikata & Adresa i veličina tablice zadužene za certifikate. Ne ma
 Relokacijska Tablica & Sadrži adresu i veličinu tablice u kojoj su sačuvani podaci o relokacijama. \\ \hline
 Debug Tablica & Sadrži podatke o tablici koja sadrži informacije o otklanjanju grešaka. Ne mapira se u memoriju. \\ \hline
 Arhitektura & Adresa i veličina tablice koja sadrži podatke o arhitekturi sustava. \\ \hline
-Global Ptr & Sadrži relativnu virtualnu adresu vrijednosti koju je potrebno spremiti u registar globalnog pokazivača (engl.\emph{Global Pointer Register}) na procesoru. Polje veličine u ovom slučaju mora biti postavljeno na 0. \\ \hline
-TLS Tablica & Sadrži adresu i veličinu TLS tablice (engl.\emph{Thread Local Storage}) \\ \hline
+Global Ptr & Sadrži relativnu virtualnu adresu vrijednosti koju je potrebno spremiti u registar globalnog pokazivača (engl. \emph{Global Pointer Register}) na procesoru. Polje veličine u ovom slučaju mora biti postavljeno na 0. \\ \hline
+TLS Tablica & Sadrži adresu i veličinu TLS tablice (engl. \emph{Thread Local Storage}) \\ \hline
 Tablica s konfiguracijom & Sadrži adresu i veličinu tablice koja pohranjuje informacije o postavkama na koje treba obratiti pažnju prilikom učitavanja datoteke u memoriju. \\ \hline
-Tablica spremnih importa (engl.\emph{Bound Import}) & Radi se o opcionalnoj tablici koja sadrži informacije o import funkcijama i DLL-ovima koji su unaprijed učitani u memoriju na dobro poznate adrese te ih radi toga nije potrebno ponovno učitavati već se mogu odmah koristiti. \\ \hline
-IAT tablica & Radi se o dijelu Import tablice. Konkretno, IAT (engl.\emph{Import Address Table}) sadrži popis adresa na kojima se nalaze funkcije učitane iz raznih DLL-ova koje program koristi. \\ \hline
+Tablica spremnih importa (engl. \emph{Bound Import}) & Radi se o opcionalnoj tablici koja sadrži informacije o import funkcijama i DLL-ovima koji su unaprijed učitani u memoriju na dobro poznate adrese te ih radi toga nije potrebno ponovno učitavati već se mogu odmah koristiti. \\ \hline
+IAT tablica & Radi se o dijelu Import tablice. Konkretno, IAT (engl. \emph{Import Address Table}) sadrži popis adresa na kojima se nalaze funkcije učitane iz raznih DLL-ova koje program koristi. \\ \hline
 Tablica odgođenih importa & Sadrži informacije o importima koji se naknadno mogu učitati u memoriju. Djeluje kao dodatak import tablice. \\ \hline
 CLI Tablica & Sadrži adresu i veličinu tablice koja se uglavnom koristi kod .NET aplikacija. \\ \hline
 Rezervirano & Rezervirano za potrebe operacijskog sustava. \\
 \hline
 \end{longtable}
 }
-\pagebreak
+%\pagebreak
 
 \subsection{Sekcije}
 \label{sec:sekcije}
@@ -663,7 +662,7 @@ tablice sekcija. Zbog toga se koristi element
 \emph{SizeOfOptionalHeader} kako bi se pronašao točan pomak do
 zaglavlja sekcija. Svaka sekcija opisana je pomoću
 \emph{IMAGE\_SECTION\_HEADER} strukture. Sadržaj navedene
-strukture prikazan je u odsječku koda \ref{lst:imgSectionHeader}.				% Rekao sam da SVUDA promijenite ``odsjecak'' u ispis!
+strukture prikazan je na ispisu strukture \ref{lst:imgSectionHeader}.				% Rekao sam da SVUDA promijenite ``odsjecak'' u ispis! -promijenjeno
 
 \begin{struktura} {caption=IMAGE\_SECTION\_HEADER struktura} {label=lst:imgSectionHeader}
 typedef struct _IMAGE_SECTION_HEADER {
@@ -694,7 +693,7 @@ započinju sa točkom te su oblika ".text", ".code", ".rsrc",
 shvaćanja koji tipovi podataka i informacija se nalaze unutar
 pojedine sekcije, ono ne mora nužno postojati ili može biti
 proizvoljno. Mnogo puta je određene PE datoteke, koje su pakirane
-ili zaštičene na neki način, moguće identificirati samo po
+ili zaštićene na neki način, moguće identificirati samo po
 neuobičajenim imenima sekcija. Valja još napomenuti kako je
 duljina imena sekcije ograničena na 8 okteta (znakova).
 
@@ -878,7 +877,7 @@ sustava.
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=10cm, height=10cm]{slike/aslr_v2}
-\caption{Primjer djelovanja ASLR-a izmađu dva pokretanja programa}
+\caption{Primjer djelovanja ASLR-a između dva pokretanja programa}
 \label{fig:aslr} 
 \end{figure} 
 
@@ -914,8 +913,8 @@ Kako bi spriječio izvršavanje, operacijski sustav Windows koristi
 jedno od sljedećeg:
 
 \begin{itemize}
-\item Procesorska značajka zabrane izvršavanja(NX) - definirano od strane AMD-a
-\item Bit za onemogućavanje izvršavanja(XD) - definirano od strane Intel-a
+\item Procesorska značajka zabrane izvršavanja (NX) - definirano od strane AMD-a
+\item Bit za onemogućavanje izvršavanja (XD) - definirano od strane Intel-a
 \end{itemize}
 
 Kako bi procesor mogao koristiti navedene značajke, on mora
@@ -945,8 +944,8 @@ se iznimkama prilikom pokretanja dodatnog koda.
 \section{ASLP}
 \label{sct:aslp}
 
-ASLP \citep{aslp} (engl. \emph{Address Space Layout Permutation})
-je alat za operacijski sustav Linux koji omogućava pomicanje
+ASLP \citep{aslp} (engl. \emph{Address Space Layout Permutation}) 
+je alat za operacijski sustav Linux koji omogućava pomicanje 
 (permutaciju) dijelova koda i podataka iz izvršnih ELF datoteka
 na slučajno odabrane nove lokacije unutar izvršne ELF datoteke.
 Time datoteka i dalje zadržava svoju funkcionalnost, ali je
@@ -987,7 +986,7 @@ prilikom izračuna pomaka na koji treba postaviti podatkovne i
 izvršne dijelove datoteke. Osim toga, program za permutaciju u
 korisničkom prostoru omogućava promjenu redoslijeda podatkovnih i
 izvršnih dijelova u memoriji. To je značajno prednost u odnosu na
-klasični povezivač (engl.\emph{linker}) koji uvijek postavlja dio
+klasični povezivač (engl. \emph{linker}) koji uvijek postavlja dio
 sa podacima nakon dijela sa izvršnim kodom u memoriji.
 
 Ranije je spomenuto kako je jedan od glavnih problema prilikom
@@ -1078,8 +1077,8 @@ podatkovnom odnosno izvršnom dijelu datoteke.
 \item Prepisivanje stavki: U posljednjem koraku provodi se sam
 postupak permutacije. Na osnovu prethodno generiranih slučajnih
 brojeva stvara se novi raspored funkcija i varijabli u zasebnom
-dijelu memorije. Nakon što je novi raspored stvoren, stari
-(originalni) raspored se ukloni te se nadomjesti novim
+dijelu memorije. Nakon što je novi raspored stvoren, stari 
+(originalni) raspored se ukloni te se nadomjesti novim 
 (permutiranim). Na kraju ovog koraka potrebno je modificirati sve
 reference između podatkovnih i izvršnih dijelova.
 
@@ -1094,9 +1093,10 @@ jezgre operacijskog sustava Linux.
 
 Kako bi permutacija u jezgri operacijskog sustava bila moguća,
 potrebno je provesti određene promjene na jezgri. U ovom koraku
-se ASLP značajno razlikuje od modula za promjenu koda jer ima			% Sto je ``modul za promjenu''? -ispravljeno - Jel' to PErmutator?
+se ASLP značajno razlikuje od modula za promjenu koda koji
+razvijamo jer ima			% Sto je ``modul za promjenu''? -ispravljeno - Jel' to PErmutator? - Da, dodao sam sada da bude preciznije što se želi reći
 mogućnost vršenja modifikacija na samoj jezgri operacijskog
-sustava dok je navedeno kod modula za promjenu koda nemoguće jer
+sustava dok je navedeno kod modula za promjenu koda nemoguće pošto
 se radi o Microsoft Windows aplikaciji.
 
 Permutacije unutar jezgre provode se slično kao i kod ASLR
@@ -1184,10 +1184,10 @@ gomila...) te izvršiti navedene instrukcije. Ukoliko izvršavanje
 instrukcija uspije, PaXtest program javlja kako je navedena
 memorijska regija ranjiva na napade. Drugi test testira svaku
 pojedinu memorijsku regiju na randomizaciju, tj. koliko se bitova
-adrese može koristiti u postupku randomizacije. Na tablici
+adrese može koristiti u postupku randomizacije. Na tablici 
 \ref{tbl:paxtest_results} prikazani su rezultati drugog testa na
 jednom Linux stroju. Testiranje su proveli autoru ASLP mehanizma te
-je ono detaljnije opisano u samom članku u ovom mehanizmu zaštite \citep{aslp}.
+je ono detaljnije opisano u samom članku o ovom mehanizmu zaštite \citep{aslp}.
 
 \begin{table}[htb]
 \small
@@ -1199,7 +1199,7 @@ je ono detaljnije opisano u samom članku u ovom mehanizmu zaštite \citep{aslp}
 Regija & Originalna jezgra & Exec-Shield & PaX ASLR & ASLP \\ \hline
 Stog & 0 bitova & 17 & 24 & 28 \\ \hline
 Gomila & 0 bitova & 13 & 13 & 29 \\ \hline
-Mmap & 0 bitova & 12 & 16 & 20 \\ \hline
+Memorija za vanjske biblioteke & 0 bitova & 12 & 16 & 20 \\ \hline
 Izvršni dio & 0 bitova & 0 & 0 & 20 \\ \hline
 Podatkovni dio & 0 bitova & 0 & 0 & 20 \\ \hline
 \end{tabular}
@@ -1215,7 +1215,7 @@ za permutaciju u podatkovnim i izvršnim dijelovima.
 \chapter{Korupcija memorije}
 
 Cilj ovog poglavlja je dati uvod u metode napada, pritom se
-orijenirajući na napade usmjerene na memoriju (engl.\emph{Memory
+orijentirajući na napade usmjerene na memoriju (engl. \emph{Memory
 Corruption Attacks}).  Napadi usmjereni na memoriju temelje se na
 korupciji memorije te su jedni od najstarijih napada, pri čemu su se
 najviše koristili tijekom 90-ih godina prošlog stoljeća.
@@ -1225,12 +1225,12 @@ se sadržaj memorije nenamjerno mijenja. Najčešći uzrok takvim
 situacijama su programerske pogreške. Ukoliko se kasnije, tijekom
 izvođenja programa, pokuša pristupiti promijenjenim memorijskim
 lokacijama, velika je vjerojatnost kako će doći do gašenja
-programa radi pogreške ili do izvršavanja stranog koda. Iz tih
+programa radi pogreške ili do izvršavanja dodatnog programskog koda. Iz tih
 razloga, korupcija memorije je izuzetno opasna jer najčešće
 uzrokuje ne definirano ponašanje programa. 
 
 Programski jezici kao što su C i C++ omogućuju programerima
-direktni pristup memoriji putem pokazivača (engl.\emph{Pointer}) 
+direktni pristup memoriji putem pokazivača (engl. \emph{Pointer}) 
 pri čemu nepravilna uporaba istih može dovesti do značajnih
 pogrešaka u radu s memorijom.
 Pogreške uzrokovane korupcijom memorije dosta je teško otkriti.
@@ -1238,11 +1238,11 @@ Postoje dva razloga za to:
 
 \begin{enumerate}
 
-\item Između izvora memorijske korupcije i manifestacije istoga u		% Svuda koristite izraz ``korupcija memorije''
+\item Između izvora korupcije memorije i manifestacije istoga u		% Svuda koristite izraz ``korupcija memorije'' -popravljeno
 programu može biti jako velika razlika. Radi toga, teško je
 uvidjeti vezu između uzroka i posljedice problema.
 
-\item Memorijske korupcije se uglavnom pojavljuju u neuobičajenim
+\item Korupcija memorije se uglavnom pojavljuju u neuobičajenim
 situacijama. Posljedica toga je nemogućnost za jednostavnim
 ponavljanjem pogreške kako bi se pronašao sam izvor problema.
 
@@ -1254,7 +1254,9 @@ Pogreške uzrokovane korupcijom memorije moguće je podijeliti u
 \begin{enumerate}
 
 \item Upotreba neinicijalizirane memorije: Sadržaj neinicijalizirane
-memorije tretira se kao "smeće". Korištenje					% Ne ``tretira'' se kao smece, jer da se tretira onda bi se pocistilo. Tretira se kao vazeci podaci!
+memorije nije siguran za korištenje od strane procesa jer se tamo 
+nalaze podaci koji trenutno nisu pripremljeni za korištenje za 
+promatrani proces. Korištenje					% Ne ``tretira'' se kao smece, jer da se tretira onda bi se pocistilo. Tretira se kao vazeci podaci! -Napisao sam sada malo drugačije
 vrijednosti iz takve memorije može uzrokovati ne definirano
 ponašanje programa.
 
@@ -1269,40 +1271,40 @@ radu programa koji onda najčešće završavaju iniciranjem iznimke i
 prekidom rada.
 
 \item Upotreba memorije van granica alocirane memorije (preljev
-spremnika): U ovom slučaju radi se o jednoj od najčešćih			% Recite ``cestima'' ili navedite referencu gdje se argumentira da su to doista najcesci slucajevi!
-programerskih pogrešaka koja se često pojavljuje u raznim
+spremnika): U ovom slučaju radi se o čestoj			% Recite ``cestima'' ili navedite referencu gdje se argumentira da su to doista najcesci slucajevi! -Ispravljeno
+programerskoj pogrešci koju je moguće pronaći u raznim
 programima. Zbog učestalosti navedene pogreške, mnogi virusi i
 ostali maliciozni programi iskorištavaju istu kako bi dobili
-mogućnost za izvršavanjem stranog koda. Više o ovoj pogrešci
+mogućnost za izvršavanjem dodatnog programskog koda. Više o ovoj pogrešci
 moguće je pročitati u poglavlju \ref{sct:bufferOverflow}.
 
-\item Neispravno upravljanje gomilom (engl.\emph{heap}): Događa				% RAZMAK!!!
+\item Neispravno upravljanje gomilom (engl. \emph{heap}): Događa				% RAZMAK!!!
 se prilikom pokušaja oslobađanja ne alocirane memorije ili
 memorije koja se nalazi van granica gomile. 
 
 \end{enumerate}
 
-Iako je na početku ovog poglavlja spomenuto kako pogreške vezane
-za korupciju memorije svoj vrhunac doživljavaju 90-ih godina,
+Iako je na početku ovog poglavlja spomenuto kako pogreške u radu
+s memorijom svoj vrhunac doživljavaju 90-ih godina,
 danas su iste još uvijek dosta zastupljene. OSVDB 
-(engl.\emph{Open Source Vulnerability Database}) je baza podataka			% RAZMAK!!!
+(engl. \emph{Open Source Vulnerability Database}) je baza podataka			% RAZMAK!!!
 osnovana 2002. godine od strane zajednice koja se bavi računalnom
 sigurnošću. Baza je otvorenog koda i njezin cilj je dati točne,
 detaljne te trenutne informacije o sigurnosnim ranjivostima. Na
 slici \ref{fig:mem_corruption} moguće je vidjeti graf koji
 pokazuje kako se broj napada uzrokovanih korupcijom memorije
 kretao u razdoblju 2009-2014. Navedeni podaci uzeti su iz OSVDB
-baze te je moguće vidjeti kako su pogreške uzrokovane korupcijom
-memorije danas još uvijek dosta aktualne te kako postoji potreba
+baze te je moguće vidjeti kako su pogreške u radu s memorijom
+ danas još uvijek dosta aktualne te kako postoji potreba
 za pronalaskom novih načina i metoda kako bi se te prijetnje
 smanjile te u konačnosti skroz uklonile. U nastavku ovog
 poglavlja dan je detaljan opis pojedinih sigurnosnih napada koji
-iskorištavaju pogreške uzrokovane korupcijom memorije. Također
-prikazano je kako postojeći mehanizmi zaštite (ASLR i DEP)
+iskorištavaju pogreške u radu s memorijom. Također
+prikazano je kako postojeći mehanizmi zaštite (ASLR i DEP) 
 otežavaju provođenje tih napada te kako bi modul za permutaciju
 koda dodatno pospješio obranu. 
 
-\pagebreak
+%\pagebreak
 \begin{figure}[!ht]
 \centering
 \setlength\fboxsep{0pt}
@@ -1321,14 +1323,14 @@ kada program pokušava upisati podatke u polje fiksne veličine,
 pri čemu je veličina podataka koji se žele upisati veća od
 veličine polja. Posljedica toga je što susjedne memorijske
 lokacije, koje ne pripadaju ranjivom spremniku, sadrže podatke
-koji mogu izazvati ne definirano ponašanje programa. Ranjivost				% Ovo se pise zajedno! Vec sam vas upozorio na te pogreske i da ih popravite po cijelom tekstu!
-preljeva spremnika moguće je iskoristit kada napadači žele				% iskoristitI
-izvršiti neki strani programski kod ili kako bi se promijenio				% strani -> dodatni
+koji mogu izazvati nedefinirano ponašanje programa. Ranjivost				% Ovo se pise zajedno! Vec sam vas upozorio na te pogreske i da ih popravite po cijelom tekstu! -Ispravljeno, predao sam cijeli dokument u hašek i ispravio sve greške koje je tamo zabilježio
+preljeva spremnika moguće je iskoristiti kada napadači žele				% iskoristitI -Ispravljeno
+izvršiti neki dodatni programski kod ili kako bi se promijenio				% strani -> dodatni -ISpravljeno
 način na koji program radi. 
 
 Programski jezici koji se najčešće spominju u kontekstu preljeva
 spremnika su C i C++. Razlog tome je što navedeni programski
-jezici nemaju ugrađeni oblik zaštite koji bi kontrolirao				% bez ``oblik''
+jezici nemaju ugrađenu zaštitu kojom bi bilo moguće kontrolirati				% bez ``oblik'' -Ispravljeno
 upisivanje podataka na bilo koje mjesto u memoriji. Također, C i
 C++ nemaju automatski način provjere podataka u smislu da podaci
 koji se upisuju u spremnik budu unutar njegovih granica.
@@ -1350,12 +1352,12 @@ načina:
 \item prepisati vrijednost lokalne varijable koja se nalazi blizu
 ranjivog spremnika čime je moguće promijeniti ponašanje programa
 \item prepisati vrijednost povratne adrese. Na taj način napadač
-je u mogućnosti prebaciti izvršavanje programa na neki strani
-kod. Ovaj način preljeva detaljno je prikazan u nastavku.
+je u mogućnosti prebaciti izvršavanje programa na neki dodatni 
+programski kod. Ovaj način preljeva detaljno je prikazan u nastavku.
 \item prepisati vrijednost pokazivača na funkcije. Na taj način
 moguće je prepisati pokazivač za funkciju zaduženu za rukovanje
-iznimkama čime se izvršavanje ponovno prebacuje na neki strani
-kod.
+iznimkama čime se izvršavanje ponovno prebacuje na neki dodatni 
+programski kod.
 \end{itemize}
 
 Glavni cilj napadača, prilikom iskorištavanja preljeva spremnika
@@ -1378,14 +1380,14 @@ int main (int argc, char **argv)
 }
 \end{ispis}
 
-Programski kod u odsječku \ref{lst:stackBuffOverflow} radit će
+Programski kod u ispisu koda \ref{lst:stackBuffOverflow} radit će
 sasvim normalno za znakovne nizove manje od 12 znakova. Na slici 
 \ref{fig:buff_overflow_nodata} i slici 
 \ref{fig:buff_overflow_legitdata} prikazan je izgled stoga prije
 kopiranja te prilikom kopiranja znakovnog niza koji zadovoljava
 granice.
 
-\pagebreak
+%\pagebreak
 \begin{figure}[!ht]
 \centering
 \setlength\fboxsep{0pt}
@@ -1403,14 +1405,17 @@ granice.
 \caption{Primjer stoga nakon kopiranja znakovnog niza "test"}
 \label{fig:buff_overflow_legitdata} 
 \end{figure} 
-\pagebreak
+%\pagebreak
 
 Na slici \ref{fig:buff_overflow_overflow} prikazan je izgleda
 stoga nakon što je kao argument programu predan znakovni niz
-"AAAAAAAAAAAAAAAA0835C080" pri čemu adresa \emph{0x80C03508}				% To nije dobro, 08... je ASCII niz, a ne adresa!
-pokazuje na početak lokalne varijable \emph{c} unutar funkcije.
+"AAAAAAAAAAAAAAAAnU@0" pri čemu adresa \emph{0x3040556E}				% To nije dobro, 08... je ASCII niz, a ne adresa! -Točno, popravio sam to i na slici.
+pokazuje na početak lokalne varijable \emph{c} unutar funkcije. 
+Zadnja četiri znaka predanog niza, "nU@0", označavaju niz okteta
+\emph{0x6E 0x55 0x40 0x30}, a to je upravo ciljna adresa na koju se 
+želi preusmjeriti izvršavanje.
 Ukoliko se sada izvrši \emph{ret} instrukcija, program će
-nastaviti s izvršavanjem od adrese \emph{0x80C03508} koja u ovom
+nastaviti s izvršavanjem od adrese \emph{0x3040556E} koja u ovom
 slučaju sadrži nepravilne vrijednosti ("AA.."). Jasno je kako je
 umjesto znakovnog niza "AAA..." mogao biti predan operacijski kod
 legitimnih instrukcija procesora koje bi bile u mogućnosti
@@ -1425,11 +1430,11 @@ izvršiti zadatke koji se od programa u primjeru ne očekuju.
 \label{fig:buff_overflow_overflow} 
 \end{figure}
 
-Ovo je dobar trenutak za objasniti kako DEP (poglavlje \ref{sct:dep})
-sprječava izvršavanje ubačenog programskog koda. Ukoliko je DEP				% sprjecava ili sprIjecava? Dajte koristite hashek (ili kako se zove) i provjerite pravopis
+Ovo je dobar trenutak za objasniti kako DEP (poglavlje \ref{sct:dep}) 
+sprječava izvršavanje ubačenog programskog koda. Ukoliko je DEP				% sprjecava ili sprIjecava? Dajte koristite hashek (ili kako se zove) i provjerite pravopis -Znači hašek kaže da je pravilno sprječava
 aktiviran u ovome primjeru, prilikom izvršavanja \emph{ret}
-instrukcije i skoka na adresu \emph{0x80C03508} program će se
-zaustaviti jer DEP onemogučava izvršavanje instrukcija na stogu,
+instrukcije i skoka na adresu \emph{0x3040556E} program će se
+zaustaviti jer DEP onemogućava izvršavanje instrukcija na stogu,
 tj. upotrebom DEP-a sve memorijske lokacije na stogu postavljene
 su kao ne izvršne. Iz tog razloga napadači se trebaju poslužiti
 drugim metodama kako bi iskoristili ranjivost preljeva spremnika
@@ -1451,8 +1456,8 @@ podatkovnih struktura poput pokazivača povezane liste.
 
 Svaki proces, prilikom kreiranja, dobiva gomilu. Početna veličina
 dobivene gomile je 1MB te ista može rasti ukoliko za to postoji
-potreba. Maksimalna veličina gomile određena je količinom				% Doista? Nije li ogranicena virtualnim prostorom?
-memorije u sustavu. Također, valja napomenuti kako svaki proces
+potreba. Maksimalna veličina gomile ograničena je veličinom				% Doista? Nije li ogranicena virtualnim prostorom? -Ispravljeno
+virtualnog adresnog prostora u procesu. Također, valja napomenuti kako svaki proces
 može stvarati i dodatne, privatne gomile pomoću WIN32 API
 funkcija \emph{HeapCreate()/HeapDestroy()}. Jednom kada su
 privatne gomile stvorene moguće ih je koristiti preko API
@@ -1465,11 +1470,11 @@ svaki puta kada proces alocira prostor na gomili, on dobiva na
 korištenje blokove čija veličina je višekratnik od 8, tj. dobiva
 na korištenje određen broj \emph{indexa}. Za primjer, ukoliko
 proces želi alocirati blok memorije veličine 32 okteta, njemu se
-vračaju 4 \emph{indexa}. Važno je naglasiti kako se alocirani			% To je meko ć! Jos jednom, spell checker!
+vraćaju 4 \emph{indexa}. Važno je naglasiti kako se alocirani			% To je meko ć! Jos jednom, spell checker! -Ispravljeno
 blokovi zauzimaju slijedno, tj. jedan iza drugoga kako je
 prikazano na slici \ref{fig:heap_2_allocated_blocks}.
 
-% Na ovoj slici ima pojam ``Pokazivac na podatke''! Sto je to? Od kuda to?
+% Na ovoj slici ima pojam ``Pokazivac na podatke''! Sto je to? Od kuda to? -Pogreška, maknuto
 \begin{figure}[!ht]
 \centering
 \setlength\fboxsep{0pt}
@@ -1486,11 +1491,11 @@ broja 8 te iznosi 16 okteta. Valja napomenuti kako zaglavlje
 postoji u dva oblika kao što je i prikazano na slikama 
 \ref{fig:used_heap_block} i \ref{fig:free_heap_block}. U
 konačnici, ukupna količina memorije koja se alocira jednaka je
-traženoj veličini uvečanoj za veličinu zaglavlja.				% Meko c!
+traženoj veličini uvećanoj za veličinu zaglavlja.				% Meko c! -Kaže hašek da je veličina ispravno
 
-\pagebreak									% Vec sam rekao, bez pagebreak-ova... pustite Latex da sam odreuje gdje ce lomiti stranice!
+%\pagebreak									% Vec sam rekao, bez pagebreak-ova... pustite Latex da sam odreuje gdje ce lomiti stranice! -Zakomentirani su svi pagebreakovi, osim onog jednog ranije spomenutog
 
-% Na ovoj slici imate ``Kolicina indexa'', to promijenite u BROJ indeksa ili BROJAC indeksa ili tako nesto
+% Na ovoj slici imate ``Kolicina indexa'', to promijenite u BROJ indeksa ili BROJAC indeksa ili tako nesto - ispravljeno
 \begin{figure}[!ht]
 \centering
 \setlength\fboxsep{0pt}
@@ -1508,13 +1513,13 @@ traženoj veličini uvečanoj za veličinu zaglavlja.				% Meko c!
 \caption{Zaglavlje slobodnog memorijskog bloka}
 \label{fig:free_heap_block} 
 \end{figure}
-\pagebreak
+%\pagebreak
 
 Svako zaglavlje sastoji se od sljedećih elemenata:
 
 \begin{itemize}
 \item Veličina bloka: Ukupna veličina bloka memorije (uključujući i zaglavlje)
-\item Veličina prethodnog bloka: Ukupna veličina bloka koji se nalazi prije promatranoga. Također uključuje i veličinu zaglavlja.
+\item Veličina prethodnog bloka: Ukupna veličina bloka koji se nalazi prije promatranog bloka. Također uključuje i veličinu zaglavlja.
 \item Indeks segmenta: Indeks segmenta u memoriji unutar kojega se blok nalazi.
 \item Zastavice: Opisuju određena svojstva blokova u pripadajućoj gomili.
 \item Slobodni okteti: Broj slobodnih okteta u bloku.
@@ -1531,7 +1536,7 @@ elemenata, za potrebe opisivanja preljeva spremnika na gomili
 važno je uočiti element na pomaku \emph{0x178} unutar strukture.
 Radi se o polju (\emph{FreeLists}) koje sadrži 128 elemenata
 \emph{LIST\_ENTRY} strukture. Svaka \emph{LIST\_ENTRY} struktura
-sadrži dva pokazivača kao što je prikazano na odsječku koda 
+sadrži dva pokazivača kao što je prikazano na ispisu strukture 
 \ref{lst:list_entry_struct}.
 
 \begin{struktura} {caption=LIST\_ENTRY struktura} {label=lst:list_entry_struct}
@@ -1548,13 +1553,13 @@ Pokazivači unutar \emph{LIST\_ENTRY} strukture imaju sljedeće vrijednosti:
 \item \emph{Blink}: Pokazuje na prethodni element liste ili na početak liste ukoliko je lista prazna.
 \end{itemize}
 
-% Za ovu sliku dati referencu kako bi se mogao pronaci detaljniji opis!
+% Za ovu sliku dati referencu kako bi se mogao pronaci detaljniji opis! -Dodano u captionu slike
 \begin{figure}[!ht]
 \centering
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=12cm, height=10cm]{slike/heap_structure}
-\caption{Osnovna struktura gomile}
+\caption{Osnovna struktura gomile \citep{heapOverflow_infosec}}
 \label{fig:heap_structure} 
 \end{figure}
 
@@ -1565,7 +1570,7 @@ strukture. Ovdje do izražaja dolazi količina \emph{indexa} koji
 sačinjavaju pojedini blok. Naime, upravo količina \emph{indexa} u
 bloku određuje kojem indeksu unutar \emph{FreeLists} strukture će
 se pojedini blok dodijeliti jednom kada bude slobodan. Za
-primjer, ukoliko neki blok sadrži 192 okteta (24 \emph{indexa})
+primjer, ukoliko neki blok sadrži 192 okteta (24 \emph{indexa}) 
 on će se prilikom oslobađanja pohraniti u listu pod indeksom
 \emph{FreeLists[24]}. Valja još napomenuti par graničnih
 vrijednosti:
@@ -1584,7 +1589,7 @@ U trenutku kada je gomila stvorena, pokazivač na indeksu 0 iz
 \emph{FreeLists} polja pokazuju na prvi slobodni blok. Primjera
 radi, ako je gomila stvorena na adresi \emph{0x00350000} tada se
 prvi slobodni blok može nalaziti na adresi \emph{0x00350688}.
-Navedeno je prikazano na odsječku koda \ref{lst:freeLists0}.
+Navedeno je prikazano na ispisu koda \ref{lst:freeLists0}.
 
 \begin{ispis} {caption=Prvi slobodni blok gomile} {label=lst:freeLists0}
 0x00350178 (FreeList[0].Flink) = 0x00350688 (Prvi Slobodni Blok)
@@ -1612,7 +1617,7 @@ Sada kada je objašnjen način na koji funkcionira gomila unutar
 Windows operacijskog sustava, iskoristit ćemo jednostavan primjer
 kako bi prikazali preljev spremnika na gomili.
 
-Unutar odsječka koda \ref{lst:heapOverflowExmp} nalazi se ranjiva
+Unutar ispisa koda \ref{lst:heapOverflowExmp} nalazi se ranjiva
 funkcija unutar koje je moguće izazvati preljev spremnika na
 gomili. U nastavku slijedi detaljan opis funkcije.
 
@@ -1636,9 +1641,9 @@ DWORD vulner(LPVOID str)
 
 U početku su alocirana dva memorijska bloka na gomili te su, kao
 što je ranije spomenuto, pozicionirani slijedno 
-(\ref{fig:heap_2_allocated_blocks}). Na liniji 8 vidljivo je kako			% Dodati Slika, jer kada je u tekstu samo broj ne zna se o cemu se radi! Dodatno, nije NA liniji, vec U liniji!
+(slika \ref{fig:heap_2_allocated_blocks}). U liniji 8 vidljivo je kako			% Dodati Slika, jer kada je u tekstu samo broj ne zna se o cemu se radi! Dodatno, nije NA liniji, vec U liniji! -Ispravljeno
 se blok \emph{m2} oslobađa te se informacije o bloku pohranjuju u
-odgovarajući indeks unutar \emph{FreeLists} strukture.	Na liniji			% Opet, U liniji\ldots popraviti svuda
+odgovarajući indeks unutar \emph{FreeLists} strukture.	U liniji			% Opet, U liniji\ldots popraviti svuda -Ispravljeno
 10 događa se postupak preljeva, tj. memorijski blok \emph{m1} se
 cijeli popunjava te uz njega i zaglavlje slobodnog memorijskog
 bloka \emph{m2}.
@@ -1647,7 +1652,7 @@ U ovome trenutku, pokazivači \emph{Flink} i \emph{Blink} unutar
 zaglavlja bloka \emph{m2} su prepisani, tj. postavljeni su na
 proizvoljne vrijednosti napadača.
 
-Na liniji 12 nalazi se ključan dio koda koji omogućava
+U liniji 12 nalazi se ključan dio koda koji omogućava
 iskorištavanje preljeva spremnika na gomili. Naime, nakon što se
 ponovno alocira blok veličine 128 okteta potrebno je isti taj
 blok maknuti iz \emph{FreeLists} polja jer on više nije slobodan.
@@ -1655,14 +1660,14 @@ Način na koji se to obavlja je sljedeći:
 
 \begin{enumerate}
 
-\item \emph{Blink} pokazivač sljedećeg slobodnog bloka
+\item \emph{Blink} pokazivač sljedećeg slobodnog bloka 
 (\emph{m2->Flink}) potrebno je postaviti tako da pokazuje na
 prethodni slobodni blok (\emph{m2->Blink}). Pošto su polja
 \emph{Flink} i \emph{Blink} bloka \emph{m2} prepisana, događa se
 upisivanje proizvoljne vrijednosti (vrijednost \emph{m2->Blink})
 na proizvoljnu lokaciju (\emph{m2->Flink}).
 
-\item \emph{Flink} pokazivač prethodnog elementa
+\item \emph{Flink} pokazivač prethodnog elementa 
 (\emph{m2->Blink}) potrebno je postaviti tako da pokazuje na
 sljedeći slobodni blok (\emph{m2->Flink}). Ovdje se ponovno
 događa situacija kao i u koraku 1, tj. ponovno se obavlja pisanje
@@ -1675,7 +1680,7 @@ događaju dvije operacije pisanja u memoriju. Iz tog razloga
 napadač može preljevom spremnika kontrolirati koja vrijednost će
 se upisati i gdje. Na primjer, moguće je prepisati pokazivač na
 funkciju destruktora nekog objekta na način da isti pokazuje na
-strani, ubačeni kod.
+dodatni, ubačeni programski kod.
 
 \section{Napad format znakovnim nizom}
 
@@ -1684,7 +1689,7 @@ jedan je od starijih načina kako iskoristiti korupciju memorije.
 Ova ranjivost najčešće se iskorištava u sustavima gdje ne postoji
 provjera ulaznih podataka od strane korisnika te gdje se ti isti
 podaci mogu interpretirati kao naredbe. Iz tog razloga napadač je
-u mogućnosti izvršiti strani kod, čitati podatke sa stoga ili
+u mogućnosti izvršiti dodatni programski kod, čitati podatke sa stoga ili
 izazvati rušenje programa. 
 
 Kako bi ovaj oblik ranjivosti bio jasniji, u nastavku su opisani
@@ -1700,14 +1705,14 @@ tipu) u znakovni niz. Neke od tipičnih format funkcija su:
 
 \item Format znakovni niz: Format znakovni niz je običan ASCII
 znakovni niz koji sadrži tekst i parametre formata. Predaje se
-kao argument Format funkcijama kako bi iste mogle procesirati				% ovdje je ``Format funkcija'', a malo kasnije je ``format funkcija''. Inace, pise se malim slovom, to nije ime
+kao argument format funkcijama kako bi iste mogle procesirati				% ovdje je ``Format funkcija'', a malo kasnije je ``format funkcija''. Inace, pise se malim slovom, to nije ime -Ispravljeno
 razne vrste argumenata koje je potrebno prikazati kao znakovni
 niz. Primjer format znakovnog niza je sljedeći:
 \emph{printf("Ispis broja \%d", 88)}.
 
 \item Format parametri: Označavaju način kako obraditi argumente
 format funkcije i prikazati ih kao znakovni niz. Najčešće
-korišteni format parametri vidljivi su u tablici 					% navedeni su
+korišteni format parametri navedeni su u tablici 					% navedeni su - ispravljeno
 \ref{tbl:format_parameters}.
 \end{itemize}
 
@@ -1720,17 +1725,10 @@ navedeni parametar te izvršiti konverziju specificiranu
 parametrom. Ako u tom slučaju nema dodatnih argumenata funkciji,
 ista će obaviti nedozvoljeno čitanje sa stoga. Na taj način
 moguće je stvoriti veće i opasnije format znakovne nizove koji bi
-u konačnici mogli srušiti program ili izvršiti strani kod.				% Svuda promijeniti ``strani'' u dodatni (ili maliciozni)!
+u konačnici mogli srušiti program ili izvršiti maliciozni programski kod.				% Svuda promijeniti ``strani'' u dodatni (ili maliciozni)! -Ispravljeno
 
-Najčešće korišteni format parametri koji se koriste prilikom				% Opis ubaciti u tablicu, a ovdje ih samo popisati! Nema potrebe i tablica i to!
-iskorištavanja ove ranjivosti su:
-
-\begin{itemize}
-\item \emph{\%x}: Čita podatke sa stoga u heksadecimalnom zapisu.
-\item \emph{\%s}: Čita znakovni niz iz memorije.
-\item \emph{\%n}: Upisuje cjelobrojnu varijablu u memoriju. 
-\end{itemize}
-
+Najčešće korišteni format parametri koji se koriste prilikom				% Opis ubaciti u tablicu, a ovdje ih samo popisati! Nema potrebe i tablica i to! -Ispravljeno
+iskorištavanja ove ranjivosti su: \emph{\%x}, \emph{\%s}, \emph{\%n}.
 U tablici \ref{tbl:format_parameters} prikazani su i ostali
 format parametri koji se također mogu predati format funkcijama
 kako bi se ustanovilo postoji li ranjivost.
@@ -1743,6 +1741,9 @@ kako bi se ustanovilo postoji li ranjivost.
 \begin{tabular}{|l|p{8cm}|}
 \hline
 Parametar & Izlaz \\ \hline
+\%x & Čita podatke sa stoga u heksadecimalnom zapisu \\ \hline
+\%s & Čita znakovni niz iz memorije \\ \hline
+\%n & Upisuje cjelobrojnu varijablu u memoriju \\ \hline
 \%p & Opis pokazivača na \emph{void} tip podataka \\ \hline
 \%d & Opis cjelobrojnog tipa podataka \\ \hline
 \%c & Opis jednog znaka \\ \hline
@@ -1754,10 +1755,12 @@ Kako bi poglavlje o napadu format znakovnim nizom bilo kompletno,
 u nastavku je prikazan primjer ranjivog programa te kako se isti
 ponaša prilikom predaje raznih argumenata format funkciji.
 
-U odsječku koda \ref{lst:formatStringExmp} prikazan je ranjivi
+U ispisu koda \ref{lst:formatStringExmp} prikazan je ranjivi
 program. Ranjivost je očita jer se ulazni parametar programa
 jednostavno kopira u polje \emph{buffer} koje se zatim predaje
 format funkciji \emph{printf()}. 
+
+\pagebreak %Ovdje sam isto morao staviti pagebreak jer mi caption od ispisa dolje ostane na prethodnoj stranici
 
 \begin{ispis} {caption=Primjer ranjivog programa} {label=lst:formatStringExmp}
 #include  <stdio.h>
@@ -1779,7 +1782,7 @@ Ukoliko se kao argument preda niz \emph{"\%x \%x \%x \%x \%x \%x
 stogu te će se obaviti čitanje sa stoga. Ukoliko su na stogu u
 datom trenutku pohranjeni neki važni podaci, napadač može iste
 pročitati te u konačnici ugroziti cijeli sustav. Primjer ispisa
-za navedeni ulaz prikazan je u odsječku koda 
+za navedeni ulaz prikazan je na ispisu 
 \ref{lst:formatStringStackRead}.
 
 \begin{ispis} {caption=Primjer rada program} {label=lst:formatStringStackRead}
@@ -1841,7 +1844,7 @@ proizvoljne adrese. Navedeno je prikazano na slici
 \label{fig:double_free} 
 \end{figure}
 
-\pagebreak
+%\pagebreak
  
 \section{Programiranje temeljeno na "ret" blokovima}
 \label{sct:rop}
@@ -1874,8 +1877,8 @@ iskorištavanja preljeva spremnika može se podijeliti u 3 koraka:
 \item Korak: Prekoračiti granice lokalne varijable. Time dolazi
 do prepisivanja povratne adrese.
 \item Korak: Prouzročiti da preljev bude takav da se povratna
-adresa prepiše vrijednošću na kojoj se nalazi strani, ubačeni
-kod. Time se u trenutku povratka iz funkcije, preuzima kontrola
+adresa prepiše vrijednošću na kojoj se nalazi dodatni, ubačeni 
+programski kod. Time se u trenutku povratka iz funkcije, preuzima kontrola
 nad EIP registrom, tj. isti sadrži adresu ubačenog koda od strane
 napadača.
 \item Korak: Ubačeni kod može se nalaziti na stogu ili na gomili
@@ -1891,13 +1894,13 @@ prostor unutar kojega nije moguće izvršavanje!
 Upravo iz toga razloga se pojavila potreba za programiranjem
 zasnovanim na "ret" blokovima. Glavna ideja ove vrste
 iskorištavanja sigurnosnih propusta je upotreba već postojećih
-dijelova programskog koda. Ti postojeći dijelovi programskog koda
+dijelova programskog koda. Ti postojeći dijelovi programskog koda 
 (u nastavku teksta nazivaju se \emph{blokovi}) izgrađeni su od
 nekoliko instrukcija pri čemu posljednja instrukcija u bloku mora
 biti "ret". Iz tog razloga moguće je povezivanjem više manjih
 "ret" blokova, gdje svaki blok obavlja određenu zadaću,
 konstruirati složene operacije pri čemu se u potpunosti gubi
-potreba za ubacivanjem stranog koda od strane napadača. Spomenute
+potreba za ubacivanjem dodatnog programskog koda od strane napadača. Spomenute
 "ret" blokove moguće je stoga pronaći unutar samog programa čija
 ranjivost se iskorištava ili unutar dijeljenih biblioteka.
 
@@ -1908,7 +1911,7 @@ oblika napada.
 
 \subsection{Napad \emph{ret2lib}}
 
-Napad ret2lib prvi puta se pojavio još 1997. godine
+Napad ret2lib prvi puta se pojavio još 1997. godine 
 \citep{ret2lib_official} i smatra se pretečom programiranju
 zasnovanom na "ret" blokovima. Glavna ideja ovog napada je ta da
 se tok programa nakon uspješno izvedenog preljeva spremnika na
@@ -1921,7 +1924,7 @@ Kako bi navedeni napad funkcionirao, potrebno je stvoriti lažni
 okvir funkcije na stogu. To je potrebno iz razloga što
 \emph{system()} funkcija mora imati svoj okvir stoga sa kojega
 može čitati parametre te na kojemu se nalazi povratna adresa
-nakon što funkcija završi s izvođenjem. Na odsječku koda 
+nakon što funkcija završi s izvođenjem. Na ispisu  koda 
 \ref{lst:stackBuffOverflow_ret2lib} prikazana je funkcija ranjiva
 na napad preljeva spremnika na stogu.
 
@@ -1943,7 +1946,7 @@ primjera preljeva spremnika, povratna adresa prepisana je adresom
 \emph{system()} funkcije te je na stog zapisan i lažni okvir kako
 bi se \emph{system()} funkcija mogla izvršiti.  
 
-\pagebreak
+%\pagebreak
 
 \begin{figure}[!htb]
 \centering
@@ -2023,14 +2026,14 @@ od argumenata. Navedena funkcionalnost ostvarena je pomoću
 koji označava koliko argumenata je potrebno ukloniti sa stoga.
 \end{itemize}
 
-Na odsječku koda \ref{lst:rop_example} prikazan je primjer
+Unutar ispisa koda \ref{lst:rop_example} prikazan je primjer
 programa na kojemu je u nastavku prikazan način iskorištavanja
 ranjivosti pomoću programiranja temeljenog na "ret" blokovima.
 Glavna ideja je da se preko ranjivosti preljeva spremnika u
 funkciji \emph{func1()} ubaci lažni okvir stoga čime će se
 pozvati funkcija \emph{add()} sa parametrima 5 i 6.
  
-\begin{ispis} {caption=Primjera programa za programiranje "ret" blokovima} {label=lst:rop_example}
+\begin{ispis} {caption=Primjer programa za programiranje "ret" blokovima} {label=lst:rop_example}
 #include <string.h>
  
 void func1 (char *s) { char buffer[80]; strcpy(buffer, s); }
@@ -2048,6 +2051,7 @@ int main(int argc, char *argv)
 	func1(argv[1]);
 }
 \end{ispis}
+
 Izgled stoga prilikom poziva funkcije \emph{add(3,4)} prikazan je na slici \ref{fig:rop_add34} dok je za funkciju \emph{func1()} prikazan na slici \ref{fig:ret2lib_stackFrame}.
 
 \begin{figure}[!htb]
@@ -2063,6 +2067,7 @@ Kako bi se preko \emph{func1()} funkcije mogla pozvati funkcija \emph{add(5,6)} 
 \item Izazvati preljev spremnika u funkciji \emph{func1()} tako da se povratna adresa prepiše adresom funkcije \emph{add()}. Adresu funkcije \emph{add()} moguće je jednostavno naći unutar \emph{debugger} programa ukoliko nije aktivan mehanizam zaštite ASLR \ref{sct:aslr}.
 \item Uz prepisivanje povratne adrese, potrebno je na stog postaviti i lažni okvir stoga za funkciju \emph{add(5,6)} koju želimo pozvati.
 \end{itemize}
+
 U konačnici stog bi trebao izgledati kako je prikazano na slici \ref{fig:rop_add56}.
 
 \begin{figure}[!htb]
@@ -2070,48 +2075,54 @@ U konačnici stog bi trebao izgledati kako je prikazano na slici \ref{fig:rop_ad
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=10cm, height=6cm]{slike/rop_add56}
-\caption{Izgled stoga nakon preljava u funkciji \emph{func1()}}
+\caption{Izgled stoga nakon preljeva u funkciji \emph{func1()}}
 \label{fig:rop_add56} 
 \end{figure}
+
 Nakon što funkcija \emph{func1()} završi s izvršavanjem, kao povratna adresa pročitati će se adresa funkcije \emph{add()} te će na vrhu stoga biti raspon adresa \emph{a + 4} do \emph{a + 12} kako je prikazano na slici \ref{fig:rop_add56}. Time će se funkcija \emph{add(5,6)} izvršiti pri čemu napadač opet ima u kontroli povratnu adresu, tj. registar EIP.
 
 Za primjer, uzmimo da napadač želi prvo pozvati funkciju \emph{add(5,6)} te nakon nje funkciju \emph{add(7,8)}. Kako se funkcija \emph{func1()} poziva samo jedanput, potrebno je njezin ulazni znakovni niz oblikovati na način da se povratna adresa iz funkcije \emph{add(5,6)} iskoristi kako bi izvršavanje mogli prebaciti na funkciju \emph{add(7,8)}. Ovdje valja obratiti pažnju na još jednu stvar. Nakon što funkcija \emph{add(5,6)} završi s radom, na stogu i dalje ostaju njezini argumenti. Takvo nešto neće izazvati pravilan rad programa jer će okvir stoga za funkciju \emph{add(7,8,)} biti nepravilan. Kako bi se nepotrebni argumenti uklonili sa stoga potrebno je pronaći adresu niza instrukcija \emph{POP/POP/RET} te navedenu adresu zapisati kao povratnu adresu funkciji \emph{add(5,6)}. Na taj način će se argumenti funkcije \emph{add(5,6)} ukloniti sa stoga te će se izvršavanje pravilno nastaviti od funkcije \emph{add(7,8)} kao što je i planirano u početku. Navedeni postupak i izgled stoga prikazani su na slici \ref{fig:rop_add78}. 
-\pagebreak
+%\pagebreak
 \begin{figure}[!htb]
 \centering
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=12cm, height=12cm]{slike/rop_add78}
-\caption{Izgled stoga nakon preljava u funkciji \emph{func1()}. Dvostruki poziv \emph{add()} funkciji.}
+\caption{Izgled stoga nakon preljeva u funkciji \emph{func1()}. Dvostruki poziv \emph{add()} funkciji.}
 \label{fig:rop_add78} 
 \end{figure}
-Iz primjera prikazanih u ovom poglavlju vidljivo je kako programiranje temeljeno na "ret" blokovima predstavlja značajnu prijetnju za aplikacija koje su ranjive na napade tipa preljeva spremnika. Vjerojatno najveća opasnost koju programiranje temeljeno na "ret" blokovima predstavlja je potpuno zaobilaženje DEP mehanizma zaštite. Postavlja se stoga pitanje: Na koji način je moguće spriječiti ovaj oblik iskorištavanja propusta vezanih za korupciju memorije? 
+
+Iz primjera prikazanih u ovom poglavlju vidljivo je kako programiranje temeljeno na "ret" blokovima predstavlja značajnu prijetnju za aplikacije koje su ranjive na napade tipa preljeva spremnika. Vjerojatno najveća opasnost koju programiranje temeljeno na "ret" blokovima predstavlja je potpuno zaobilaženje DEP mehanizma zaštite. Postavlja se stoga pitanje: Na koji način je moguće spriječiti ovaj oblik iskorištavanja propusta vezanih za korupciju memorije? 
 
 Odgovor na to pitanje leži u randomizaciji dijelova programa i dijeljenih biblioteka koje program koristi. Upravo je tako i nastao mehanizam zaštite ASLR (\ref{sct:aslr}) koji značajno otežava napadaču pronalazak točnih lokacija određenih dijelova programskog koda koji bi se u konačnici mogli upotrijebiti prilikom konstruiranja potrebnih "ret" blokova. Međutim, ASLR ima nedostatke i moguće ga je zaobići. Ukoliko neki program koristi dijeljenu biblioteku kojoj nije omogućen ASLR (određuje se prilikom prevođenja), ta biblioteka će uvijek biti učitana na poznatu lokaciju te će napadač znati na kojim adresama se nalaze pojedini, zanimljivi dijelovi programskog koda koji se zatim mogu iskoristiti za konstrukciju "ret" blokova.
 
-Uz ovaj rad napravljena je skripta u programskom jeziku Python(\emph{CheckAslrDep}) koja skenira sve PE datoteke u odabranom direktoriju te provjerava jesu li iste zaštićene ASLR i DEP sigurnosnim mehanizmima. Skripta je pokrenuta na potpuno ažuriranom operacijskom sustavu Microsoft Windows 7 Professional te je kao ciljani direktorij odabran \emph{C:\textbackslash Windows\textbackslash System32}. Navedeni direktorij odabran je iz razloga što se unutar njega nalaze sve važne sistemske DLL i EXE datoteke. Kao rezultat dobiveni su sljedeći podaci:
+Uz ovaj rad napravljena je skripta u programskom jeziku Python (\emph{CheckAslrDep.py}) koja skenira sve PE datoteke u odabranom direktoriju te provjerava jesu li iste zaštićene ASLR i DEP sigurnosnim mehanizmima. Skripta je pokrenuta na potpuno ažuriranom operacijskom sustavu Microsoft Windows 7 Professional te je kao ciljani direktorij odabran \emph{C:\textbackslash Windows\textbackslash System32}. Navedeni direktorij odabran je iz razloga što se unutar njega nalaze sve važne sistemske DLL i EXE datoteke. Kao rezultat dobiveni su sljedeći podaci:
+
 \begin{itemize}
 \item Broj provjerenih PE datoteka: 3065
 \item Broj datoteka sa ASLR zaštitom: 2583 (84\%)
 \item Broj datoteka sa DEP zaštitom: 2575 (84\%)
 \end{itemize}
-Kao što je vidljivo iz priloženog, oko 500 sistemskih EXE i DLL datoteka nema ASLR ili DEP mehanizam zaštite aktivan. Napadač stoga lako može saznati o kojim se datotekama radi, te koje aplikacije koriste navedene datoteka. Na taj način, napadaču se pruža mogućnost da iskorištavanjem propusta u obliku preljeva spremnika u aplikaciji pristupi programskom kodu u nezaštičenim sistemskim datotekama te iskoristi isti za konstruiranje "ret" blokova.
+
+Kao što je vidljivo iz priloženog, oko 500 sistemskih EXE i DLL datoteka nema ASLR ili DEP mehanizam zaštite aktivan. Napadač stoga lako može saznati o kojim se datotekama radi, te koje aplikacije koriste navedene datoteka. Na taj način, napadaču se pruža mogućnost da iskorištavanjem propusta u obliku preljeva spremnika u aplikaciji pristupi programskom kodu u nezaštićenim sistemskim datotekama te iskoristi isti za konstruiranje "ret" blokova.
 
 Međutim, čak i ako je svim PE datotekama omogućen ASLR, moguće ga je zaobići. Jedan od načina je preko nesigurnih pokazivača (engl. \emph{Dangling/Leaking pointer}). U tom slučaju radi se o pokazivačima koji ne pokazuju na pravilan objekt u memoriju. Konkretno, oni mogu pokazivati na dio memorije koji je prethodno bio oslobođen. Upravo iz tog razloga, moguće je čitati navedene memorijske lokacije te dobiti uvid u način na koji se provodi randomizacija.
 
 
 \chapter{PErmutator program}
 \label{sct:permutator}
+
 U prethodnim poglavljima obrađene su teme vezane za sam format PE
 datoteka, za korupciju memorije te sigurnosne propuste koji istu
 iskorištavaju. Također, obrađene su i teme vezane uz postojeće
-mehanizme zaštite protiv napada usmjerenih na memoriju. Sve te			% Napadi koji iskoristavaju krivo upravljanje memorijom
+mehanizme zaštite protiv napada koji iskorištavaju krivo upravljanje  memorijom. 
+Sve te			% Napadi koji iskoristavaju krivo upravljanje memorijom -Ispravljeno
 teme bilo je nužno proći kako bi se dobio dojam o tome koliko su
 napadi usmjereni na memoriju još uvijek opasni te koliko su
 određeni mehanizmi zaštite, koji se danas koriste, nedovoljno
-sigurni kako bi se taj oblik napada u potpunosti iskorijenio.			% Nedovoljno dobri
+dobri kako bi se taj oblik napada u potpunosti iskorijenio.			% Nedovoljno dobri
 
-U prethodnom poglavlju(\ref{sct:rop2}) pokazali smo i kako ASLR			% Opet, razmak prije zagrade
+U prethodnom poglavlju (\ref{sct:rop2}) pokazali smo i kako ASLR			% Opet, razmak prije zagrade -Ispravljeno
 kao randomizacijski mehanizam ima svojih nedostataka. Spomenuto
 je i nekoliko tehnika preko kojih je moguće zaobići ASLR zaštitu
 čak i kada ista postoji na sustavu. Glavni problem kod ASLR-a je
@@ -2143,7 +2154,7 @@ dodatnu permutaciju pojedinih dijelova sekcije koja sadrži
 programski kod kako bi sam položaj tih dijelova prilikom svakog
 pokretanja bio drugačiji. Na taj način zaštita bi se dodatno
 poboljšala jer napadač više ne bi mogao iskoristiti činjenicu
-kako se određeni interesni dijelovi programskog koda nalaze na			% ``interesantni'', ili ``zanimljivi''
+kako se određeni zanimljivi dijelovi programskog koda nalaze na			% ``interesantni'', ili ``zanimljivi'' -Ispravljeno
 istom odmaku od početne adrese na koju je PE datoteka učitana u
 memoriji. U konačnici, program bi imao potpuno drugačiji raspored
 u memoriji pri čemu bi funkcionalnost ostala ista.
@@ -2159,7 +2170,7 @@ koda potrebno dati odgovore na nekoliko ključnih pitanja:
 \end{itemize}
 
 Kako bi se moglo odgovoriti na prvo pitanje potrebno je dobro
-poznavati format PE datoteka(poglavlje \ref{sct:peFormat}). Tu se		% Razmak!
+poznavati format PE datoteka (poglavlje \ref{sct:peFormat}). Tu se		% Razmak! -Ispravljeno
 prije svega misli na sadržaj pojedinih sekcija, te što svaka od
 njih sadrži. Pošto je razvoj jednog ovakvog modula namijenjen
 poboljšanju sigurnosti uz postojeći ASLR mehanizam zaštite,
@@ -2176,14 +2187,14 @@ leži u nekoj vrsti simulacije izvođenja programa. Konkretno,
 počinje se od ideje kako prvi oktet koji će biti obuhvaćen
 permutacijom je ujedno i prvi oktet prve instrukcije koja se
 izvede. Navedeni položaj unutar sekcije s izvršnim kodom lako je
-pronaći preko elementa \emph{AddressOfEntryPoint} koje je dio
+pronaći preko elementa \emph{AddressOfEntryPoint} koji je dio
 opcionalnog zaglavlja unutar PE zaglavlja. U sljedećem koraku,
 potrebno je odrediti sve moguće tokove programa počevši od
 polazne točke (engl. \emph{Entry Point}) te na taj način
 izgraditi graf instrukcija. Čvorovi u tom grafu su slijedne
 instrukcije, tj. blokovi izvršnog koda koji bi se trebali
-permutirati. Više o navedenome objašnjeno je u poglavlju
-\label{sct:instrucionGraph}.							% Kriva referenca!
+permutirati. Više o navedenome objašnjeno je u poglavlju 
+\ref{sct:instructionGraph}.							% Kriva referenca! -Ispravljeno
 
 Posljednje pitanje na koje valja odgovoriti je ujedno i
 najizazovnije. Razlog tome je što između pojedinih dijelova
@@ -2211,9 +2222,9 @@ U nastavku ovog poglavlja svaki od pojedinih dijelova je detaljno
 analiziran. Opisan je način na koji je pojedini dio implementiran
 te koja je njegova funkcija u konačnom proizvodu. Valja još
 napomenuti kako je cijeli projekt moguće pratiti na stranici
-Github: https://github.com/bhumic/PErmutator					% Referenca, ne link u tekstu!
+Github \citep{bh_permutator}.					% Referenca, ne link u tekstu! -Ispravljeno
 
-\pagebreak									% Zasto?
+%\pagebreak									% Zasto? -Ispravljeno
 
 \section{Disasembler}
 
@@ -2242,25 +2253,27 @@ funkcionalnost disasemblera.
 
 Možda će nekome biti iznenađujuće, ali ne postoji velik broj
 kvalitetnih disasembler biblioteka za programski jezik C++. U
-konačnici izbor se sveo na dvije biblioteka:					% bibliotekE
-\emph{Distorm}\citep{distorm} i
-\emph{BeaEngine}\citep{bea_engine} pri čemu je pobjedu uzeo			% Nisu se medusobno borili!
+konačnici izbor se sveo na dvije biblioteke:					% bibliotekE -Ispravljeno
+\emph{Distorm} \citep{distorm} i
+\emph{BeaEngine} \citep{bea_engine} pri čemu smo se na kraju ipak 
+odlučili za		% Nisu se medusobno borili! -Ispravljeno
 \emph{Distorm}.
 
 \emph{Distorm} je izuzetno moćna i brza disasembler biblioteka
-koja nudi podršku za dosta programskih jezika osim C/C++. Moguće		% ... osim C/C++ koji se koristi u ovom radu.
+koja nudi podršku za dosta programskih jezika osim C/C++, koji
+se koristi u ovom radu. Moguće		% ... osim C/C++ koji se koristi u ovom radu. -Ispravljeno
 je biblioteku koristiti i za projekte u Pythonu, Javi te C\#-u.
 Također, osim jednostavne pretvorbe sirovih okteta u smisleni
-tekstualni zapis, \emph{Distorm} cijeli disasemblerski postupak			% ``tekstualni zapis'', nije li bolje u ``asemblerski'' ili nesto slino? Tekstualni je i niz okteta...
+asemblerski zapis, \emph{Distorm} cijeli disasemblerski postupak			% ``tekstualni zapis'', nije li bolje u ``asemblerski'' ili nesto slino? Tekstualni je i niz okteta... -Ispravljeno
 provodi na način što konstruira strukturu u programskom jeziku
 C++ preko koje je moguće pristupati određenim, ciljanim
 dijelovima dekodirane instrukcije. Sadržaj strukture prikazan je
-na odsječku koda \ref{lst:distorm} te se na taj način postupak
+na ispisu strukture \ref{lst:distorm} te se na taj način postupak
 analize binarnih x86 datoteka dodatno pospješuje. Više o samoj
 \emph{Distorm} biblioteci moguće je pročitati na službenim
-stranicama projekta\citep{distorm}. 						% Razmak!
+stranicama projekta \citep{distorm}. 						% Razmak! -Ispravljeno
 
-\pagebreak
+%\pagebreak
 \begin{struktura} {caption=Temeljna \emph{distorm} struktura za dekodiranu instrukciju} {label=lst:distorm}
 typedef struct {
 	_WString mnemonic; /* Tekstualni naziv instrukcije. */
@@ -2279,7 +2292,7 @@ prije nego se nakupina okteta koja čini izvršni kod provede kroz
 disasembler, nužno je na neki način odvojiti te oktete od ostatka
 datoteke. Također, prilikom permutacije dijelova izvršnog koda
 nužno je napraviti i promjene u određenim zaglavljima PE
-datoteka. Neke od promjena su modifikacija početne točke (engl.
+datoteka. Neke od promjena su modifikacija početne točke (engl. 
 \emph{Entry Point}) programa ili promjene u zaglavlju sekcije
 ukoliko dolazi do promjene u veličini sekcije ili karakteristike
 sekcije. Iz navedenih razloga bilo je potrebno uvesti skupinu
@@ -2290,7 +2303,7 @@ implementirane za potrebe ovog rada. Navedene funkcije moguće je
 koristiti i za razvoj drugih alata koji na neki način obavljaju
 analiza sadržaja PE datoteka. Radi preglednog ispisa sve funkcije
 navedene su bez argumenata koje primaju. Za detaljniju analizu
-pojedinih funkcija preporučam uvid u datoteke
+pojedinih funkcija preporučujem uvid u datoteke
 \emph{PEFunctions.h} i \emph{PEFunctions.cpp} koje su priložene
 ovom radu. Popis funkcija:
 
@@ -2299,8 +2312,8 @@ ovom radu. Popis funkcija:
 \item {\footnotesize \emph{BYTE* LoadSection((std::fstream\&
 hFile, PIMAGE\_SECTION\_HEADER pSectionHeader))}}: Navedena
 funkcija prima referencu na otvorenu PE datoteku te pokazivač na
-strukturu koja opisuje zaglavlje sekcije. Iz navedenih ulaznih
-parametara, funkcija čita te vraća sadržaj odabrane sekcije.
+strukturu koja opisuje zaglavlje sekcije. S obzirom na ulazne
+parametre, funkcija čita te vraća sadržaj odabrane sekcije.
 
 \item {\footnotesize \emph{BOOL WriteSection(std::ofstream\&
 hFile, PIMAGE\_SECTION\_HEADER pSectionHeader, unsigned char
@@ -2355,15 +2368,15 @@ valjana.
 \end{itemize}
 
 \section{Graf instrukcija}
-\label{scr:instructionGraph}
+\label{sct:instructionGraph}
 
 Konstruiranje grafa instrukcija jedan je od najvažnijih zadataka vezanih za
 implementaciju programa poput modula za promjenu koda. U ovom poglavlju opisan
 je način na koji je jedan takav graf konstruiran. Preciznije, u nastavku
 poglavlja slijedi detaljan opis pojedinih elemenata grafa te samog algoritma
 konstrukcije grafa. Osim opisa samog grafa i njegove primjene unutar modula za
-promjenu koda, ovo poglavlje sadrži i ostale načine na koje je navedeni graf		% opisuje i druge nacine
-moguće primijeniti. 									% prOmijeniti?
+promjenu koda, ovo poglavlje opisuje i druge načine na koje je navedeni graf		% opisuje i druge nacine - ispravljeno
+moguće primijeniti. 									% prOmijeniti? - Mislim da bi ipak trebalo biti primijeniti jer se misli na primjenu grafa instrukcija.
 
 Dobro je poznato kako se svaki graf sastoji od dvaju osnovnih skupova: skup
 čvorova i skup bridova. Iz tog razloga, prije nego krenemo u opis
@@ -2376,7 +2389,7 @@ između pojedinih vrhova. Međutim, s obzirom na karakteristiku grafa koji
 gradimo, odlučeno je kako će veza između pojedinih vrhova ovisiti o položaju
 instrukcija skoka unutar programskog koda. Na taj način, graf koji se gradi u
 ovom projektu je zapravo graf toka izvođenja (engl. \emph{Control Flow Graph}).
-Kako bi bilo jasnije, prikaz jednog takvog grafa nalazi se na slici
+Kako bi bilo jasnije, prikaz jednog takvog grafa nalazi se na slici 
 \ref{fig:control_flow_graph}.
 
 \begin{figure}[!htb]
@@ -2402,10 +2415,10 @@ skoka, tj. skok se uvijek događa.
 Prije nego krenemo u sam opis algoritma za konstrukciju grafa instrukcija te
 njegovu pohranu u memoriji za daljnju obradu, potrebno je opisati na koji način
 su implementirani vrhovi i bridovi unutar ovog projekta. Vrhovi su definirani
-unutar datoteke \emph{Node.h} čiji najvažniji dijelovi se nalaze na odsječku
-koda \ref{lst:node}. 
+unutar datoteke \emph{Node.h} čiji najvažniji dijelovi se nalaze na ispisu koda 
+\ref{lst:node}. 
 
-\begin{ispis} {caption=Klasa koja opisuje vrh(čvor) grafa instrukcija} {label=lst:node}
+\begin{ispis} {caption=Klasa koja opisuje vrh u grafu instrukcija} {label=lst:node}
 class Node
 {
 public:
@@ -2435,10 +2448,10 @@ ili bezuvjetnog skoka. Također, valja napomenuti kako je ova metoda
 konstruirana na način da sprječava postojanje petlji, tj. ukoliko se pokuša kao
 dijete dodati čvor prema kojemu veza već postoji, isti neće biti dodan te će
 funkcija vratiti pravilnu povratnu vrijednost.
-\item \emph{FindChild(DWORD)offset}: Funkcija koja vraća pokazivač na čvor			% Greska!
-dijete kojemu odgovara argument \emph{offset}.
+\item \emph{FindChild(DWORD)offset}: Funkcija koja vraća pokazivač na čvor			% Greska! - Malo sam sada drugačije ovo opisao.
+dijete ukoliko se taj čvor nalazi na odmaku \emph{offset} unutar sekcije s izvršnim kodom.
 \item \emph{dwOffset}: Navedena vrijednost je jedinstveni ključ za svaki
-čvor(vrh). Označava gdje se promatrani čvor nalazi s obzirom na početak sekcije
+čvor. Označava gdje se promatrani čvor nalazi s obzirom na početak sekcije
 sa izvršnim kodom.
 \item \emph{dwSize}: Označava veličinu čvora, tj. broj okteta unutar čvora.
 \item \emph{instructions}: Sadrži \emph{dwSize} broj okteta koji označavaju instrukcije koje se nalaze unutar navedenog čvora. Ovaj element sadrži sam sadržaj čvora.
@@ -2447,7 +2460,7 @@ vektor može imati najviše dva elementa ili najmanje nula elemenata. Ukoliko
 vektor sadrži dva elementa, zna se da je posljednja instrukcija unutar čvora
 instrukcija uvjetnog skoka. Ako vektor sadrži nula elemenata tada se radi o
 posljednjem čvoru u grafu, tj. u čvoru iz kojeg nema daljnjeg izvršavanja. Ovim
-elementom su zapravo opisani i bridovi (veze) unutar grafa.
+elementom su zapravo opisani i bridovi unutar grafa.
 \end{itemize}
 
 Sada kada smo opisali osnovne elemente grafa instrukcija možemo krenuti sa
@@ -2488,7 +2501,7 @@ sekcije s izvršnim kodom se nalazi čvor koji predstavlja roditelja trenutnom
 \end{itemize} 
 \item Potrebno je sadržaj sekcije provesti kroz disasembler, počevši od početne
 točke izvršavanja (engl. \emph{Entry Point.}).
-\item U ovome koraku dobiven je tekstualni prikaz instrukcija iz disasemblera
+\item U ovome koraku dobiven je asemblerski prikaz instrukcija iz disasemblera
 te se ovaj korak sastoji od dvaju manjih koraka. Prvu stvar koju je potrebno
 napraviti je provjeriti redom instrukcije sve dok ne dođemo do instrukcija
 \emph{RET}, \emph{RETN}, \emph{DB} ili neke od instrukcija skoka.
@@ -2518,14 +2531,14 @@ spomenuto je kako veze između čvorova mogu biti definirane na razne načine.
 Jedan od dodatnih načina je i korištenje poziva funkcija. Na taj način moguće
 je izdvojiti funkcije kao zasebne čvorove te provoditi određene operacije nad
 njima. Primjer grafa i pripadajućih mu instrukcija generiranog pomoću
-razvijenog modula moguće je vidjeti u dodatku \ref{sct:appPE} i dodatku
+razvijenog modula moguće je vidjeti u dodatku \ref{sct:appPE} i dodatku 
 \ref{sct:appGraph}.
 
 Za sam kraj valja još spomenuti nekoliko područja gdje se graf instrukcija može
 primijeniti. Osim za gradnju modula za promjenu koda, graf instrukcija moguće
 je primijeniti prilikom konstruiranja nekih složenijih disasemblera kako bi se
 dobio pregledniji prikaz toka programa. Jedan od primjera takve primjene je i
-poznati disasembler alat \emph{Ida Pro}\citep{ida}. Postojanje grafa
+poznati disasembler alat \emph{Ida Pro} \citep{ida}. Postojanje grafa
 instrukcija u memoriji može se, osim za pregledniji prikaz, iskoristiti i
 prilikom konstruiranja alata čija zadaća je zaštiti programski kod od postupaka
 reverznog inženjeringa. Za primjer, moguće je kriptirati pojedine čvorove grafa
@@ -2579,9 +2592,9 @@ funkcija iz Windows API-a. Neke od tih funkcija su dokumentirane, dok neke
 nisu. Pretraživati jednu tako veliku bazu bez zajamčenog uspjeha zahtjeva
 veliku računalnu moć, te se time jedan alat poput modula za promjenu koda ne bi
 isplatio. Kako bi sve prethodno navedeno bilo jasnije potrebno je pogledati
-sljedeći primjer. Na odsječku koda \ref{lst:PE_instructions} nalazi se dio
-instrukcija iz jedne jednostavne PE datoteke (odsječak instrukcija počinje na
-adresi \emph{0x00401000}).
+sljedeći primjer. Na ispisu koda \ref{lst:PE_instructions} nalazi se dio
+instrukcija iz jedne jednostavne PE datoteke. Valja napomenuti kako odsječak 
+instrukcija počinje na adresi \emph{0x00401000}.
 
 \begin{ispis} {caption=Instrukcije unutar PE datoteke} {label=lst:PE_instructions}
 6A 00	                      PUSH 0
@@ -2607,16 +2620,16 @@ E8 F6000000                   CALL <JMP.&USER32.SetFocus>
 E9 C4000000                   JMP AD_CM#1.00401113
 \end{ispis}
 
-Kao što je vidljivo na odsječku koda, postoje dvije instrukcije
+Kao što je vidljivo na ispisu koda \ref{lst:PE_instructions}, postoje dvije instrukcije
 skoka. Prva instrukcija skoka je instrukcija uvjetnog skoka koja
 se nalazi u 15. redu, dok je druga instrukcija bezuvjetnog skoka
-i nalazi se u posljednjem, 21. redu odsječka koda
+i nalazi se u posljednjem, 21. redu ispisa koda 
 \ref{lst:PE_instructions}. Također, valja obratiti pozornost na
 5. redak gdje se vrijednost \emph{0x0040102B} postavlja na stog.
 Navedena vrijednost označava pokazivač na funkciju koja se
 izvršava prilikom poziva Windows API funkcije
 \emph{DialogBoxParamA} u retku 8. Graf instrukcija koji je moguće
-generirati iz navedenog odsječka koda prikazan je na slici
+generirati iz navedenog ispisa prikazan je na slici 
 \ref{fig:control_flow_graph_pe}.
 
 \begin{figure}[!htb]
@@ -2624,22 +2637,21 @@ generirati iz navedenog odsječka koda prikazan je na slici
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=10cm, height=8cm]{slike/permutator_graph_part}
-\caption{Graf instrukcija za odsječak koda \ref{lst:PE_instructions}.}
+\caption{Graf instrukcija za ispis koda \ref{lst:PE_instructions}.}
 \label{fig:control_flow_graph_pe} 
 \end{figure}
 
-Zamislimo sada sljedeći scenarij: Neka se dani odsječak koda
+Zamislimo sada sljedeći scenarij: Neka se dani ispis
 preda kao ulazni podatak u modul za permutaciju te neka se
-permutacija odvija na način da se blok na odsječku \emph{0x0}
-zamijeni sa blokom na odsječku \emph{0x37} (radi se o dvama
-susjednim blokovima, tj. koji slijede jedan iza drugoga u
-memoriji).  Problem koji se ovdje javlja upravo je vezan za
+permutacija odvija na način da se blok na pomaku \emph{0x0}
+zamijeni sa susjednim blokom na pomaku \emph{0x37}. 
+Problem koji se ovdje javlja upravo je vezan za
 postavljanje vrijednosti \emph{0x0040102B} na stog. Navedena
-adresa pokazuje na 12. redak u odsječku koda
+adresa pokazuje na 12. redak u ispisu koda 
 \ref{lst:PE_instructions}. Nakon što se permutacija provede,
 navedena adresa više neće biti valjana jer se cijeli blok pomakao
 za određenu vrijednost, tj. za vrijednost veličine bloka na
-odsječku \emph{0x37}. Kako bi nova datoteka bila ispravna,
+pomaku \emph{0x37}. Kako bi nova datoteka bila ispravna,
 potrebno je, između ostaloga, ispraviti vrijednost
 \emph{0x0040102B}. Međutim, glavni problem ovdje je kako znati da
 se \emph{0x00401002B} odnosi na adresu, a ne, primjerice, na
@@ -2649,18 +2661,17 @@ dogoditi da je umjesto poziva prema Windows API funkciji bio
 poziv oblika \emph{CALL EAX} pri čemu bi vrijednost
 \emph{0x0040102B}, koja se postavlja na stog, imala potpuno drugo
 značenje.  Pripadni graf instrukcija, nakon provedene
-permutacije, prikazan je na slici
+permutacije, prikazan je na slici 
 \ref{fig:control_flow_graph_permutated}. Ovdje valja obratiti
-pažnju na uokvirene vrijednosti na slici
-\ref{fig:control_flow_graph_pe} i
-\ref{fig:control_flow_graph_permutated}.
+pažnju na uokvirene vrijednosti na slici 
+\ref{fig:control_flow_graph_pe} i \ref{fig:control_flow_graph_permutated}.
 
 \begin{figure}[!htb]
 \centering
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=8cm, height=14cm]{slike/permutator_graph_permutated}
-\caption{Graf instrukcija za odsječak koda \ref{lst:PE_instructions} nakon provedene permutacije.}
+\caption{Graf instrukcija za ispis koda \ref{lst:PE_instructions} nakon provedene permutacije.}
 \label{fig:control_flow_graph_permutated} 
 \end{figure}
 
@@ -2670,7 +2681,7 @@ heurističnom rješenju te ga je najbolje objasniti korištenjem
 prethodnog primjera.
 
 Kao što je prethodno navedeno, glavni problem sa permutacijom
-odsječka koda \ref{lst:PE_instructions} je postavljanje
+ispisa koda \ref{lst:PE_instructions} je postavljanje
 vrijednosti \emph{0x00401002B} na stog jer ne možemo sa
 sigurnošću reći radi li se o adresi ili o konstanti. Međutim,
 možemo krenuti od pretpostavke da ukoliko vrijednost koja se
@@ -2723,7 +2734,7 @@ iskorištavanje.
 \chapter{Primjer instrukcija iz PE datoteke}
 \label{sct:appPE}
 
-U nastavku ovog dodatka nalazi se odsječak koda 
+U nastavku ovog dodatka nalazi se ispis koda 
 \ref{lst:PE_instructions_full} iz jedne PE datoteke. Radi se o
 svim instrukcijama iz sekcije sa izvršnim kodom. Postojanje ovih
 instrukcija nužno je za razumijevanje grafa instrukcija koji se
@@ -2838,7 +2849,7 @@ dodatku \ref{sct:appPE} ovog dokumenta.
 \setlength\fboxsep{0pt}
 \setlength\fboxrule{0.5pt}
 \includegraphics[width=\textwidth, height=\textheight]{slike/AD_CM1_graph}
-\caption{Graf instrukcija za odsječak koda iz dodatka \ref{sct:appPE}}
+\caption{Graf instrukcija za ispis iz dodatka \ref{sct:appPE}}
 \label{fig:appGraphInstr} 
 \end{figure}
 \clearpage
