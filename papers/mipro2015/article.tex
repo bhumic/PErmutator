@@ -1,0 +1,101 @@
+\documentclass[11pt,final,conference,a4paper]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[noadjust]{cite}
+\usepackage{url}
+\usepackage[dvips]{graphicx}
+
+\begin{document}
+
+\IEEEoverridecommandlockouts
+
+\title{Fine grained permutation of text code in PE files}
+
+\author{
+	\authorblockN{Bruno Humić, Stjepan Groš}
+	\authorblockA{
+		Faculty of Electrical and Computing Engineering \\
+		University of Zagreb\\
+		Unska bb, 10000 Zagreb, Croatia \\
+		E-Mail: bruno.humic@gmail.com, stjepan.gros@fer.hr}}
+
+\maketitle
+
+\begin{abstract}
+Memory corruption is one of the oldest security vulnerabilities
+that is still very common today. It allows attackers to gain full
+control of victims computer. Crucial in the step of gaining control
+is for attacker to know memory layout of a process. There are a
+number of protection mechanisms developed to counter this threat,
+one of which are randomization mechanisms that make process image
+layout unpredictable for attacker. Randomization based security
+mechanisms had a major impact on dealing with memory corruption
+vulnerabilities but the threat still remains. In this paper we
+describe work started on a new randomization security mechanism
+whose goal is to rearrange memory blocks in the code section of a
+PE file. In that way, we strive to achieve higher security levels
+of a system by making process layout even more unpredictable for
+the attackers.
+\end{abstract}
+
+\begin{keywords}
+PE file format, computer security, operating systems, ASLR, DEP, ASLP, randomization, memory corruption, permutation, control flow graph, Microsoft Windows
+\end{keywords}
+
+\section{Introduction}
+\label{sec:intro}
+
+Species in the nature use diversity in order to combat different
+threats. In other words, if a threat manages to infect one specimen
+it want be able to infect many others because all of them are
+different. In computer networks, when a threat compromises one
+machine, it will probably compromies many others too because they
+are all identical, or almost identical.
+
+This is a know premise, and there are attempts to apply principles
+from the nature in a computer networks. Yet, we are still far away
+from a satisfactory solution.
+
+The paper is structured as follows. First, we review related work
+in Section \ref{sec:architecture}. We also list shortcomings of
+existing approaches in that section. Then, in Section \ref{sec:design}
+we describe the idea behind our solution, and its design and
+implementation. In Section \ref{sec:testing} we give results of
+different tests we performed on PErmutator. Finally, we conclude
+paper in Section \ref{sec:conclusions}.
+
+\section{Related work}
+\label{sec:architecture}
+
+\section{PErmutator design and implementation}
+\label{sec:design}
+
+Heuristics
+
+Problems
+
+PErmutaror Flow (graph generation, \ldots)
+
+\section{Testing and validation}
+\label{sec:testing}
+
+\subsection{Validation}
+
+Running vulnerable application to test if protection is better than ASLR.
+
+\subsection{Performance}
+
+Loading and executing application
+
+Running application performance penalties
+
+\section{Conclusions and Future Work}
+\label{sec:conclusions}
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+
+% Temporary fix until there are some references in the text
+\nocite{arscryptolocker}
+
+\end{document}
