@@ -122,6 +122,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
+    <None Include="papers\mipro2015\article.tex" />
+    <None Include="papers\mipro2015\bibliography.bib" />
+    <None Include="papers\mipro2015\IEEEtran.bst" />
+    <None Include="papers\mipro2015\IEEEtran.cls" />
+    <None Include="papers\mipro2015\Makefile" />
     <None Include="thesis\diplomski.tex" />
     <None Include="thesis\fer.bst" />
     <None Include="thesis\fer.cls" />

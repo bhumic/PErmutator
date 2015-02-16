@@ -28,6 +28,12 @@
     <Filter Include="thesis\slike">
       <UniqueIdentifier>{500d7dc5-3d19-4901-8e1d-4f21e897ca1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="papers">
+      <UniqueIdentifier>{caf3686a-8e1f-4241-ad3c-5a532a3ab4b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="papers\mipro2015">
+      <UniqueIdentifier>{b3a18ab8-5d16-4b14-bf74-a157a9a0e700}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Disassembler.h">
@@ -151,6 +157,21 @@
     <None Include="thesis\literatura.bib">
       <Filter>thesis</Filter>
     </None>
+    <None Include="papers\mipro2015\article.tex">
+      <Filter>papers\mipro2015</Filter>
+    </None>
+    <None Include="papers\mipro2015\bibliography.bib">
+      <Filter>papers\mipro2015</Filter>
+    </None>
+    <None Include="papers\mipro2015\IEEEtran.bst">
+      <Filter>papers\mipro2015</Filter>
+    </None>
+    <None Include="papers\mipro2015\IEEEtran.cls">
+      <Filter>papers\mipro2015</Filter>
+    </None>
+    <None Include="papers\mipro2015\Makefile">
+      <Filter>papers\mipro2015</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="thesis\slike\AD_CM1_graph.png">
@@ -171,9 +192,6 @@
     <Image Include="thesis\slike\buffer_overflow_nodata.png">
       <Filter>thesis\slike</Filter>
     </Image>
-    <Image Include="thesis\slike\buffer_overflow_overflow.png">
-      <Filter>thesis\slike</Filter>
-    </Image>
     <Image Include="thesis\slike\control_flow_graph.png">
       <Filter>thesis\slike</Filter>
     </Image>
@@ -187,9 +205,6 @@
       <Filter>thesis\slike</Filter>
     </Image>
     <Image Include="thesis\slike\free_lists_entries.PNG">
-      <Filter>thesis\slike</Filter>
-    </Image>
-    <Image Include="thesis\slike\heap_2_allocated_blocks.png">
       <Filter>thesis\slike</Filter>
     </Image>
     <Image Include="thesis\slike\heap_structure.png">
@@ -229,6 +244,12 @@
       <Filter>thesis\slike</Filter>
     </Image>
     <Image Include="thesis\slike\used_heap_block.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\buffer_overflow_overflow.png">
+      <Filter>thesis\slike</Filter>
+    </Image>
+    <Image Include="thesis\slike\heap_2_allocated_blocks.png">
       <Filter>thesis\slike</Filter>
     </Image>
   </ItemGroup>
