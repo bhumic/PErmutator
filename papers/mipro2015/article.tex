@@ -49,7 +49,7 @@ Species in the nature use diversity in order to combat different
 threats. In other words, if a threat manages to infect one specimen
 it want be able to infect many others because all of them are
 different. In computer networks, when a threat compromises one
-machine, it will probably compromies many others too because they
+machine, it will probably compromises many others too because they
 are all identical, or almost identical.
 
 This is a know premise, and there are attempts to apply principles
@@ -66,6 +66,31 @@ paper in Section \ref{sec:conclusions}.
 
 \section{Related work}
 \label{sec:architecture}
+Software diversity is an idea which is at least two decades old. Numerous projects and research has been done around this area and we will use this section to discuss and describe some of them.
+
+Before going to concrete examples of software diversity, we should note that there are two approaches to the process of software diversification:
+\begin{itemize}
+\item Pre-distribution approach: The main idea behind this approach is that all diversification action takes place before the program is shipped to end users. Therefore, the majority of diversification in this approach happens in the compiler. Certain advantages of this approach are as follows:
+\begin{itemize}
+\item Portability: Compilers are tools that are highly sophisticated and costly to produce and maintain. The reason for this is that compilers support multiple instruction sets which allows them to produce end user programs for various platforms. By adding the diversification feature to a compiler, diversified programs can be available on all platforms that are supported by the compiler.
+\item Wide transformation range: Since all compilers do sequences of code transformation passes in which instructions are selected and scheduled, it is relatively easy to add randomization transformations to existing passes. Also, the compilers avoid the need for disassembly. This is a significant advantage because the transformation from source code to object code is lossy which makes the perfect recovery of the original program control flow impossible.
+\end{itemize}
+However, there are some disadvantages when talking about compiler based diversification. If all the diversification happens before the product is shipped, there is an increased cost in the distribution because every client must download a separate and unique product variant. This requires a distribution system which must maintain a large inventory of program variants such that downloads start without delay. Also, the big problem with this approach is patching. Since every client has an unique program variant, the vendor must supply patches that are customized for each individual copy.
+\item Post-distribution approach: In this approach all the diversification happens at the clients. The main adventage of this approach is that there is no need to change the current way in which the programs are distributed to clients. Also, when using this approach vendors avoid the cost of diversifying each program copy. However, the client systems must be powerful enough to run the diversification engine.
+
+The disadvantages of this approach are as follows:
+\begin{itemize}
+\item Client Side attacks: The diversification process on the client can be disabled by malware.
+\item Same diversification engine: Since all diversification happens on the client, the client must contain a copy of the engine itself. This allows attackers to analyze the engine and make it possible for attacks.
+\end{itemize}
+\end{itemize}
+In the remaining part of this section we discuss some concrete diversification implementations. Since there are many diversification projects out there, we will be focusing on those that are highly in use today and those which share some common things with the diversification tool we are building.
+
+The most popular randomization security mechanism today is probably ASLR. In fact, it is the only diversified security mechanism that is currently deployed. Before ASLR, the base of code and data segments were always loaded at the same virtual memory addresses. The way ASLR works is that it randomizes the base address of code and data segments. This means that the stack, heap, statically allocated data and the images base address are randomly chosen. By doing this, ASLR significantly aggravates memory corruption, code injection and code reuse attacks. 
+
+However, ASLR has certain drawbacks. It can be easily bypassed via information leakage. Also it has very low entropy on 32-bit system which means it can be defeated via brute-force attacks. The reason for low entropy in ASLR is due to the fact that it randomizes only the two high order bytes of the address. Another major disadvantage of ASLR is the fact that it only allows coarse grained permutation. What this means is that ASLR will shift all the addresses by the same amount so that relative distances inside the image remain unchanged. This allows attackers to infer the entire memory layout of the process just by disclosing a single code address.
+
+Another very 
 
 \section{PErmutator design and implementation}
 \label{sec:design}
