@@ -110,18 +110,53 @@ Homescu et al. used this fact to create a profile guided diversity engine based 
 \section{PErmutator design and implementation}
 \label{sec:design}
 
-At this moment, out fine grained permutation engine is following a post-distribution diversification approach. The main part of the project is a binary rewriting tool which performs basic block reordering. This binary rewriting tool can be divided into several key parts:
+At this moment, our fine grained permutation engine is following a post-distribution diversification approach. The main part of the project is a binary rewriting tool which performs basic block reordering. This binary rewriting tool can be divided into several key parts:
 \begin{enumerate}
 \item Disassembler
+\item PE format analysis functions
 \item Control flow graph creation
 \item Permutation engine
 \end{enumerate}
+In the remaining part of this section we describe each of the key parts mentioned above as well as the implementation problems we are currently facing.
 
-Heuristics
+\subsection{Disassembler}
+\label{sec:disassembler}
+When creating a post-distribution diversification engine it is necessary to include a disassembly engine in the project. In order to obtain basic blocks from the PE file text section, we have to use a disassembler because it allows us to get human readable representation of raw bytes from the text section. This is important because doing so we can easily identify free branches such as return, call and jump instructions. Once those instructions are discovered, the process of control flow graph construction can begin \ref{sec:cfg}.
 
-Problems
+Creating a disassembler from scratch is very challenging. This is due to the fact that there are hundreds of possible processor instructions for the x86 platform and it would take a considerable amount of time to build a fast and reliable disassembler. Luckily, there are some very high quality disassembler libraries that can be used. Since we decided to build our fine grained permutation engine in C++, we determined that the \emph{distorm} disassembler library would be a perfect fit. \emph{Distorm} is a fast and powerful disassembler library that offers disassembler functionality for a wide range of programming languages. Also, every disassembled instruction is stored in a structure which makes it easy to access certain parts of each instruction.
 
-PErmutaror Flow (graph generation, \ldots)
+\subsection{PE format analysis functions}
+\label{sec:pe_functions}
+Our fine grained permutation engine operates on the content of the text section in a PE file. Before we can give the data from the text section to a disassembler, we firstly need to extract that data from the rest of the PE file. Also, when doing a binary rewriting process on a PE file, certain values in the file headers need to be modified. For example, the entry point of the PE file needs to be changed, the size of image needs to be updated because new instructions will be added to the text section. By adding new instructions, the text section size gets changed so we need to update the section header accordingly.
+
+To make all those operations as simple as possible, we developed a set of functions which allows us to easily access and modify all the parts from the PE file. All those functions can be used for other projects related to PE file format and are available at the projects Github page.
+
+\subsection{Control flow graph}
+\label{sec:cfg}
+When developing a fine grained permutation engine that is based on basic block reordering, it is necessary to create a control flow graph. Having an in memory representation of a control flow graph makes the process of basic block reordering significantly easier because all the basic blocks can be easily reached and moved to an arbitrary position in the text section of a PE file. In the remaining part of this section, there is a detailed description of our recursive algorithm that we used for creating the control flow graph.
+
+In order to successfully create a control flow graph, we first need to extract the text section from the PE file. This can be easily done by using specific PE functions we talked about in section \ref{sec:pe_functions}. Once the text section is extracted, we position at the programs entry point which can be read from the header of a PE file. At this point, the disassembly process begins which allows us to easily identify the free branches such as return and jump instructions. 
+
+Once we obtain the disassembly of a text section, we need to look for the first occurrence of the following instructions: RET, RETN, DB or a jump instruction. At this point there are two possible steps the program takes, depending on the free branch instruction we encountered:
+\begin{enumerate}
+\item If a read instruction is RET, RETN or DB, we mark its position relative to the beginning of the text section. At this point a new node is constructed and added to the graph. That node represents a basic block. Also, the node contains all of the instructions from the beginning of the current block to the position of the RET, RETN or DB instruction. Since this block ends with an instruction such as RET, RETN or DB we mark is an end node in a control flow graph. This means that this node has no child nodes and the recursion level decreases.
+\item If a jump instruction is read, the process is similar to the above step. A new node is constructed and added to the graph, but keeping in mind that the jump instruction is the last instruction in the node. Two things can happen at this point:
+\begin{enumerate}
+\item Direct jump: If the last instruction is a direct jump, the recursion will increase for one level because that node will have one child node which is the destination of the direct jump.
+\item Indirect jump: If the last instruction is an indirect jump, there will be two more recursive calls. One call will be in the case the jump takes place, and the other in case the jump doesn't get executed. This way, the node that ends in an indirect jump instruction will have two child nodes.
+\end{enumerate}
+\end{enumerate}
+In order to check if the algorithm works correctly, we implemented a graph description generator for the \emph{graphviz} program. By doing so, we were able to visualize the graph and make sure that it is correct.
+
+\subsection{Permutation engine}
+\label{sec:permutator}
+Permutation engine is the most important part of the project. Its task is to use the basic blocks obtained in section \ref{sec:cfg} and reorder them in a way that a new memory layout for the PE file is created but that the functionality of the PE file stays the same. 
+
+This is the most challenging part of the entire projects and it still has certain implementation problems. The biggest problem we encounter in this part is the task of updating all the references between the basic blocks. For example, imagine that a certain block \emph{block\_1} contains the following instruction \emph{PUSH 0x0040102B}. The operand of the \emph{PUSH} instruction can be interpreted in two ways: either it is a constant value, or it is an address. If the operand is a constant value, there is no need to modify it. However, lets say that the operand is an address of a callback function which resides in block \emph{block\_2}. If \emph{block\_2} gets moved to some other place, the given address \emph{0x0040102B} won't be correct anymore. In order for the new PE file to work, the operand in the block \emph{block\_1} needs to be updated accordingly. The problem that arises here lays in the fact that when doing static file analysis on a PE file we can not know for sure whether an operand is a constant or an address. There are a couple of solutions for this problem which we discuss in the remainder of this section.
+
+One way to solve this problem is by using the information in the relocation table of a PE file. The relocation table contains information about all the places in a PE file which need to be modified if the file isn't loaded at the preferred address. The problem with this approach is that not all PE files contain the relocation table. If those PE files get loaded at some other address, rather than the preferred one, the program won't work.
+
+However, we started working on a heuristic solution for the given problem. The idea is to mark every operand that contains data which can be part of the text section as an address. We believe that by doing so, the problem would be solved. This solution is still in implementation phase.
 
 \section{Testing and validation}
 \label{sec:testing}
